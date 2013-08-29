@@ -1,0 +1,1159 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{/accounts/gen/vis/paciorek/latex/paciorek-asa,times,graphics}
+\input{/accounts/gen/vis/paciorek/latex/paciorekMacros}
+%\renewcommand{\baselinestretch}{1.5}
+\usepackage[unicode=true]{hyperref}
+\hypersetup{unicode=true, pdfusetitle,
+bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true,}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing onehalf
+\use_hyperref false
+\papersize letterpaper
+\use_geometry true
+\use_amsmath 1
+\use_esint 0
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Basics of UNIX
+\end_layout
+
+\begin_layout Standard
+By UNIX, I mean any UNIX-like operating system, including Linux and Mac
+ OS X.
+ On the Mac you can access a UNIX terminal window with the Terminal application
+ (under Applications/Utilities).
+ Most modern scientific computing is done on UNIX-based machines, often
+ by remotely logging in to a UNIX-based server.
+\end_layout
+
+\begin_layout Standard
+If you're using your own Mac, you should install the 
+\begin_inset CommandInset href
+LatexCommand href
+name "Xcode developer tools"
+target "https://developer.apple.com/xcode/"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Connecting to a UNIX machine from {UNIX, Mac, Windows}
+\end_layout
+
+\begin_layout Standard
+See the file in the howtos folder in the repository on connecting remotely
+ to SCF.
+ In addition, 
+\begin_inset CommandInset href
+LatexCommand href
+name "this SCF help page"
+target "http://statistics.berkeley.edu/computing/ssh-keys"
+
+\end_inset
+
+ has information on logging in to remote machines via ssh without having
+ to type your password every time.
+ This can save a lot of time.
+\end_layout
+
+\begin_layout Section
+Getting help from SCF
+\end_layout
+
+\begin_layout Standard
+More generally, 
+\begin_inset CommandInset href
+LatexCommand href
+name "the department computing FAQs"
+target "http://statistics.berkeley.edu/computing/faqs"
+
+\end_inset
+
+ is the place to go for answers to questions about SCF.
+\end_layout
+
+\begin_layout Standard
+For questions not answered there, the SCF requests: 
+\begin_inset Quotes eld
+\end_inset
+
+please report any problems regarding equipment or system software to the
+ SCF staff by sending mail to 'trouble' or by reporting the problem directly
+ to room 498/499.
+ For information/questions on the use of application packages (e.g., R, SAS,
+ Matlab), programming languages and libraries send mail to 'consult'.
+ Questions/problems regarding accounts should be sent to 'manager'.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that for the purpose of this class, questions about application packages,
+ languages, libraries, etc.
+ can be directed to me.
+\end_layout
+
+\begin_layout Section
+Files and directories
+\end_layout
+
+\begin_layout Enumerate
+Files are stored in directories (aka folders) that are in a (inverted) directory
+ tree, with 
+\begin_inset Quotes eld
+\end_inset
+
+
+\series bold
+\emph on
+/
+\series default
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ as the 
+\emph on
+root
+\emph default
+ of the tree
+\end_layout
+
+\begin_layout Enumerate
+Where am I? 
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> pwd
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+What's in a directory?
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> ls
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> ls -a
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> ls -al
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Moving around
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> cd /accounts/gen/vis/paciorek/teaching/243
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> cd ~paciorek/teaching/243
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> cd ~/teaching/243
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> cd 243 # provided I am in 'teaching'
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> cd ..
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> cd -
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Copying and removing
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> cp 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> cp -r
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> cp -rp # preserves timestamps and other metainfo (VERY handy for tracing
+ your workflows if you move files between machines)
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> mkdir
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> rm 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> rm -r
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> rm -rf # CAREFUL!
+\end_layout
+
+\begin_layout Standard
+To copy between machines, we can use 
+\emph on
+scp
+\emph default
+, which has similar options to 
+\emph on
+cp
+\emph default
+:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> scp file.txt paciorek@bilbo.berkeley.edu:~/research/.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> scp paciorek@bilbo.berkeley.edu:/data/file.txt 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+~/research/renamed.txt
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+File permissions: 
+\family typewriter
+\series bold
+ls -al
+\family default
+\series default
+ will show the permissions for the '
+\emph on
+user
+\emph default
+', '
+\emph on
+group
+\emph default
+', '
+\emph on
+other
+\emph default
+' (
+\emph on
+ugo
+\emph default
+) for 
+\series bold
+r
+\series default
+eading, 
+\series bold
+w
+\series default
+riting and e
+\series bold
+x
+\series default
+ecuting files (
+\emph on
+rwx
+\emph default
+):
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+to allow a file to be executed as a program: 
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> chmod ugo+x myProg # myProg should be compiled code or a shell script
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+to allow read and write access to all: 
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> chmod ugo+rw code.R
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+to prevent write access: 
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> chmod go-w myThesisCode.R
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+Compressing files
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+the 
+\emph on
+zip
+\emph default
+ utility compresses in a format compatible with zip files for Windows:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> zip files.zip a.txt b.txt c.txt 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\emph on
+gzip
+\emph default
+ is the standard in UNIX:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> gzip a.txt b.txt c.txt # will create a.txt.gz, b.txt.gz, c.txt.gz
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\emph on
+tar
+\emph default
+ will nicely wrap up entire directories:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> tar -cvf files.tar myDirectory
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> tar -cvzf files.tgz myDirectory
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+To unwrap a tarball
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> tar -xvf files.tar
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> tar -xvzf files.tgz
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+To peek into a zipped (text) file:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> gzip -cd file.gz | less
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> zcat file.zip | less
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+Disk space
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+To see how much space is free in the various filesystems available on a
+ machine:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+> df -h
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+To see how much space is used in a directory:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+> du -h
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+To see how much space you are using out of your overall quota
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+> quota -s
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Section
+A variety of UNIX tools/capabilities
+\end_layout
+
+\begin_layout Standard
+Many UNIX programs are small programs (tools, utilities) that can be combined
+ to do complicated things.
+\end_layout
+
+\begin_layout Enumerate
+For help on a UNIX program, including command-line utilities like 
+\emph on
+ls
+\emph default
+, 
+\emph on
+cp
+\emph default
+, etc.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> man cp
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+What's the path of an executable (and implicitly, does it exist on the system)?
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> which R
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Tools for remotely mounting the filesystem of a remote UNIX machine/filesystem
+ as a 'local' directory on your machine - 
+\begin_inset CommandInset href
+LatexCommand href
+name "see this SCF FAQ"
+target "http://statistics.berkeley.edu/computing/mount-homedir"
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Cloud storage: Dropbox and other services will mirror directories on multiple
+ machines and on their servers.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Version control: We'll be using Git extensively to do version control.
+ 
+\end_layout
+
+\begin_layout Enumerate
+To do something at the UNIX command line from within R, use the 
+\family typewriter
+system()
+\family default
+ function in R:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> system(
+\begin_inset Quotes eld
+\end_inset
+
+ls -al
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Editors
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+For statistical computing, we need an editor, not a word processor, because
+ we're going to be operating on files of code and data files, for which
+ word processing formatting gets in the way.
+\end_layout
+
+\begin_layout Itemize
+traditional UNIX: 
+\emph on
+emacs
+\emph default
+, 
+\emph on
+vim
+\end_layout
+
+\begin_layout Itemize
+Windows: 
+\emph on
+WinEdt
+\end_layout
+
+\begin_layout Itemize
+Mac: 
+\emph on
+Aquamacs Emacs, TextMate, TextEdit
+\end_layout
+
+\begin_layout Itemize
+Be careful in Windows - file suffixes are often hidden
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Basic emacs:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+emacs
+\emph default
+ has special modes for different types of files: R code files, C code files,
+ Latex files -- it's worth your time to figure out how to set this up on
+ your machine for the kinds of files you often work on
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For working with R, ESS (emacs speaks statistics) mode is helpful.
+ This is built in to Aquamacs emacs.
+ Alternatively, the Windows and Mac versions of R, as well as RStudio (available
+ for all platforms) provide a GUI with a built-in editor.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+To open emacs in the terminal window rather than as a new window, which
+ is handy when it's too slow (or impossible) to tunnel the graphical emacs
+ window through ssh:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> emacs -nw file.txt 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Helpful 
+\emph on
+emacs
+\emph default
+ control sequences
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="12" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Sequence
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Result
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+C-x,C-c
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Close the file
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+C-x,C-s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Save the file
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+C-x,C-w
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Save with a new name
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+C-s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Search
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+ESC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Get out of command buffer at bottom of screen
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+C-a
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Go to beginning of line
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+C-e
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Go to end of line
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+C-k
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Delete the rest of the line from cursor forward
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+C-space
+\family default
+\series default
+\emph on
+, 
+\emph default
+then move to end of block
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Highlight a block of text
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+C-w
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Remove the highlighted block, putting it in the kill buffer
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+C-y
+\family default
+\series default
+\emph on
+ (
+\emph default
+after using
+\emph on
+ 
+\family typewriter
+\series bold
+\emph default
+C-k
+\family default
+\series default
+\emph on
+ 
+\emph default
+or 
+\family typewriter
+\series bold
+C-w
+\family default
+\series default
+\emph on
+)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Paste from kill buffer ('y' is for 'yank')
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Files that provide info about a UNIX machine:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+/proc/meminfo
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+/proc/cpuinfo
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+/etc/issue
+\end_layout
+
+\begin_layout Itemize
+Example: to find out how many processors a machine has: 
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+> grep processor /proc/cpuinfo 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+There are (free) tools in UNIX to convert files between lots of formats
+ (pdf, ps, html, latex, jpg).
+ This is particularly handy when preparing figures for a publication.
+ My 
+\begin_inset CommandInset href
+LatexCommand href
+name "computing tips"
+target "http://www.stat.berkeley.edu/~paciorek/computingTips/File_Conversion_pdf_postscr.html"
+
+\end_inset
+
+ page lists a number of these.
+ On a related note 
+\emph on
+pandoc
+\emph default
+ is a program for converting between markup formats, including Markdown,
+ HTML, Latex and MS Word.
+\end_layout
+
+\end_body
+\end_document

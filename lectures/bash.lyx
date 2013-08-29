@@ -1,0 +1,2599 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{/accounts/gen/vis/paciorek/latex/paciorek-asa,times,graphics}
+\input{/accounts/gen/vis/paciorek/latex/paciorekMacros}
+%\renewcommand{\baselinestretch}{1.5}
+\usepackage[unicode=true]{hyperref}
+\hypersetup{unicode=true, pdfusetitle,
+bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true,}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing onehalf
+\use_hyperref false
+\papersize letterpaper
+\use_geometry true
+\use_amsmath 1
+\use_esint 0
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+The bash shell, UNIX utilities, and version control
+\end_layout
+
+\begin_layout Standard
+Note that it can be difficult to distinguish what is shell-specific and
+ what is just part of UNIX.
+ Some of the material here is not bash-specific but general to UNIX.
+ 
+\end_layout
+
+\begin_layout Standard
+Reference: Newham and Rosenblatt, Learning the bash Shell, 2nd ed.
+\end_layout
+
+\begin_layout Section
+Shell basics
+\end_layout
+
+\begin_layout Standard
+The shell is the interface between you and the UNIX operating system.
+ When you are working in a terminal window (i.e., a window with the command
+ line interface), you're interacting with a shell.
+\end_layout
+
+\begin_layout Standard
+There are multiple shells (
+\emph on
+sh
+\emph default
+, 
+\emph on
+bash
+\emph default
+, 
+\emph on
+csh
+\emph default
+, 
+\emph on
+tcsh
+\emph default
+, 
+\emph on
+ksh
+\emph default
+).
+ We'll assume usage of 
+\emph on
+bash
+\emph default
+, as this is the default for Mac OSX and on the SCF machines and is very
+ common for Linux.
+\end_layout
+
+\begin_layout Enumerate
+What shell am I using? 
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+> echo $SHELL
+\end_layout
+
+\begin_layout Enumerate
+To change to bash on a one-time basis:
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+> bash
+\end_layout
+
+\begin_layout Enumerate
+To make it your default: 
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+> chsh /bin/bash
+\family default
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\emph on
+/bin/bash
+\emph default
+ should be whatever the path to the bash shell is, which you can figure
+ out using 
+\family typewriter
+\series bold
+which bash
+\end_layout
+
+\begin_layout Standard
+Shell commands can be saved in a file (with extension 
+\emph on
+.sh
+\emph default
+) and this file can be executed as if it were a program.
+ To run a shell script called 
+\emph on
+file.sh
+\emph default
+, you would type 
+\family typewriter
+\series bold
+./file.sh
+\family default
+\series default
+.
+ Note that if you just typed
+\family typewriter
+ 
+\series bold
+file.sh
+\family default
+\series default
+, the operating system will generally have trouble finding the script and
+ recognizing that it is executable.
+ To be sure that the operating system knows what shell to use to interpret
+ the script, the first line of the script should be 
+\family typewriter
+#!/bin/bash
+\family default
+ (in the case that you're using the bash shell).
+\end_layout
+
+\begin_layout Section
+Tab completion
+\end_layout
+
+\begin_layout Standard
+When working in the shell, it is often unnecessary to type out an entire
+ command or file name, because of a feature known as tab completion.
+ When you are entering a command or filename in the shell, you can, at any
+ time, hit the tab key, and the shell will try to figure out how to complete
+ the name of the command or filename you are typing.
+ If there is only one command in the search path and you're using tab completion
+ with the first token of a line, then the shell will display its value and
+ the cursor will be one space past the completed name.
+ If there are multiple commands that match the partial name, the shell will
+ display as much as it can.
+ In this case, hitting tab twice will display a list of choices, and redisplay
+ the partial command line for further editing.
+ Similar behavior with regard to filenames occurs when tab completion is
+ used on anything other than the first token of a command.
+ 
+\end_layout
+
+\begin_layout Standard
+Note that R does tab completion for objects (including functions) and filenames.
+\end_layout
+
+\begin_layout Section
+Command history
+\end_layout
+
+\begin_layout Standard
+By using the up and down arrows, you can scroll through commands that you
+ have entered previously.
+ So if you want to rerun the same command, or fix a typo in a command you
+ entered, just scroll up to it and hit enter to run it or edit the line
+ and then hit enter.
+\end_layout
+
+\begin_layout Standard
+Note that you can use emacs-like control sequences (
+\family typewriter
+\series bold
+C-a
+\family default
+\series default
+, 
+\family typewriter
+\series bold
+C-e
+\family default
+\series default
+, 
+\family typewriter
+\series bold
+C-k
+\family default
+\series default
+) to navigate and delete characters, just as you can at the prompt in the
+ shell usually.
+\end_layout
+
+\begin_layout Standard
+You can also rerun previous commands as follows:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> !-n # runs the 
+\emph on
+n
+\emph default
+th previous command
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> !xt # runs the last command that started with 'xt'
+\end_layout
+
+\begin_layout Standard
+If you're not sure what command you're going to recall, you can append 
+\family typewriter
+\series bold
+:p
+\family default
+\series default
+ at the end of the text you type to do the recall, and the result will be
+ printed, but not executed.
+ For example:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> !xt:p
+\family default
+
+\begin_inset Newline newline
+\end_inset
+
+You can then use the up arrow key to bring back that statement for editing
+ or execution.
+\end_layout
+
+\begin_layout Standard
+You can also search for commands by doing 
+\family typewriter
+\series bold
+C-r
+\family default
+\series default
+ and typing a string of characters to search for in the search history.
+ You can hit return to submit, 
+\family typewriter
+\series bold
+C-c
+\family default
+\series default
+ to get out, or 
+\family typewriter
+\series bold
+ESC
+\family default
+\series default
+ to put the result on the regular command line for editing.
+\end_layout
+
+\begin_layout Section
+Wildcards in filenames
+\end_layout
+
+\begin_layout Standard
+The shell will expand certain special characters to match patterns of file
+ names, before passing those filenames on to a program.
+ Note that the programs themselves don't know anything about wildcards;
+ it is the shell that does the expansion, so that programs don't see the
+ wildcards.
+ Table 1 shows some of the special characters that the shell uses for expansion:
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Wildcards
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Syntax
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+What it matches
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\emph on
+?
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+any single character
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\emph on
+*
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+zero or more characters
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\emph on
+[
+\begin_inset Formula $c_{1}c_{2}\ldots$
+\end_inset
+
+]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+any character in the set
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\emph on
+[!
+\begin_inset Formula $c_{1}c_{2}\ldots$
+\end_inset
+
+]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+anything not in the set
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\emph on
+[
+\begin_inset Formula $c_{1}-c_{2}$
+\end_inset
+
+]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+anything in the range from 
+\begin_inset Formula $c_{1}$
+\end_inset
+
+ to 
+\begin_inset Formula $c_{2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\emph on
+{string1,string2,...}
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+anything in the set of strings
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here are some examples of using wildcards: 
+\end_layout
+
+\begin_layout Itemize
+List all files ending with a digit: 
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> ls *[0-9]
+\family default
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Make a copy of 
+\emph on
+filename
+\emph default
+ as 
+\emph on
+filename.old
+\emph default
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> cp filename{,.old} 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Remove all files beginning with 
+\emph on
+a
+\emph default
+ or 
+\emph on
+z
+\emph default
+:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> rm [az]*
+\family default
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+List all the R code files with a variety of suffixes:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> ls *.{r,q,R}
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+The 
+\emph on
+echo
+\emph default
+ command can be used to verify that a wildcard expansion will do what you
+ think it will:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> echo cp filename{,.old} # returns cp filename filename.old
+\end_layout
+
+\begin_layout Standard
+If you want to suppress the special meaning of a wildcard in a shell command,
+ precede it with a backslash (
+\series bold
+\emph on
+
+\backslash
+
+\series default
+\emph default
+).
+ Note that this is a general rule of thumb in many similar situations when
+ a character has a special meaning but you just want to treat it as a character.
+\end_layout
+
+\begin_layout Section
+Basic UNIX utilities
+\end_layout
+
+\begin_layout Standard
+Table 2 shows some basic UNIX programs, which are sometimes referred to
+ as filters.
+ The general syntax for a UNIX program is
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> command -options argument1 argument2 ...
+\begin_inset Newline newline
+\end_inset
+
+
+\family default
+For example, 
+\family typewriter
+\series bold
+> grep -i graphics file.txt
+\family default
+\series default
+ looks for 
+\emph on
+graphics
+\emph default
+ (argument 1) in 
+\emph on
+file.txt
+\emph default
+ (argument2) with the option 
+\emph on
+-i
+\emph default
+, which says to ignore the case of the letters.
+ 
+\family typewriter
+\series bold
+> less file.txt
+\family default
+\series default
+ simply pages through a text file (you can navigate up and down) so you
+ can get a feel for what's in it.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+UNIX utilities
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="12" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Name
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+What it does
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+tail
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+shows last few lines of a file
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+less
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+shows a file one screen at a time
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+cat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+writes file to screen
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+wc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+counts words and lines in a file
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+grep
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+finds patterns in files
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+wget or curl
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+download files from the web
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+sort
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sorts a file by line
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+nl
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+numbers lines in a file
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+diff
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+compares two files
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+uniq
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+removes repeated (sequential) rows
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+cut
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+extracts fields (columns) from a file
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+UNIX programs often take options that are identified with a minus followed
+ by a letter, followed by the specific option (adding a space before the
+ specific option is fine).
+ Options may also involve two dashes, e.g., 
+\family typewriter
+\series bold
+R --no-save
+\family default
+\series default
+.
+ Here's another example that tells 
+\emph on
+tail
+\emph default
+ to keep refreshing as the file changes:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+tail -f dat.txt
+\end_layout
+
+\begin_layout Standard
+A few more tidbits about 
+\emph on
+grep
+\emph default
+:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+grep ^read code.r # returns lines that start with 'read'
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+grep dat$ code.r # returns lines that end with 'dat'
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+grep 7.7 dat.txt # returns lines with two sevens separated by a single character
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+grep 7.*7 dat.txt # returns lines with two sevens separated by any number
+ of characters
+\end_layout
+
+\begin_layout Standard
+If you have a big data file and need to subset it by line (e.g., with 
+\emph on
+grep
+\emph default
+) or by field (e.g., with 
+\emph on
+cut
+\emph default
+), then you can do it really fast from the UNIX command line, rather than
+ reading it with R, SAS, Perl, etc.
+\end_layout
+
+\begin_layout Standard
+Much of the power of these utilities comes in piping between them (see Section
+ 6) and using wildcards (see Section 4) to operate on groups of files.
+ The utilities can also be used in shell scripts to do more complicated
+ things.
+ 
+\end_layout
+
+\begin_layout Section
+Redirection 
+\end_layout
+
+\begin_layout Standard
+UNIX programs that involve input and/or output often operate by reading
+ input from a stream known as standard input (
+\emph on
+stdin
+\emph default
+), and writing their results to a stream known as standard output (
+\emph on
+stdout
+\emph default
+).
+ In addition, a third stream known as standard error (
+\emph on
+stderr
+\emph default
+) receives error messages, and other information that's not part of the
+ program's results.
+ In the usual interactive session, standard output and standard error default
+ to your screen, and standard input defaults to your keyboard.
+ You can change the place from which programs read and write through redirection.
+ The shell provides this service, not the individual programs, so redirection
+ will work for all programs.
+ Table 3 shows some examples of redirection.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Redirection
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Syntax
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+What it does
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+cmd > file
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sends stdout from 
+\emph on
+cmd
+\emph default
+ into 
+\emph on
+file
+\emph default
+, overwriting 
+\emph on
+file
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+cmd >> file
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+appends stdout from 
+\emph on
+cmd
+\emph default
+ to 
+\emph on
+file
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+cmd < file
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+execute 
+\emph on
+cmd
+\emph default
+ reading stdin from 
+\emph on
+file
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+cmd <infile >outfile 2>errors
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+reads from 
+\emph on
+infile
+\emph default
+, sending stdout to 
+\emph on
+outfile
+\emph default
+ and stderr to 
+\emph on
+errors
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+cmd <infile >outfile 2>&1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+reads from 
+\emph on
+infile
+\emph default
+, sending stdout and stderr to 
+\emph on
+outfile
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+cmd1 | cmd2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sends stdout from 
+\emph on
+cmd1
+\emph default
+ as stdin to 
+\emph on
+cmd2
+\emph default
+ (a pipe)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+Note that 
+\emph on
+cmd
+\emph default
+ may include options and arguments as seen in the previous section.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Operations where output from one command is used as input to another command
+ (via the | operator) are known as pipes; they are made especially useful
+ by the convention that many UNIX commands will accept their input through
+ the standard input stream when no file name is provided to them.
+ 
+\end_layout
+
+\begin_layout Standard
+Here's an example of finding out how many unique entries there are in the
+ 2rd column of a data file whose fields are separated by commas:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+cut -d',' -f2 mileage2009.csv | sort | uniq | wc
+\begin_inset Newline newline
+\end_inset
+
+
+\family default
+To see if there are any 
+\begin_inset Quotes eld
+\end_inset
+
+S
+\begin_inset Quotes erd
+\end_inset
+
+ values in certain fields (fixed width) of a set of files (note I did this
+ on 22,000 files (5 Gb or so) in about 15 minutes on my old desktop; it
+ would have taken hours to read the data into R):
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> cut -b29,37,45,53,61,69,77,85,93,101,109,117,125,133,141,149,
+\begin_inset Newline newline
+\end_inset
+
+157,165,173,181,189,197,205,213,221,229,237,245,253,261,269 USC*.dly | grep
+ "S" | less
+\end_layout
+
+\begin_layout Standard
+A closely related, but subtly different, capability is offered by the use
+ of backticks (`).
+ When the shell encounters a command surrounded by backticks, it runs the
+ command and replaces the backticked expression with the output from the
+ command; this allows something similar to a pipe, but is appropriate when
+ a command reads its arguments directly from the command line instead of
+ through standard input.
+ For example, suppose we are interested in searching for the text 
+\emph on
+pdf
+\emph default
+ in the last 4 R code files (those with suffix 
+\emph on
+.
+\emph default
+r or .R) that were modified in the current directory.
+ We can find the names of the last 4 files ending in 
+\begin_inset Quotes eld
+\end_inset
+
+.R
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+.r
+\begin_inset Quotes erd
+\end_inset
+
+ which were modified using
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> ls -t *.{R,r} | head -4
+\family default
+ 
+\begin_inset Newline newline
+\end_inset
+
+and we can search for the required pattern using 
+\emph on
+grep
+\emph default
+.
+ Putting these together with the backtick operator we can solve the problem
+ using 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> grep pdf `ls -t *.{R,r} | head -4`
+\family default
+ 
+\begin_inset Newline newline
+\end_inset
+
+Note that piping the output of the 
+\emph on
+ls
+\emph default
+ command into 
+\emph on
+grep
+\emph default
+ would not achieve the desired goal, since 
+\emph on
+grep
+\emph default
+ reads its filenames from the command line, not standard input.
+ 
+\end_layout
+
+\begin_layout Standard
+You can also redirect output as the arguments to another program using the
+ 
+\emph on
+xargs
+\emph default
+ utility.
+ Here's an example:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> which bash | xargs chsh
+\end_layout
+
+\begin_layout Standard
+And you can redirect output into a shell variable (see section 9) by putting
+ the command that produces the output in parentheses and preceding with
+ a 
+\series bold
+\emph on
+$
+\series default
+\emph default
+.
+ Here's an example:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> files=$(ls) # NOTE - don't put any spaces around the '='
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> echo $files
+\end_layout
+
+\begin_layout Section
+Job Control
+\end_layout
+
+\begin_layout Paragraph
+Starting a job
+\end_layout
+
+\begin_layout Standard
+When you run a command in a shell by simply typing its name, you are said
+ to be running in the foreground.
+ When a job is running in the foreground, you can't type additional commands
+ into that shell, but there are two signals that can be sent to the running
+ job through the keyboard.
+ To interrupt a program running in the foreground, use 
+\family typewriter
+\series bold
+C-c
+\family default
+\series default
+; to quit a program, use 
+\family typewriter
+\series bold
+C-
+\backslash
+
+\family default
+\series default
+.
+ While modern windowed systems have lessened the inconvenience of tying
+ up a shell with foreground processes, there are some situations where running
+ in the foreground is not adequate.
+\end_layout
+
+\begin_layout Standard
+The primary need for an alternative to foreground processing arises when
+ you wish to have jobs continue to run after you log off the computer.
+ In cases like this you can run a program in the background by simply terminatin
+g the command with an ampersand (
+\emph on
+&
+\emph default
+).
+ However, before putting a job in the background, you should consider how
+ you will access its results, since 
+\emph on
+stdout
+\emph default
+ is not preserved when you log off from the computer.
+ Thus, redirection (including redirection of 
+\emph on
+stderr
+\emph default
+) is essential when running jobs in the background.
+ As a simple example, suppose that you wish to run an R script, and you
+ don't want it to terminate when you log off.
+ (Note that this can also be done using 
+\family typewriter
+\series bold
+R CMD BATCH
+\family default
+\series default
+, so this is primarily an illustration.)
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> R --no-save <code.R >code.Rout 2>&1
+\family default
+ &
+\begin_inset Newline newline
+\end_inset
+
+If you forget to put a job in the background when you first execute it,
+ you can do it while it's running in the foreground in two steps.
+ First, suspend the job using the 
+\family typewriter
+\series bold
+C-z
+\family default
+\series default
+ signal.
+ After receiving the signal, the program will interrupt execution, but will
+ still have access to all files and other resources.
+ Next, issue the 
+\family typewriter
+\emph on
+bg
+\family default
+\emph default
+ command, which will put the stopped job in the background.
+ 
+\end_layout
+
+\begin_layout Paragraph
+Listing and killing jobs
+\end_layout
+
+\begin_layout Standard
+Since only foreground jobs will accept signals through the keyboard, if
+ you want to terminate a background job you must first determine the unique
+ process id (PID) for the process you wish to terminate through the use
+ of the 
+\emph on
+ps
+\emph default
+ command.
+ For example, to see all the jobs running on a particular computer, you
+ could use a command like: 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> ps -aux 
+\family default
+
+\begin_inset Newline newline
+\end_inset
+
+Among the output after the header (shown here) might appear a line that
+ looks like this: 
+\family typewriter
+
+\begin_inset Newline newline
+\end_inset
+
+USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND 
+\begin_inset Newline newline
+\end_inset
+
+paciorek 11998 97.0 39.1 1416644 1204824 pts/16 R+ Jul27 1330:01 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+/usr/lib64/R/bin/exec/R 
+\begin_inset Newline newline
+\end_inset
+
+
+\family default
+In this example, the 
+\emph on
+ps
+\emph default
+ output tells us that this R job has a PID of 
+\emph on
+11998
+\emph default
+, that it has been running for 1330 minutes (!), is using 97% of CPU and
+ 39% of memory, and that it started on July 27.
+ You could then issue the command:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> kill 11998
+\family default
+ 
+\begin_inset Newline newline
+\end_inset
+
+or, if that doesn't work 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> kill -9 11998
+\family default
+ 
+\begin_inset Newline newline
+\end_inset
+
+to terminate the job.
+ Another useful command in this regard is 
+\emph on
+killall
+\emph default
+, which accepts a program name instead of a process id, and will kill all
+ instances of the named program.
+ E.g.,
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> killall R
+\family default
+
+\begin_inset Newline newline
+\end_inset
+
+Of course, it will only kill the jobs that belong to you, so it will not
+ affect the jobs of other users.
+ Note that the 
+\emph on
+ps
+\emph default
+ and 
+\emph on
+kill
+\emph default
+ commands only apply to the particular computer on which they are executed,
+ not to the entire computer network.
+ Thus, if you start a job on one machine, you must log back into that same
+ machine in order to manage your job.
+\end_layout
+
+\begin_layout Paragraph
+Monitoring jobs and memory use
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+top
+\emph default
+ command also allows you to monitor the jobs on the system and in real-time.
+ In particular, it's useful for seeing how much of the CPU and how much
+ memory is being used, as well as figuring out a PID as an alternative to
+ 
+\emph on
+ps
+\emph default
+.
+ You can also renice jobs (see below) and kill jobs from within top: just
+ type 
+\emph on
+r
+\series bold
+ 
+\series default
+\emph default
+or 
+\emph on
+k
+\emph default
+, respectively, and proceed from there.
+\end_layout
+
+\begin_layout Standard
+One of the main things to watch out for is a job that is using close to
+ 100% of memory and much less than 100% of CPU.
+ What is generally happening is that your program has run out of memory
+ and is using virtual memory on disk, spending most of its time writing
+ to/from disk, sometimes called 
+\emph on
+paging
+\emph default
+ or 
+\emph on
+swapping
+\emph default
+.
+ If this happens, it can be a very long time, if ever, before your job finishes.
+\end_layout
+
+\begin_layout Paragraph
+Nicing a job
+\end_layout
+
+\begin_layout Standard
+The most important thing to remember when starting a job on a machine that
+ is not your personal machine is how to be a good citizen.
+ This often involves 'nicing' your jobs.
+ This is required on the SCF machines, but the compute servers should automatica
+lly nice your jobs.
+ Nicing a job puts it at a lower priority so that a user working at the
+ keyboard has higher priority in using the CPU.
+ Here's how to do it, giving the job a low priority of 19, as required by
+ SCF:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> nice -19 R CMD BATCH --no-save in.R out.Rout
+\family default
+ &
+\begin_inset Newline newline
+\end_inset
+
+If you forget and just submit the job without nicing, you can reduce the
+ priority by doing:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> renice +19 11998
+\family default
+
+\begin_inset Newline newline
+\end_inset
+
+where 
+\emph on
+11998
+\emph default
+ is the PID of your job.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+For short jobs (less than 5 minutes), it's ok to use a priority of 18 rather
+ than 19.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On many larger UNIX cluster computers, all jobs are submitted via a job
+ scheduler and enter a queue, which handles the issue of prioritization
+ and jobs conflicting.
+ Syntax varies by system and queueing software, but may look something like
+ this for submitting an R job:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> bsub -q long R CMD BATCH --no-save in.R out.Rout # just an example; this
+ will not work on the SCF network
+\end_layout
+
+\begin_layout Section
+Aliases
+\end_layout
+
+\begin_layout Standard
+Aliases allow you to use an abbreviation for a command, to create new functional
+ity or to insure that certain options are always used when you call an existing
+ command.
+ For example, I'm lazy and would rather type 
+\family typewriter
+\series bold
+q
+\family default
+\series default
+ instead of 
+\family typewriter
+\series bold
+exit
+\family default
+\series default
+ to terminate a shell window.
+ You could create the alias as follow 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> alias q=
+\begin_inset Quotes erd
+\end_inset
+
+exit
+\begin_inset Quotes erd
+\end_inset
+
+
+\family default
+ 
+\begin_inset Newline newline
+\end_inset
+
+As another example, suppose you find the 
+\emph on
+-F
+\emph default
+ option of 
+\emph on
+ls
+\emph default
+ (which displays 
+\series bold
+\emph on
+/
+\series default
+\emph default
+ after directories, 
+\series bold
+\emph on
+*
+\series default
+\emph default
+ after executable files and 
+\series bold
+\emph on
+@
+\series default
+\emph default
+ after links) to be very useful.
+ The command 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> alias ls=
+\begin_inset Quotes erd
+\end_inset
+
+ls -F
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\family default
+
+\begin_inset Newline newline
+\end_inset
+
+will insure that the 
+\emph on
+-F
+\emph default
+ option will be used whenever you use 
+\emph on
+ls
+\emph default
+.
+ If you need to use the unaliased version of something for which you've
+ created an alias, precede the name with a backslash (
+\series bold
+\emph on
+
+\backslash
+
+\series default
+\emph default
+).
+ For example, to use the normal version of 
+\emph on
+ls
+\emph default
+ after you've created the alias described above, just type
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> 
+\backslash
+ls
+\family default
+ 
+\end_layout
+
+\begin_layout Standard
+The real power of aliases is only achieved when they are automatically set
+ up whenever you log in to the computer or open a new shell window.
+ To achieve that goal with aliases (or any other bash shell commands), simply
+ insert the commands in the file 
+\emph on
+.bashrc
+\emph default
+ in your home directory.
+ See the 
+\emph on
+example.bashrc
+\emph default
+ file in the repository for some of what's in my 
+\emph on
+.bashrc
+\emph default
+ file.
+\end_layout
+
+\begin_layout Section
+Shell Variables
+\end_layout
+
+\begin_layout Standard
+We can define shell variables that will help us when writing shell scripts.
+ Here's an example of defining a variable:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> name=
+\begin_inset Quotes erd
+\end_inset
+
+chris
+\begin_inset Quotes erd
+\end_inset
+
+
+\family default
+
+\begin_inset Newline newline
+\end_inset
+
+The shell may not like it if you leave any spaces around the = sign.
+ To see the value of a variable we need to precede it by 
+\emph on
+$
+\emph default
+:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> echo $chris
+\family default
+
+\begin_inset Newline newline
+\end_inset
+
+You can also enclose the variable name in curly brackets, which comes in
+ handy when we're embedding a variable within a line of code to make sure
+ the shell knows where the variable name ends:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> echo ${chris}
+\end_layout
+
+\begin_layout Standard
+There are also special shell variables called environment variables that
+ help to control the shell's behavior.
+ These are generally named in all caps.
+ Type 
+\family typewriter
+\series bold
+env
+\family default
+ 
+\series default
+to see them.
+ You can create your own environment variable as follows:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> export NAME=
+\begin_inset Quotes erd
+\end_inset
+
+chris
+\begin_inset Quotes erd
+\end_inset
+
+
+\family default
+
+\begin_inset Newline newline
+\end_inset
+
+The 
+\emph on
+export
+\emph default
+ command ensures that other shells created by the current shell (for example,
+ to run a program) will inherit the variable.
+ Without the export command, any shell variables that are set will only
+ be modified within the current shell.
+ More generally, if one wants a variable to always be accessible, one would
+ include the definition of a variable with an 
+\emph on
+export
+\emph default
+ command in your 
+\emph on
+.bashrc
+\emph default
+ file.
+\end_layout
+
+\begin_layout Standard
+Here's an example of modifying an environment variable:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> export CDPATH=.:~/research:~/teaching
+\family default
+
+\begin_inset Newline newline
+\end_inset
+
+Now if you have a subdirectory 
+\emph on
+bootstrap
+\emph default
+ in your 
+\emph on
+research
+\emph default
+ directory, you can type 
+\family typewriter
+\series bold
+cd bootstrap
+\family default
+\series default
+ no matter what your pwd is and it will move you to 
+\emph on
+~/research/bootstrap
+\emph default
+.
+ Similarly for any subdirectory within the 
+\emph on
+teaching
+\emph default
+ directory.
+\end_layout
+
+\begin_layout Standard
+Here's another example of an environment variable that puts the username,
+ hostname, and pwd in your prompt.
+ This is handy so you know what machine you're on and where in the filesystem
+ you are.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> export PS1="
+\backslash
+u@
+\backslash
+h:
+\backslash
+w> "
+\family default
+
+\begin_inset Newline newline
+\end_inset
+
+For me, this is one of the most important things to put in my 
+\emph on
+.bashrc
+\emph default
+ file.
+ The 
+\series bold
+
+\backslash
+
+\series default
+ syntax tells bash what to put in the prompt string: 
+\emph on
+u
+\emph default
+ for username, 
+\emph on
+h
+\emph default
+ for hostname, and 
+\emph on
+w
+\emph default
+ for working directory.
+ 
+\end_layout
+
+\begin_layout Section
+Functions
+\end_layout
+
+\begin_layout Standard
+You can define your own utilities by creating a shell function.
+ This allows you to automate things that are more complicated than you can
+ do with an alias.
+ One nice thing about shell functions is that the shell automatically takes
+ care of function arguments for you.
+ It places the arguments given by the user into local variables in the function
+ called (in order): 
+\emph on
+$1 $2 $3
+\emph default
+ etc.
+ It also fills 
+\emph on
+$#
+\emph default
+ with the number of arguments given by the user.
+ Here's an example of using arguments in a function that saves me some typing
+ when I want to copy a file to the SCF filesystem:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+function putscf() {
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+scp $1 paciorek@bilbo.berkeley.edu:~/$2 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+}
+\family default
+
+\begin_inset Newline newline
+\end_inset
+
+To use this function, I just do the following to copy 
+\emph on
+unit1.pdf
+\emph default
+ from the current directory on whatever non-SCF machine I'm on to the directory
+ 
+\emph on
+~/teaching/243
+\emph default
+ on SCF:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> putscf unit1.pdf teaching/243/.
+\end_layout
+
+\begin_layout Standard
+Of course you'd want to put such functions in your 
+\emph on
+.bashrc
+\emph default
+ file.
+\end_layout
+
+\begin_layout Section
+If/then/else
+\end_layout
+
+\begin_layout Standard
+We can use if-then-else type syntax to control the flow of a shell script.
+ For an example, see 
+\emph on
+niceR()
+\emph default
+ in the demo code file 
+\emph on
+niceR.sh
+\emph default
+ for this unit.
+\end_layout
+
+\begin_layout Standard
+For more details, look in Newham&Rosenblatt or search online.
+\end_layout
+
+\begin_layout Section
+For loops
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+for
+\emph default
+ loops in shell scripting are primarily designed for iterating through a
+ set of files or directories.
+ Here's an example:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+for file in $(ls *txt)
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+do
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+mv $file ${file/.txt/.R} 
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+# this syntax replaces .txt with .R in $file
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+done
+\end_layout
+
+\begin_layout Standard
+You could also have done that with 
+\family typewriter
+for file in `ls *txt`
+\end_layout
+
+\begin_layout Standard
+Another use of 
+\emph on
+for
+\emph default
+ loops is automating file downloads: see the demo code file.
+ And, in my experience, 
+\emph on
+for
+\emph default
+ loops are very useful for starting a series of jobs: see the demo code
+ files in the repository: 
+\emph on
+forloopDownload.sh
+\emph default
+ and 
+\emph on
+forloopJobs.sh
+\emph default
+.
+\end_layout
+
+\begin_layout Section
+How much shell scripting should I learn?
+\end_layout
+
+\begin_layout Standard
+You can do a fair amount of what you need from within R using the 
+\emph on
+system()
+\emph default
+ function.
+ This will enable you to avoid dealing with a lot of shell programming syntax
+ (but you'll still need to know how to use UNIX utilities, wildcards, and
+ pipes to be effective).
+ Example: a fellow student in grad school programmed a tool in R to extract
+ concert information from the web for bands appearing in her iTunes library.
+ Not the most elegant solution, but it got the job done.
+\end_layout
+
+\begin_layout Standard
+For more extensive shell programming, it's probably worth learning Python
+ and doing it there rather than using a shell script.
+ In particular iPython makes it very easy to interact with the operating
+ system.
+\end_layout
+
+\begin_layout Section
+Version Control using Git
+\end_layout
+
+\begin_layout Standard
+[UNDER CONSTRUCTION]
+\end_layout
+
+\end_body
+\end_document

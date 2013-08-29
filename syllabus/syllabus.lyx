@@ -237,6 +237,14 @@ All course materials will be posted on Github.
  Note that each unit will have a single set of notes and demo code that
  I will add to as we move through the unit, so you may want to just print
  out the new pages.
+ I'll provide PDF documents as well as the underlying Lyx file I used to
+ generate the document.
+ If you want a plain Latex version, open the Lyx file in Lyx on an SCF machine
+ and do 
+\family typewriter
+File->Export->LaTeX(pdflatex)
+\family default
+.
 \end_layout
 
 \begin_layout Standard
@@ -628,6 +636,7 @@ You should prepare your assignments using Latex plus knitr, Sweave, or R
 
 \begin_layout Enumerate
 Submit your primary solutions on paper, including all your code.
+ 
 \end_layout
 
 \begin_layout Enumerate
