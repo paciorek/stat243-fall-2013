@@ -240,8 +240,7 @@ All course materials will be posted on Github.
 \end_layout
 
 \begin_layout Standard
-We will use the Piazza class website for communication (announcements and
- questions).
+We will use Piazza for communication (announcements and questions).
  You should ask questions about class material and problem sets through
  the course Piazza website: 
 \begin_inset ERT
@@ -258,8 +257,23 @@ status open
 
 \end_inset
 
-piazza.com/berkeley/fall2013/stat243/home.
- You should sign up for the site at piazza.com/berkeley/fall2013/stat243.
+
+\begin_inset CommandInset href
+LatexCommand href
+target "piazza.com/berkeley/fall2013/stat243/home"
+
+\end_inset
+
+.
+ If you're not already automatically enrolled on the site, you should sign
+ up for the site at 
+\begin_inset CommandInset href
+LatexCommand href
+target "piazza.com/berkeley/fall2013/stat243"
+
+\end_inset
+
+ if you are not already s.
  Please use this site for your questions so that either Tessa or I can respond
  and so that everyone can benefit from the discussion.
  I encourage you to respond to each other's questions as well.
@@ -275,8 +289,8 @@ I have set up a course Wiki on Github, building off the Wiki from last year.
  The goal is to build up a useful set of webpages that provide tips on statistic
 al computing and programming.
  So if you figure out a clever way to do something, find a useful R function
- or package, or see a useful reference to link to, please contribute this
- to the Wiki.
+ or package, have a way to clean up the Wiki, or see a useful reference
+ to link to, please contribute this to the Wiki.
  One way to get credit for class participation is to contribute to the Wiki.
 \end_layout
 
@@ -410,7 +424,22 @@ Other resources with more detail on particular aspects of statistical computing
 
 \begin_layout Itemize
 Lange, Kenneth; Numerical Analysis for Statisticians, 2nd ed.
- (first edition is available electronically through OskiCat: 
+ (first edition is available electronically through OskiCat:
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+
+\backslash
+
+\end_layout
+
+\end_inset
+
+ 
 \begin_inset CommandInset href
 LatexCommand href
 target "http://sunsite.berkeley.edu:8080/librarysurvey/library.survey.logic?refUrl=http%3A%2F%2Fsite%2Eebrary%2Ecom%2Flib%2Fberkeley%2FDoc%3Fid%3D2004310"
@@ -422,7 +451,22 @@ target "http://sunsite.berkeley.edu:8080/librarysurvey/library.survey.logic?refU
 
 \begin_layout Itemize
 Monahan, John; Numerical Methods of Statistics (available electronically
- through OskiCat: 
+ through OskiCat:
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+
+\backslash
+
+\end_layout
+
+\end_inset
+
+ 
 \begin_inset CommandInset href
 LatexCommand href
 target "http://dx.doi.org/10.1017/CBO9780511977176"
@@ -481,17 +525,16 @@ Computing Resources
 \begin_layout Standard
 All students will be provided with a computer account on the Statistical
  Computer Facility (SCF) network of Linux and Mac computers.
- The computer room in 342 Evans provides iMacs, and computers are also available
- in Evans 432; you can also remotely log in to the SCF system from other
- campus computers or from home.
+ The computer rooms in 342 and 432 Evans provide Mac desktops; you can also
+ remotely log in to the SCF system from other campus computers or from home.
  If you wish to do your assignments on some other computer, keep in mind
  that required programs/packages may be stored on the SCF system, and it
  is your responsibility to get the required resources working on the other
  computer.
- Also, assignments and topics are oriented towards the UNIX operating system,
- so if you wish to use a non-UNIX computer, you should make sure that the
- necessary resources are available (and in some cases, you will need to
- use a UNIX-based system).
+ Also, assignments and topics are oriented towards the UNIX (i.e., Linux or
+ Mac) operating system, so if you wish to use a non-UNIX computer, you should
+ make sure that the necessary resources are available (and in some cases,
+ you will need to use a UNIX-based system).
  I can try to help with Windows-related issues but this help will necessarily
  be limited by my limited experience with Windows.
  
@@ -604,8 +647,8 @@ Any mathematical derivations may be done by hand.
 \end_layout
 
 \begin_layout Standard
-Note: knitr and Sweave are tools for embedding chunks of code within Latex
- documents.
+Note: knitr and Sweave are tools that allow one to embed chunks of code
+ within Latex documents.
  They can also be used with the LyX GUI front-end to Latex.
  R Markdown is an extension to the Markdown markup language that allows
  one to embed R code within an HTML document.
