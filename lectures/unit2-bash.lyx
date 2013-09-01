@@ -3381,38 +3381,47 @@ cd /tmp/git-demo git
 \end_layout
 
 \begin_layout Chunk
+
 echo 'stuff' > test.txt
 \end_layout
 
 \begin_layout Chunk
+
 git add test.txt
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am'added test file'
 \end_layout
 
 \begin_layout Chunk
+
 ls test*
 \end_layout
 
 \begin_layout Chunk
+
 git rm test.txt
 \end_layout
 
 \begin_layout Chunk
+
 ls test*
 \end_layout
 
 \begin_layout Chunk
+
 git status
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am'removed test file'
 \end_layout
 
 \begin_layout Chunk
+
 git status
 \end_layout
 
@@ -3433,12 +3442,92 @@ git rm
 git rm --cached file
 \end_layout
 
-\begin_layout Standard
-And `git rm` works in a similar fashion.
+\begin_layout Subsubsection
+Unstaging changes
 \end_layout
 
 \begin_layout Standard
-**Optional:** Exercise
+If we want to make a change before we do a commit, we can do that as follows:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+
+cd /tmp/git-demo git 
+\end_layout
+
+\begin_layout Chunk
+
+echo 'stuff' > test.txt
+\end_layout
+
+\begin_layout Chunk
+
+git add test.txt
+\end_layout
+
+\begin_layout Chunk
+
+git commit -am'added test file'
+\end_layout
+
+\begin_layout Chunk
+
+git rm test.txt
+\end_layout
+
+\begin_layout Chunk
+
+git status
+\end_layout
+
+\begin_layout Chunk
+
+# whoops, I want that file!
+\end_layout
+
+\begin_layout Chunk
+
+git reset -- test.txt # restore file in index (unstage)
+\end_layout
+
+\begin_layout Chunk
+
+git checkout -- test.txt # get a copy of the file back
+\end_layout
+
+\begin_layout Chunk
+
+ls test*
+\end_layout
+
+\begin_layout Chunk
+
+git status
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Note that if you want to unstage an addition before you've committed it,
+ you can do 
+\family typewriter
+git reset -- <file>
+\family default
+.
+ If you want to remove a file after you've committed the addition of the
+ file, you can do 
+\family typewriter
+git rm --cached
+\family default
+ and then a commit.
 \end_layout
 
 \begin_layout Subsection
