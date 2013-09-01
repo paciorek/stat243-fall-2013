@@ -1,0 +1,591 @@
+\batchmode
+\makeatletter
+\def\input@path{{/accounts/gen/vis/paciorek/teaching/243/stat243-fall-2013/lectures//}}
+\makeatother
+\documentclass[12pt]{article}\usepackage{graphicx, color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.2, 0.2, 0.2}
+\newcommand{\hlnumber}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlfunctioncall}[1]{\textcolor[rgb]{0.501960784313725,0,0.329411764705882}{\textbf{#1}}}%
+\newcommand{\hlstring}[1]{\textcolor[rgb]{0.6,0.6,1}{#1}}%
+\newcommand{\hlkeyword}[1]{\textcolor[rgb]{0,0,0}{\textbf{#1}}}%
+\newcommand{\hlargument}[1]{\textcolor[rgb]{0.690196078431373,0.250980392156863,0.0196078431372549}{#1}}%
+\newcommand{\hlcomment}[1]{\textcolor[rgb]{0.180392156862745,0.6,0.341176470588235}{#1}}%
+\newcommand{\hlroxygencomment}[1]{\textcolor[rgb]{0.43921568627451,0.47843137254902,0.701960784313725}{#1}}%
+\newcommand{\hlformalargs}[1]{\textcolor[rgb]{0.690196078431373,0.250980392156863,0.0196078431372549}{#1}}%
+\newcommand{\hleqformalargs}[1]{\textcolor[rgb]{0.690196078431373,0.250980392156863,0.0196078431372549}{#1}}%
+\newcommand{\hlassignement}[1]{\textcolor[rgb]{0,0,0}{\textbf{#1}}}%
+\newcommand{\hlpackage}[1]{\textcolor[rgb]{0.588235294117647,0.709803921568627,0.145098039215686}{#1}}%
+\newcommand{\hlslot}[1]{\textit{#1}}%
+\newcommand{\hlsymbol}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlprompt}[1]{\textcolor[rgb]{0.2,0.2,0.2}{#1}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage[letterpaper]{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage[unicode=true]
+ {hyperref}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{/accounts/gen/vis/paciorek/latex/paciorek-asa,times,graphics}
+\input{/accounts/gen/vis/paciorek/latex/paciorekMacros}
+%\renewcommand{\baselinestretch}{1.5}
+\hypersetup{unicode=true, pdfusetitle,
+bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true,}
+
+\makeatother
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
+\begin{document}
+
+
+
+
+\title{Reading and Writing to/from R}
+
+\maketitle
+References: 
+\begin{itemize}
+\item Adler
+\item Chambers
+\item \href{http://cran.r-project.org/doc/manuals/R-intro.html}{R intro manual}
+on CRAN (R-intro).
+\item Venables and Ripley, Modern Applied Statistics with S
+\item Murrell, Introduction to Data Technologies. 
+\item \href{http://cran.r-project.org/doc/manuals/R-data.html}{R Data Import/Export manual}
+on CRAN (R-data). 
+\end{itemize}
+
+\section{Data storage and formats (outside R)}
+
+At this point, we're going to turn to reading data into R and manipulating
+text, including regular expressions. We'll focus on doing these manipulations
+in R, but the concepts involved in reading in data, database manipulations,
+and regular expressions are common to other languages, so familarity
+with these in R should allow you to pick up other tools more easily.
+The main downside to working with datasets in R is that the entire
+dataset resides in memory, so R is not so good for dealing with very
+large datasets. More on alternatives in a bit. Another common frustration
+is controlling how the variables are interpreted (numeric, character,
+factor) when reading data into a data frame.
+
+R has the capability to read in a wide variety of file formats. Let's
+get a feel for some of the common ones. 
+\begin{enumerate}
+\item Flat text files (ASCII files): data are often provided as simple text
+files. Often one has one record or observation per row and each column
+or field is a different variable or type of information about the
+record. Such files can either have a fixed number of characters in
+each field (fixed width format) or a special character (a delimiter)
+that separates the fields in each row. Common delimiters are tabs,
+commas, one or more spaces, and the pipe (|). Common file extensions
+are \emph{.txt} and \emph{.csv}. Metadata (information about the data)
+is often stored in a separate file. I like CSV files but if you have
+files where the data contain commas, other delimiters can be good.
+Text can be put in quotes in CSV files. This was difficult to deal
+with in the shell in PS1, but \emph{read.table()} in R handles this
+situation. 
+
+\begin{enumerate}
+\item One occasionally tricky difficulty is as follows. If you have a text
+file created in Windows, the line endings are coded differently than
+in UNIX (a newline (the ASCII character\emph{ \textbackslash{}n})
+and a carriage return (the ASCII character \emph{\textbackslash{}r})
+in Windows vs. only a newline in UNIX). There are UNIX utilities (\emph{fromdos}
+in Ubuntu, including the SCF Linux machines and \emph{dos2unix} in
+other Linux distributions) that can do the necessary conversion. If
+you see \emph{\textasciicircum{}M} at the end of the lines in a file,
+that's the tool you need. Alternatively, if you open a UNIX file in
+Windows, it may treat all the lines as a single line. You can fix
+this with \emph{todos} or \emph{unix2dos}.\\
+As a side note, Macs have line endings as in UNIX, but before Mac
+OS X, lines ended only in a carriage return. There is a UNIX utility
+call \emph{mac2unix} that can convert such text files. 
+\end{enumerate}
+\item In some contexts, such as textual data and bioinformatics data, the
+data may in a text file with one piece of information per row, but
+without meaningful columns/fields.
+\item In scientific contexts, netCDF (\emph{.nc}) (and the related HDF5)
+are popular format for gridded data that allows for highly-efficient
+storage and contains the metadata within the file. The basic structure
+of a netCDF file is that each variable is an array with multiple dimensions
+(e.g., latitude, longitude, and time), and one can also extract the
+values of and metadata about each dimension. The \emph{ncdf} package
+in R nicely handles working with netCDF files. These are examples
+of a binary format, which is not (easily) human readable but can be
+more space-efficient and faster to work with (because they can allow
+random access into the data rather than requiring sequential reading). 
+\item Data may also be in the form of XML or HTML files. We won't deal with
+these in 243, except to the extent that they come up in a problem
+set.
+\item Data may already be in a database or in the data storage of another
+statistical package (\emph{Stata}, \emph{SAS}, \emph{SPSS}, etc.).
+The \emph{foreign} package in R has excellent capabilities for importing
+Stata (\emph{read.dta()}), SPSS (\emph{read.spss()}), SAS (\emph{read.ssd()}
+and, for XPORT files, \emph{read.xport()}), and dbf (a common database
+format) (\emph{read.dbf()}), among others.
+\item For Excel, there are capabilities to read an Excel file (see the \emph{XLConnect}
+package among others), but you can also just go into Excel and export
+as a CSV file or the like and then read that into R. In general, it's
+best not to pass around data files as Excel or other spreadsheet format
+files because (1) Excel is proprietary, so someone may not have Excel
+and the format is subject to change, (2) Excel imposes limits on the
+number of rows, (3) one can easily manipulate text files such as CSV
+using UNIX tools, but this is not possible with an Excel file, (4)
+Excel files often have more than one sheet, graphs, macros, etc.,
+so they're not a data storage format per se.
+\end{enumerate}
+
+\section{Reading data from text files into R}
+
+\emph{read.table()} is probably the most commonly-used function for
+reading in data, it reads in delimited files (\emph{read.csv()} and
+\emph{read.delim()} are special cases of \emph{read.table()}). The
+key arguments are the delimiter (the \emph{sep} argument) and whether
+the file contains a header, a line with the variable names. We can
+use \emph{read.fwf()} to read from a fixed width text file into a
+data frame. 
+
+The most difficult part of reading in such files can be dealing with
+how R determines the classes of the fields that are read in. There
+are a number of arguments to \emph{read.table()} and \emph{read.fwf()}
+that allow the user to control the classes. One difficulty is that
+character and numeric fields are sometimes read in as factors. Basically
+\emph{read.table()} tries to read fields in as numeric and if it finds
+non-numeric and non-NA values, it reads in as a factor. This can be
+annoying.
+
+Let's work through a couple examples. First let's look at the arguments
+to \emph{read.table()}. Note that \emph{sep=''''} separates on any
+amount of white space.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{getwd}()  \hlcomment{# a common error is not knowing what directory R is looking at}
+\hlfunctioncall{setwd}(\hlstring{"../data"})
+dat <- \hlfunctioncall{read.table}(\hlstring{"RTADataSub.csv"}, sep = \hlstring{","}, head = TRUE)
+\hlfunctioncall{lapply}(dat, class)
+\hlfunctioncall{levels}(dat[, 2])
+dat2 <- \hlfunctioncall{read.table}(\hlstring{"RTADataSub.csv"}, sep = \hlstring{","}, head = TRUE, na.strings = \hlfunctioncall{c}(\hlstring{"NA"}, 
+    \hlstring{"x"}), stringsAsFactors = FALSE)
+\hlfunctioncall{unique}(dat2[, 2])
+\hlcomment{# hmmm, what happened to the blank values this time?}
+\hlfunctioncall{which}(dat[, 2] == \hlstring{""})
+dat2[\hlfunctioncall{which}(dat[, 2] == \hlstring{""})[1], ]  # deconstruct it!
+sequ <- \hlfunctioncall{read.table}(\hlstring{"hivSequ.csv"}, sep = \hlstring{","}, header = TRUE, colClasses = \hlfunctioncall{c}(\hlstring{"integer"}, 
+    \hlstring{"integer"}, \hlstring{"character"}, \hlstring{"character"}, \hlstring{"numeric"}, \hlstring{"integer"}))
+\hlcomment{# let's make sure the coercion worked - sometimes R is obstinant}
+\hlfunctioncall{lapply}(sequ, class)
+\hlcomment{# that made use of the fact that a data frame is a list}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+If possible, it's a good idea to look through the input file in UNIX
+before reading into R to catch such issues in advance. Using less
+on \emph{RTADataSub.csv} would have revealed these various issues,
+but note that \emph{RTADataSub.csv} is a 1000-line subset of a much
+larger file of data available from the kaggle.com website.
+
+The basic function \emph{scan()} simply reads everything in, ignoring
+lines, which works well and very quickly if you are reading in a numeric
+vector or matrix. \emph{scan()} is also useful if your file is free
+format - i.e., if it's not one line per observation, but just all
+the data one value after another; in this case you can use \emph{scan()}
+to read it in and then format the resulting character or numeric vector
+as a matrix with as many columns as fields in the dataset. Remember
+that the default is to fill the matrix by column.
+
+If the file is not nicely arranged by field (e.g., if it has ragged
+lines), we'll need to do some more work. \emph{readLines()} will read
+in each line into a separate character vector, after which we can
+process the lines using text manipulation. Here's an example from
+some US meteorological data where I know from metadata (not provided
+here) that the 4-11th values are an identifier, the 17-20th are the
+year, the 22-23rd the month, etc.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+dat <- \hlfunctioncall{readLines}(\hlstring{"../data/precip.txt"})
+id <- \hlfunctioncall{as.factor}(\hlfunctioncall{substring}(dat, 4, 11))
+year <- \hlfunctioncall{substring}(dat, 17, 20)
+year[1:5]
+\end{alltt}
+\begin{verbatim}
+## [1] "I201" "I201" "I201" "I201" "I201"
+\end{verbatim}
+\begin{alltt}
+\hlfunctioncall{class}(year)
+\end{alltt}
+\begin{verbatim}
+## [1] "character"
+\end{verbatim}
+\begin{alltt}
+year <- \hlfunctioncall{as.integer}(\hlfunctioncall{substring}(dat, 18, 21))
+month <- \hlfunctioncall{as.integer}(\hlfunctioncall{substring}(dat, 22, 23))
+nvalues <- \hlfunctioncall{as.integer}(\hlfunctioncall{substring}(dat, 28, 30))
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+Note that for precip.txt, reading in using read.fwf() would be a good
+strategy.
+
+R allows you to read in not just from a file but from a more general
+construct called a \emph{connection}. Here are some examples of connections:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+dat <- \hlfunctioncall{readLines}(\hlfunctioncall{pipe}(\hlstring{"ls -al"}))
+dat <- \hlfunctioncall{read.table}(\hlfunctioncall{pipe}(\hlstring{"unzip dat.zip"}))
+dat <- \hlfunctioncall{read.csv}(\hlfunctioncall{gzfile}(\hlstring{"dat.csv.gz"}))
+dat <- \hlfunctioncall{readLines}(\hlstring{"http://www.stat.berkeley.edu/~paciorek/index.html"})
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+If a file is large, we may want to read it in in chunks (of lines),
+do some computations to reduce the size of things, and iterate. \emph{read.table()},
+\emph{read.fwf()} and \emph{readLines()} all have the arguments that
+let you read in a fixed number of lines. To read-on-the-fly in blocks,
+we need to first establish the connection and then read from it sequentially. 
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+con <- \hlfunctioncall{file}(\hlstring{"../data/precip.txt"}, \hlstring{"r"})
+\hlfunctioncall{class}(con)
+blockSize <- 1000  \hlcomment{# obviously this would be large in any real application}
+nLines <- 3e+05
+\hlfunctioncall{for} (i in 1:\hlfunctioncall{ceiling}(nLines/blockSize)) \{
+    lines <- \hlfunctioncall{readLines}(con, n = blockSize)
+\hlcomment{    # manipulate the lines and store the key stuff}
+\}
+\hlfunctioncall{close}(con)
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+One cool trick that can come in handy is to create a \emph{text connection}.
+This lets you 'read' from an R character vector as if it were a text
+file and could be handy for processing text. For example, you could
+then use \emph{read.fwf()} applied to \emph{con}.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+dat <- \hlfunctioncall{readLines}(\hlstring{"../data/precip.txt"})
+con <- \hlfunctioncall{textConnection}(dat[1], \hlstring{"r"})
+\hlfunctioncall{read.fwf}(con, \hlfunctioncall{c}(3, 8, 4, 2, 4, 2))
+\end{alltt}
+\begin{verbatim}
+##    V1      V2   V3 V4   V5 V6
+## 1 DLY 1000807 PRCP HI 2010  2
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+We can create connections for writing output too. Just make sure to
+open the connection first.
+
+Be careful with the directory separator in Windows files: you can
+either do \emph{``C:\textbackslash{}\textbackslash{}mydir\textbackslash{}\textbackslash{}file.txt''}
+or \emph{``C:/mydir/file.txt''}, but not \emph{``C:\textbackslash{}mydir\textbackslash{}file.txt''}.
+{[}I think; I haven't checked this, so a Windows user should correct
+me if I'm wrong.{]}
+
+
+\section{Output from R}
+
+
+\subsection{Writing output to files}
+
+Functions for text output are generally analogous to those for input.
+\emph{write.table()},\textbf{ }\emph{write.csv()}, and\textbf{ }\emph{writeLines()}
+are analogs of \emph{read.table()}, \emph{read.csv()}, and \emph{readLines()}.
+\emph{write()} can be used to write a matrix to a file, specifying
+the number of columns desired. \emph{cat()} can be used when you want
+fine control of the format of what is written out and allows for outputting
+to a connection (e.g., a file).
+
+And of course you can always save to an R data file using \emph{save.image()}
+(to save all the objects in the workspace or \emph{save()} to save
+only some objects. Happily this is platform-independent so can be
+used to transfer R objects between different OS.
+
+
+\subsection{Formatting output}
+
+One thing to be aware of when writing out numerical data is how many
+digits are included. For example, the default with \emph{write()}
+and\textbf{\emph{ }}\emph{cat()} is the number of digits displayed
+to the screen, controlled by \texttt{\emph{options()\$digits}}. (to
+change this, do\texttt{\textbf{ }}\texttt{options(digits = 5)} or
+specify as an argument to \emph{write()} or \emph{cat()}) If you want
+finer control, use \emph{sprintf()}, e.g. to print out print out temperatures
+as reals (``\emph{f}''=floating points) with four decimal places
+and nine total character positions, followed by a C for Celsius:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+temps <- \hlfunctioncall{c}(12.5, 37.234324, 1342434324.79997, 2.3456e-06, 1e+10)
+\hlfunctioncall{sprintf}(\hlstring{"%9.4f C"}, temps)
+\end{alltt}
+\begin{verbatim}
+## [1] "  12.5000 C"        "  37.2343 C"        "1342434324.8000 C" 
+## [4] "   0.0000 C"        "10000000000.0000 C"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\emph{cat()} is a good choice for printing a message to the screen,
+often better than \emph{print()}, which is an object-oriented method.
+You generally won't have control over how the output of a \emph{print()}
+statement is actually printed.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+val <- 1.5
+\hlfunctioncall{cat}(\hlstring{"My value is "}, val, \hlstring{".\textbackslash{}n"}, sep = \hlstring{""})
+\end{alltt}
+\begin{verbatim}
+## My value is 1.5.
+\end{verbatim}
+\begin{alltt}
+\hlfunctioncall{print}(\hlfunctioncall{paste}(\hlstring{"My value is "}, val, \hlstring{"."}, sep = \hlstring{""}))
+\end{alltt}
+\begin{verbatim}
+## [1] "My value is 1.5."
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+We can do more to control formatting with \emph{cat()}:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcomment{# input}
+x <- 7
+n <- 5
+\hlcomment{# display powers}
+\hlfunctioncall{cat}(\hlstring{"Powers of"}, x, \hlstring{"\textbackslash{}n"})
+\hlfunctioncall{cat}(\hlstring{"exponent   result\textbackslash{}n\textbackslash{}n"})
+result <- 1
+\hlfunctioncall{for} (i in 1:n) \{
+    result <- result * x
+    \hlfunctioncall{cat}(\hlfunctioncall{format}(i, width = 8), \hlfunctioncall{format}(result, width = 10), \hlstring{"\textbackslash{}n"}, sep = \hlstring{""})
+\}
+x <- 7
+n <- 5
+\hlcomment{# display powers}
+\hlfunctioncall{cat}(\hlstring{"Powers of"}, x, \hlstring{"\textbackslash{}n"})
+\hlfunctioncall{cat}(\hlstring{"exponent result\textbackslash{}n\textbackslash{}n"})
+result <- 1
+\hlfunctioncall{for} (i in 1:n) \{
+    result <- result * x
+    \hlfunctioncall{cat}(i, \hlstring{"\textbackslash{}t"}, result, \hlstring{"\textbackslash{}n"}, sep = \hlstring{""})
+\}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+
+\section{File and string encodings}
+
+Text (either in the form of a file with regular language in it or
+a data file with fields of character strings) will often contain characters
+that are not part of the {[}limited ASCII set of characters{]}(http://en.wikipedia.org/wiki/ASCII),
+which has $2^{7}=128$ characters and control codes; basically what
+you see on a standard US keyboard. So for non-ASCII files you may
+need to deal with the text encoding (the mapping of individual characters
+(including tabs, returns, etc.) to a set of numeric codes). There
+are a variety of different encodings for text files, with different
+ones common on different operating systems. UTF-8 is an encoding for
+the Unicode characters that include more than 110,000 characters from
+100 different alphabets/scripts. It's widely used on the web. Latin-1
+encodes a small subset of Unicode and contains the characters used
+in many European languages (e.g., letters with accents). 
+
+The UNIX utility \emph{file}, e.g. \texttt{file tmp.txt} can help
+provide some information. \emph{read.table()} in R takes arguments
+\emph{fileEncoding} and \emph{encoding} that address this issue. The
+UNIX utility \emph{iconv} and the R function \emph{iconv()} can help
+with conversions.
+
+In US installations of R, the default encoding is UTF-8; note that
+various types of information are interpreted in US English with the
+encoding UTF-8:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{Sys.getlocale}()
+\end{alltt}
+\begin{verbatim}
+## [1] "LC_CTYPE=en_US.UTF-8;LC_NUMERIC=C;LC_TIME=en_US.UTF-8;LC_COLLATE=en_US.UTF-8;LC_MONETARY=en_US.UTF-8;LC_MESSAGES=en_US.UTF-8;LC_PAPER=C;LC_NAME=C;LC_ADDRESS=C;LC_TELEPHONE=C;LC_MEASUREMENT=en_US.UTF-8;LC_IDENTIFICATION=C"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+With strings already in R, you can convert between encodings with
+\emph{iconv()}:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+text <- \hlstring{"_Melhore sua seguran\textbackslash{}xe7a_"}
+\hlfunctioncall{iconv}(text, from = \hlstring{"latin1"}, to = \hlstring{"UTF-8"})
+\end{alltt}
+\begin{verbatim}
+## [1] "_Melhore sua segurança_"
+\end{verbatim}
+\begin{alltt}
+\hlfunctioncall{iconv}(text, from = \hlstring{"latin1"}, to = \hlstring{"ASCII"}, sub = \hlstring{"???"})
+\end{alltt}
+\begin{verbatim}
+## [1] "_Melhore sua seguran???a_"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+You can also mark a string with an encoding, so R knows how to display
+it correctly:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+x <- \hlstring{"fa\textbackslash{}xE7ile"}
+\hlfunctioncall{Encoding}(x) <- \hlstring{"latin1"}
+x
+\end{alltt}
+\begin{verbatim}
+## [1] "façile"
+\end{verbatim}
+\begin{alltt}
+\hlcomment{# playing around...}
+x <- \hlstring{"\textbackslash{}xa1 \textbackslash{}xa2 \textbackslash{}xa3 \textbackslash{}xf1 \textbackslash{}xf2"}
+\hlfunctioncall{Encoding}(x) <- \hlstring{"latin1"}
+x
+\end{alltt}
+\begin{verbatim}
+## [1] "¡ ¢ £ ñ ò"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+An R error message with \textquotedbl{}multi-byte string\textquotedbl{}
+in the message often indicates an encoding issue. In particular errors
+often arise when trying to do string manipulations in R on character
+vectors for which the encoding is not properly set. Here's an example
+with some Internet logging data that we used last year in 243 in a
+problem set and which caused some problems.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{load}(\hlstring{"../data/IPs.RData"})  # loads in an object named \hlstring{'text'}
+tmp <- \hlfunctioncall{substring}(text, 1, 15)
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: invalid multibyte string at '<bf>a7lw8'}}\begin{alltt}
+\hlcomment{# the issue occurs with the 6402th element (found by trial and error):}
+tmp <- \hlfunctioncall{substring}(text[1:6401], 1, 15)
+tmp <- \hlfunctioncall{substring}(text[1:6402], 1, 15)
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: invalid multibyte string at '<bf>a7lw8'}}\begin{alltt}
+text[6402]  \hlcomment{# note the Latin-1 character}
+\end{alltt}
+\begin{verbatim}
+## [1] "from 5#c\xbfa7lw8lz2nX,%@ [128.32.244.179] by ncpc-email with ESMTP\n(SMTPD32-7.04) id A06E24A0116; Mon, 10 Jun 2002 11:43:42 +0800"
+\end{verbatim}
+\begin{alltt}
+text <- \hlfunctioncall{iconv}(text, from = \hlstring{"latin1"}, to = \hlstring{"UTF-8"})
+text[6402]
+\end{alltt}
+\begin{verbatim}
+## [1] "from 5#c¿a7lw8lz2nX,%@ [128.32.244.179] by ncpc-email with ESMTP\n(SMTPD32-7.04) id A06E24A0116; Mon, 10 Jun 2002 11:43:42 +0800"
+\end{verbatim}
+\begin{alltt}
+tmp <- \hlfunctioncall{substring}(text, 1, 15)
+tmp[6402]
+\end{alltt}
+\begin{verbatim}
+## [1] "from 5#c¿a7lw8l"
+\end{verbatim}
+\begin{alltt}
+\hlcomment{# Interesting:}
+\hlfunctioncall{table}(\hlfunctioncall{Encoding}(text))
+\end{alltt}
+\begin{verbatim}
+## 
+## unknown   UTF-8 
+##    6932       4
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+
+\end{document}

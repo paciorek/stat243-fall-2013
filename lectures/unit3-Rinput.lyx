@@ -1,0 +1,1458 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{/accounts/gen/vis/paciorek/latex/paciorek-asa,times,graphics}
+\input{/accounts/gen/vis/paciorek/latex/paciorekMacros}
+%\renewcommand{\baselinestretch}{1.5}
+\hypersetup{unicode=true, pdfusetitle,
+bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true,}
+\end_preamble
+\use_default_options false
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing onehalf
+\use_hyperref false
+\papersize letterpaper
+\use_geometry true
+\use_amsmath 1
+\use_esint 0
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<setup, include=FALSE, cache=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+## I use = but I can replace it with <-; set code/output width to be 68
+\end_layout
+
+\begin_layout Plain Layout
+
+options(replace.assign=TRUE, width=60)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+Reading and Writing to/from R
+\end_layout
+
+\begin_layout Standard
+References: 
+\end_layout
+
+\begin_layout Itemize
+Adler
+\end_layout
+
+\begin_layout Itemize
+Chambers
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "R intro manual"
+target "http://cran.r-project.org/doc/manuals/R-intro.html"
+
+\end_inset
+
+ on CRAN (R-intro).
+\end_layout
+
+\begin_layout Itemize
+Venables and Ripley, Modern Applied Statistics with S
+\end_layout
+
+\begin_layout Itemize
+Murrell, Introduction to Data Technologies.
+ 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "R Data Import/Export manual"
+target "http://cran.r-project.org/doc/manuals/R-data.html"
+
+\end_inset
+
+ on CRAN (R-data).
+ 
+\end_layout
+
+\begin_layout Section
+Data storage and formats (outside R)
+\end_layout
+
+\begin_layout Standard
+At this point, we're going to turn to reading data into R and manipulating
+ text, including regular expressions.
+ We'll focus on doing these manipulations in R, but the concepts involved
+ in reading in data, database manipulations, and regular expressions are
+ common to other languages, so familarity with these in R should allow you
+ to pick up other tools more easily.
+ The main downside to working with datasets in R is that the entire dataset
+ resides in memory, so R is not so good for dealing with very large datasets.
+ More on alternatives in a bit.
+ Another common frustration is controlling how the variables are interpreted
+ (numeric, character, factor) when reading data into a data frame.
+\end_layout
+
+\begin_layout Standard
+R has the capability to read in a wide variety of file formats.
+ Let's get a feel for some of the common ones.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Flat text files (ASCII files): data are often provided as simple text files.
+ Often one has one record or observation per row and each column or field
+ is a different variable or type of information about the record.
+ Such files can either have a fixed number of characters in each field (fixed
+ width format) or a special character (a delimiter) that separates the fields
+ in each row.
+ Common delimiters are tabs, commas, one or more spaces, and the pipe (|).
+ Common file extensions are 
+\emph on
+.txt
+\emph default
+ and 
+\emph on
+.csv
+\emph default
+.
+ Metadata (information about the data) is often stored in a separate file.
+ I like CSV files but if you have files where the data contain commas, other
+ delimiters can be good.
+ Text can be put in quotes in CSV files.
+ This was difficult to deal with in the shell in PS1, but 
+\emph on
+read.table()
+\emph default
+ in R handles this situation.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+One occasionally tricky difficulty is as follows.
+ If you have a text file created in Windows, the line endings are coded
+ differently than in UNIX (a newline (the ASCII character
+\emph on
+ 
+\backslash
+n
+\emph default
+) and a carriage return (the ASCII character 
+\emph on
+
+\backslash
+r
+\emph default
+) in Windows vs.
+ only a newline in UNIX).
+ There are UNIX utilities (
+\emph on
+fromdos
+\emph default
+ in Ubuntu, including the SCF Linux machines and 
+\emph on
+dos2unix
+\emph default
+ in other Linux distributions) that can do the necessary conversion.
+ If you see 
+\emph on
+^M
+\emph default
+ at the end of the lines in a file, that's the tool you need.
+ Alternatively, if you open a UNIX file in Windows, it may treat all the
+ lines as a single line.
+ You can fix this with 
+\emph on
+todos
+\emph default
+ or 
+\emph on
+unix2dos
+\emph default
+.
+\begin_inset Newline newline
+\end_inset
+
+As a side note, Macs have line endings as in UNIX, but before Mac OS X,
+ lines ended only in a carriage return.
+ There is a UNIX utility call 
+\emph on
+mac2unix
+\emph default
+ that can convert such text files.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+In some contexts, such as textual data and bioinformatics data, the data
+ may in a text file with one piece of information per row, but without meaningfu
+l columns/fields.
+\end_layout
+
+\begin_layout Enumerate
+In scientific contexts, netCDF (
+\emph on
+.nc
+\emph default
+) (and the related HDF5) are popular format for gridded data that allows
+ for highly-efficient storage and contains the metadata within the file.
+ The basic structure of a netCDF file is that each variable is an array
+ with multiple dimensions (e.g., latitude, longitude, and time), and one can
+ also extract the values of and metadata about each dimension.
+ The 
+\emph on
+ncdf
+\emph default
+ package in R nicely handles working with netCDF files.
+ These are examples of a binary format, which is not (easily) human readable
+ but can be more space-efficient and faster to work with (because they can
+ allow random access into the data rather than requiring sequential reading).
+ 
+\end_layout
+
+\begin_layout Enumerate
+Data may also be in the form of XML or HTML files.
+ We won't deal with these in 243, except to the extent that they come up
+ in a problem set.
+\end_layout
+
+\begin_layout Enumerate
+Data may already be in a database or in the data storage of another statistical
+ package (
+\emph on
+Stata
+\emph default
+, 
+\emph on
+SAS
+\emph default
+, 
+\emph on
+SPSS
+\emph default
+, etc.).
+ The 
+\emph on
+foreign
+\emph default
+ package in R has excellent capabilities for importing Stata (
+\emph on
+read.dta()
+\emph default
+), SPSS (
+\emph on
+read.spss()
+\emph default
+), SAS (
+\emph on
+read.ssd()
+\emph default
+ and, for XPORT files, 
+\emph on
+read.xport()
+\emph default
+), and dbf (a common database format) (
+\emph on
+read.dbf()
+\emph default
+), among others.
+\end_layout
+
+\begin_layout Enumerate
+For Excel, there are capabilities to read an Excel file (see the 
+\emph on
+XLConnect
+\emph default
+ package among others), but you can also just go into Excel and export as
+ a CSV file or the like and then read that into R.
+ In general, it's best not to pass around data files as Excel or other spreadshe
+et format files because (1) Excel is proprietary, so someone may not have
+ Excel and the format is subject to change, (2) Excel imposes limits on
+ the number of rows, (3) one can easily manipulate text files such as CSV
+ using UNIX tools, but this is not possible with an Excel file, (4) Excel
+ files often have more than one sheet, graphs, macros, etc., so they're not
+ a data storage format per se.
+\end_layout
+
+\begin_layout Section
+Reading data from text files into R
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+read.table()
+\emph default
+ is probably the most commonly-used function for reading in data, it reads
+ in delimited files (
+\emph on
+read.csv()
+\emph default
+ and 
+\emph on
+read.delim()
+\emph default
+ are special cases of 
+\emph on
+read.table()
+\emph default
+).
+ The key arguments are the delimiter (the 
+\emph on
+sep
+\emph default
+ argument) and whether the file contains a header, a line with the variable
+ names.
+ We can use 
+\emph on
+read.fwf()
+\emph default
+ to read from a fixed width text file into a data frame.
+ 
+\end_layout
+
+\begin_layout Standard
+The most difficult part of reading in such files can be dealing with how
+ R determines the classes of the fields that are read in.
+ There are a number of arguments to 
+\emph on
+read.table()
+\emph default
+ and 
+\emph on
+read.fwf()
+\emph default
+ that allow the user to control the classes.
+ One difficulty is that character and numeric fields are sometimes read
+ in as factors.
+ Basically 
+\emph on
+read.table()
+\emph default
+ tries to read fields in as numeric and if it finds non-numeric and non-NA
+ values, it reads in as a factor.
+ This can be annoying.
+\end_layout
+
+\begin_layout Standard
+Let's work through a couple examples.
+ First let's look at the arguments to 
+\emph on
+read.table()
+\emph default
+.
+ Note that 
+\emph on
+sep=
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ separates on any amount of white space.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk81, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+getwd()  # a common error is not knowing what directory R is looking at
+\end_layout
+
+\begin_layout Chunk
+
+setwd('../data')
+\end_layout
+
+\begin_layout Chunk
+
+dat <- read.table('RTADataSub.csv', sep = ',', head = TRUE)
+\end_layout
+
+\begin_layout Chunk
+
+lapply(dat, class)
+\end_layout
+
+\begin_layout Chunk
+
+levels(dat[ ,2])
+\end_layout
+
+\begin_layout Chunk
+
+dat2 <- read.table('RTADataSub.csv', sep = ',', head = TRUE, 
+\end_layout
+
+\begin_layout Chunk
+
+   na.strings = c("NA", "x"), stringsAsFactors = FALSE)
+\end_layout
+
+\begin_layout Chunk
+
+unique(dat2[ ,2])
+\end_layout
+
+\begin_layout Chunk
+
+# hmmm, what happened to the blank values this time?
+\end_layout
+
+\begin_layout Chunk
+
+which(dat[ ,2] == "")
+\end_layout
+
+\begin_layout Chunk
+
+dat2[which(dat[, 2] == "")[1], ] # deconstruct it!
+\end_layout
+
+\begin_layout Chunk
+
+sequ <- read.table('hivSequ.csv', sep = ',', header = TRUE, 
+\end_layout
+
+\begin_layout Chunk
+
+  colClasses = c('integer','integer','character',
+\end_layout
+
+\begin_layout Chunk
+
+    'character','numeric','integer'))
+\end_layout
+
+\begin_layout Chunk
+
+# let's make sure the coercion worked - sometimes R is obstinant
+\end_layout
+
+\begin_layout Chunk
+
+lapply(sequ, class) 
+\end_layout
+
+\begin_layout Chunk
+
+# that made use of the fact that a data frame is a list
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+If possible, it's a good idea to look through the input file in UNIX before
+ reading into R to catch such issues in advance.
+ Using less on 
+\emph on
+RTADataSub.csv
+\emph default
+ would have revealed these various issues, but note that 
+\emph on
+RTADataSub.csv
+\emph default
+ is a 1000-line subset of a much larger file of data available from the
+ kaggle.com website.
+\end_layout
+
+\begin_layout Standard
+The basic function 
+\emph on
+scan()
+\emph default
+ simply reads everything in, ignoring lines, which works well and very quickly
+ if you are reading in a numeric vector or matrix.
+ 
+\emph on
+scan()
+\emph default
+ is also useful if your file is free format - i.e., if it's not one line per
+ observation, but just all the data one value after another; in this case
+ you can use 
+\emph on
+scan()
+\emph default
+ to read it in and then format the resulting character or numeric vector
+ as a matrix with as many columns as fields in the dataset.
+ Remember that the default is to fill the matrix by column.
+\end_layout
+
+\begin_layout Standard
+If the file is not nicely arranged by field (e.g., if it has ragged lines),
+ we'll need to do some more work.
+ 
+\emph on
+readLines()
+\emph default
+ will read in each line into a separate character vector, after which we
+ can process the lines using text manipulation.
+ Here's an example from some US meteorological data where I know from metadata
+ (not provided here) that the 4-11th values are an identifier, the 17-20th
+ are the year, the 22-23rd the month, etc.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk81a>>=
+\end_layout
+
+\begin_layout Chunk
+
+dat <- readLines('../data/precip.txt')
+\end_layout
+
+\begin_layout Chunk
+
+id <- as.factor(substring(dat, 4, 11) )
+\end_layout
+
+\begin_layout Chunk
+
+year <- substring(dat, 17, 20)
+\end_layout
+
+\begin_layout Chunk
+
+year[1:5]
+\end_layout
+
+\begin_layout Chunk
+
+class(year)
+\end_layout
+
+\begin_layout Chunk
+
+year <- as.integer(substring(dat, 18, 21))
+\end_layout
+
+\begin_layout Chunk
+
+month <- as.integer(substring(dat, 22, 23))
+\end_layout
+
+\begin_layout Chunk
+
+nvalues <- as.integer(substring(dat, 28, 30))
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Note that for precip.txt, reading in using read.fwf() would be a good strategy.
+\end_layout
+
+\begin_layout Standard
+R allows you to read in not just from a file but from a more general construct
+ called a 
+\emph on
+connection
+\emph default
+.
+ Here are some examples of connections:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk82, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+dat <- readLines(pipe("ls -al"))
+\end_layout
+
+\begin_layout Chunk
+
+dat <- read.table(pipe("unzip dat.zip"))
+\end_layout
+
+\begin_layout Chunk
+
+dat <- read.csv(gzfile("dat.csv.gz"))
+\end_layout
+
+\begin_layout Chunk
+
+dat <- readLines("http://www.stat.berkeley.edu/~paciorek/index.html")
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+If a file is large, we may want to read it in in chunks (of lines), do some
+ computations to reduce the size of things, and iterate.
+ 
+\emph on
+read.table()
+\emph default
+, 
+\emph on
+read.fwf()
+\emph default
+ and 
+\emph on
+readLines()
+\emph default
+ all have the arguments that let you read in a fixed number of lines.
+ To read-on-the-fly in blocks, we need to first establish the connection
+ and then read from it sequentially.
+ 
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk83, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+con <- file("../data/precip.txt", "r") # "r" for 'read' - you can also open
+ files for writing with "w" (or "a" for appending) 
+\end_layout
+
+\begin_layout Chunk
+
+class(con)
+\end_layout
+
+\begin_layout Chunk
+
+blockSize <- 1000 # obviously this would be large in any real application
+ 
+\end_layout
+
+\begin_layout Chunk
+
+nLines <- 300000
+\end_layout
+
+\begin_layout Chunk
+
+for(i in 1:ceiling(nLines / blockSize)){ 
+\end_layout
+
+\begin_layout Chunk
+
+	lines <- readLines(con, n = blockSize) 
+\end_layout
+
+\begin_layout Chunk
+
+	# manipulate the lines and store the key stuff
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+close(con) 
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+One cool trick that can come in handy is to create a 
+\emph on
+text connection
+\emph default
+.
+ This lets you 'read' from an R character vector as if it were a text file
+ and could be handy for processing text.
+ For example, you could then use 
+\emph on
+read.fwf()
+\emph default
+ applied to 
+\emph on
+con
+\emph default
+.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk84>>=
+\end_layout
+
+\begin_layout Chunk
+
+dat <- readLines('../data/precip.txt')
+\end_layout
+
+\begin_layout Chunk
+
+con <- textConnection(dat[1], "r")
+\end_layout
+
+\begin_layout Chunk
+
+read.fwf(con, c(3,8,4,2,4,2))
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+We can create connections for writing output too.
+ Just make sure to open the connection first.
+\end_layout
+
+\begin_layout Standard
+Be careful with the directory separator in Windows files: you can either
+ do 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+C:
+\backslash
+
+\backslash
+mydir
+\backslash
+
+\backslash
+file.txt
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ or 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+C:/mydir/file.txt
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+, but not 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+C:
+\backslash
+mydir
+\backslash
+file.txt
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+.
+ [I think; I haven't checked this, so a Windows user should correct me if
+ I'm wrong.]
+\end_layout
+
+\begin_layout Section
+Output from R
+\end_layout
+
+\begin_layout Subsection
+Writing output to files
+\end_layout
+
+\begin_layout Standard
+Functions for text output are generally analogous to those for input.
+ 
+\emph on
+write.table()
+\emph default
+,
+\series bold
+ 
+\series default
+\emph on
+write.csv()
+\emph default
+, and
+\series bold
+ 
+\series default
+\emph on
+writeLines()
+\emph default
+ are analogs of 
+\emph on
+read.table()
+\emph default
+, 
+\emph on
+read.csv()
+\emph default
+, and 
+\emph on
+readLines()
+\emph default
+.
+ 
+\emph on
+write()
+\emph default
+ can be used to write a matrix to a file, specifying the number of columns
+ desired.
+ 
+\emph on
+cat()
+\emph default
+ can be used when you want fine control of the format of what is written
+ out and allows for outputting to a connection (e.g., a file).
+\end_layout
+
+\begin_layout Standard
+And of course you can always save to an R data file using 
+\emph on
+save.image()
+\emph default
+ (to save all the objects in the workspace or 
+\emph on
+save()
+\emph default
+ to save only some objects.
+ Happily this is platform-independent so can be used to transfer R objects
+ between different OS.
+\end_layout
+
+\begin_layout Subsection
+Formatting output
+\end_layout
+
+\begin_layout Standard
+One thing to be aware of when writing out numerical data is how many digits
+ are included.
+ For example, the default with 
+\emph on
+write()
+\emph default
+ and
+\series bold
+\emph on
+ 
+\series default
+cat()
+\emph default
+ is the number of digits displayed to the screen, controlled by 
+\family typewriter
+\emph on
+options()$digits
+\family default
+\emph default
+.
+ (to change this, do
+\family typewriter
+\series bold
+ 
+\series default
+options(digits = 5)
+\family default
+ or specify as an argument to 
+\emph on
+write()
+\emph default
+ or 
+\emph on
+cat()
+\emph default
+) If you want finer control, use 
+\emph on
+sprintf()
+\emph default
+, e.g.
+ to print out print out temperatures as reals (
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+f
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+=floating points) with four decimal places and nine total character positions,
+ followed by a C for Celsius:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk111>>=
+\end_layout
+
+\begin_layout Chunk
+
+temps <- c(12.5, 37.234324, 1342434324.79997234, 2.3456e-6, 1e10)
+\end_layout
+
+\begin_layout Chunk
+
+sprintf("%9.4f C", temps)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+cat()
+\emph default
+ is a good choice for printing a message to the screen, often better than
+ 
+\emph on
+print()
+\emph default
+, which is an object-oriented method.
+ You generally won't have control over how the output of a 
+\emph on
+print()
+\emph default
+ statement is actually printed.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk112>>=
+\end_layout
+
+\begin_layout Chunk
+
+val <- 1.5
+\end_layout
+
+\begin_layout Chunk
+
+cat('My value is ', val, '.
+\backslash
+n', sep = '')
+\end_layout
+
+\begin_layout Chunk
+
+print(paste('My value is ', val, '.', sep = ''))
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+We can do more to control formatting with 
+\emph on
+cat()
+\emph default
+:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk113, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+# input
+\end_layout
+
+\begin_layout Chunk
+
+x <- 7
+\end_layout
+
+\begin_layout Chunk
+
+n <- 5
+\end_layout
+
+\begin_layout Chunk
+
+# display powers
+\end_layout
+
+\begin_layout Chunk
+
+cat("Powers of", x, "
+\backslash
+n")
+\end_layout
+
+\begin_layout Chunk
+
+cat("exponent   result
+\backslash
+n
+\backslash
+n")
+\end_layout
+
+\begin_layout Chunk
+
+result <- 1
+\end_layout
+
+\begin_layout Chunk
+
+for (i in 1:n) {
+\end_layout
+
+\begin_layout Chunk
+
+	result <- result * x
+\end_layout
+
+\begin_layout Chunk
+
+	cat(format(i, width = 8), format(result, width = 10),"
+\backslash
+n", sep = "")
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+x <- 7
+\end_layout
+
+\begin_layout Chunk
+
+n <- 5
+\end_layout
+
+\begin_layout Chunk
+
+# display powers
+\end_layout
+
+\begin_layout Chunk
+
+cat("Powers of", x, "
+\backslash
+n")
+\end_layout
+
+\begin_layout Chunk
+
+cat("exponent result
+\backslash
+n
+\backslash
+n")
+\end_layout
+
+\begin_layout Chunk
+
+result <- 1
+\end_layout
+
+\begin_layout Chunk
+
+for (i in 1:n) {
+\end_layout
+
+\begin_layout Chunk
+
+	result <- result * x
+\end_layout
+
+\begin_layout Chunk
+
+	cat(i, '
+\backslash
+t', result, '
+\backslash
+n', sep = '')
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Section
+File and string encodings
+\end_layout
+
+\begin_layout Standard
+Text (either in the form of a file with regular language in it or a data
+ file with fields of character strings) will often contain characters that
+ are not part of the [limited ASCII set of characters](http://en.wikipedia.org/wik
+i/ASCII), which has 
+\begin_inset Formula $2^{7}=128$
+\end_inset
+
+ characters and control codes; basically what you see on a standard US keyboard.
+ So for non-ASCII files you may need to deal with the text encoding (the
+ mapping of individual characters (including tabs, returns, etc.) to a set
+ of numeric codes).
+ There are a variety of different encodings for text files, with different
+ ones common on different operating systems.
+ UTF-8 is an encoding for the Unicode characters that include more than
+ 110,000 characters from 100 different alphabets/scripts.
+ It's widely used on the web.
+ Latin-1 encodes a small subset of Unicode and contains the characters used
+ in many European languages (e.g., letters with accents).
+ 
+\end_layout
+
+\begin_layout Standard
+The UNIX utility 
+\emph on
+file
+\emph default
+, e.g.
+ 
+\family typewriter
+file tmp.txt
+\family default
+ can help provide some information.
+ 
+\emph on
+read.table()
+\emph default
+ in R takes arguments 
+\emph on
+fileEncoding
+\emph default
+ and 
+\emph on
+encoding
+\emph default
+ that address this issue.
+ The UNIX utility 
+\emph on
+iconv
+\emph default
+ and the R function 
+\emph on
+iconv()
+\emph default
+ can help with conversions.
+\end_layout
+
+\begin_layout Standard
+In US installations of R, the default encoding is UTF-8; note that various
+ types of information are interpreted in US English with the encoding UTF-8:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk113b>>=
+\end_layout
+
+\begin_layout Chunk
+
+Sys.getlocale()
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+With strings already in R, you can convert between encodings with 
+\emph on
+iconv()
+\emph default
+:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk114>>=
+\end_layout
+
+\begin_layout Chunk
+
+text <- "_Melhore sua seguran
+\backslash
+xe7a_"
+\end_layout
+
+\begin_layout Chunk
+
+iconv(text, from = "latin1", to = "UTF-8")
+\end_layout
+
+\begin_layout Chunk
+
+iconv(text, from = "latin1", to = "ASCII", sub = "???")
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+You can also mark a string with an encoding, so R knows how to display it
+ correctly:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk114a>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- "fa
+\backslash
+xE7ile" 
+\end_layout
+
+\begin_layout Chunk
+
+Encoding(x) <- "latin1" 
+\end_layout
+
+\begin_layout Chunk
+
+x
+\end_layout
+
+\begin_layout Chunk
+
+# playing around...
+ 
+\end_layout
+
+\begin_layout Chunk
+
+x <- "
+\backslash
+xa1 
+\backslash
+xa2 
+\backslash
+xa3 
+\backslash
+xf1 
+\backslash
+xf2" 
+\end_layout
+
+\begin_layout Chunk
+
+Encoding(x) <- "latin1" 
+\end_layout
+
+\begin_layout Chunk
+
+x 
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+An R error message with "multi-byte string" in the message often indicates
+ an encoding issue.
+ In particular errors often arise when trying to do string manipulations
+ in R on character vectors for which the encoding is not properly set.
+ Here's an example with some Internet logging data that we used last year
+ in 243 in a problem set and which caused some problems.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk115>>=
+\end_layout
+
+\begin_layout Chunk
+
+load('../data/IPs.RData') # loads in an object named 'text'
+\end_layout
+
+\begin_layout Chunk
+
+tmp <- substring(text, 1, 15)
+\end_layout
+
+\begin_layout Chunk
+
+# the issue occurs with the 6402th element (found by trial and error):
+\end_layout
+
+\begin_layout Chunk
+
+tmp <- substring(text[1:6401],1,15)
+\end_layout
+
+\begin_layout Chunk
+
+tmp <- substring(text[1:6402],1,15)
+\end_layout
+
+\begin_layout Chunk
+
+text[6402] # note the Latin-1 character
+\end_layout
+
+\begin_layout Chunk
+
+text <- iconv(text, from = "latin1", to = "UTF-8")
+\end_layout
+
+\begin_layout Chunk
+
+text[6402]
+\end_layout
+
+\begin_layout Chunk
+
+tmp <- substring(text, 1, 15)
+\end_layout
+
+\begin_layout Chunk
+
+tmp[6402]
+\end_layout
+
+\begin_layout Chunk
+
+# Interesting:
+\end_layout
+
+\begin_layout Chunk
+
+table(Encoding(text))
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\end_body
+\end_document
