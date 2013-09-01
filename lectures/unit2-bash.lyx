@@ -2736,22 +2736,27 @@ Recall that we have been using Git in a very simple fashion.
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk0, engine='bash'>>=
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp
 \end_layout
 
 \begin_layout Chunk
+
 git clone https://github.com/paciorek/stat243-fall-2013
 \end_layout
 
 \begin_layout Chunk
+
 git pull
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2774,58 +2779,72 @@ A toy "implementation"
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk1>>=
 \end_layout
 
 \begin_layout Chunk
+
 library('digest')
 \end_layout
 
 \begin_layout Chunk
+
 # first commit 
 \end_layout
 
 \begin_layout Chunk
+
 data1 <- 'This is the start of my paper2.' 
 \end_layout
 
 \begin_layout Chunk
+
 meta1 <- 'date: 8/20/13' 
 \end_layout
 
 \begin_layout Chunk
+
 hash1 <- digest(c(data1,meta1), algo="sha1") 
 \end_layout
 
 \begin_layout Chunk
+
 cat('Hash:', hash1)
 \end_layout
 
 \begin_layout Chunk
+
 # second commit, linked to the first 
 \end_layout
 
 \begin_layout Chunk
+
 data2 <- 'Some more text in my paper...' 
 \end_layout
 
 \begin_layout Chunk
+
 meta2 <- 'date: 8/20/13' 
 \end_layout
 
 \begin_layout Chunk
+
 # Note we add the parent hash here! 
 \end_layout
 
 \begin_layout Chunk
+
 hash2 <- digest(c(data2,meta2,hash1), algo="sha1") 
 \end_layout
 
 \begin_layout Chunk
+
 cat('Hash:', hash2)
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2847,14 +2866,17 @@ git help
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk2, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 git help 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2871,22 +2893,27 @@ git init
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk3, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp 
 \end_layout
 
 \begin_layout Chunk
+
 rm -rf git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git init git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2895,22 +2922,27 @@ Let's look at what git did:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk4, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 ls -al
 \end_layout
 
 \begin_layout Chunk
+
 ls -al .git
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2925,18 +2957,22 @@ Now let's edit our first file in the test directory with a text editor...
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk5, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 echo "My first bit of text" > file1.txt 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2949,18 +2985,22 @@ add
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git add file1.txt 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2973,18 +3013,22 @@ status
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git status 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3019,18 +3063,22 @@ index
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am"This is our first commit" 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3049,18 +3097,22 @@ We can use git log to see what has been committed to the repository so far:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git log 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3072,18 +3124,22 @@ Let's do a little bit more work...
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 echo "And now some more text..." >> file1.txt 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3092,18 +3148,22 @@ And now we can ask git what is different:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git diff 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3112,18 +3172,22 @@ So the cycle of work in a git context is: work, commit, work, commit, ...
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am"I have made great progress on this critical matter." 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3132,18 +3196,22 @@ Now let's see what the log shows us now:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git log 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3152,18 +3220,22 @@ Sometimes it's handy to see a very summarized version of the log:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git log --oneline --topo-order --graph 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3181,31 +3253,38 @@ git slog
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 # We create our alias (this saves it in git's permanent configuration file):
  
 \end_layout
 
 \begin_layout Chunk
+
 git config --global alias.slog "log --oneline --topo-order --graph" 
 \end_layout
 
 \begin_layout Chunk
+
 # And now we can use it 
 \end_layout
 
 \begin_layout Chunk
+
 git slog 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3214,14 +3293,42 @@ Renaming and removing files
 \end_layout
 
 \begin_layout Standard
-While `git add` is used to add fils to the list git tracks, we must also
- tell it if we want their names to change or for it to stop tracking them.
- In familiar Unix fashion, the `mv` and `rm` git commands do precisely this:
+Once a file is added to a repository, we need to use git commands to rename
+ and remove files.
+ In familiar Unix fashion, the 
+\emph on
+mv
+\emph default
+ and 
+\emph on
+rm
+\emph default
+ git commands do precisely this:
 \end_layout
 
-\begin_layout Standard
-<<chunk, engine='bash'>>= cd /tmp/git-demo git mv file1.txt file-newname.txt
- git status @
+\begin_layout Chunk
+
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+
+cd /tmp/git-demo git 
+\end_layout
+
+\begin_layout Chunk
+
+mv file1.txt file-newname.txt 
+\end_layout
+
+\begin_layout Chunk
+
+git status 
+\end_layout
+
+\begin_layout Chunk
+
+@
 \end_layout
 
 \begin_layout Standard
@@ -3230,9 +3337,100 @@ Note that these changes must be committed too, to become permanent! In git's
  anywhere.
 \end_layout
 
+\begin_layout Chunk
+
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+
+git commit -am"I like this new name better" 
+\end_layout
+
+\begin_layout Chunk
+
+git slog 
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
 \begin_layout Standard
-<<chunk, engine='bash'>>= cd /tmp/git-demo git commit -a -m"I like this
- new name better" echo "Let's look at the log again:" git slog @
+Let's see 
+\emph on
+git rm
+\emph default
+ in action:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+
+cd /tmp/git-demo git 
+\end_layout
+
+\begin_layout Chunk
+echo 'stuff' > test.txt
+\end_layout
+
+\begin_layout Chunk
+git add test.txt
+\end_layout
+
+\begin_layout Chunk
+git commit -am'added test file'
+\end_layout
+
+\begin_layout Chunk
+ls test*
+\end_layout
+
+\begin_layout Chunk
+git rm test.txt
+\end_layout
+
+\begin_layout Chunk
+ls test*
+\end_layout
+
+\begin_layout Chunk
+git status
+\end_layout
+
+\begin_layout Chunk
+git commit -am'removed test file'
+\end_layout
+
+\begin_layout Chunk
+git status
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Be careful: 
+\emph on
+git rm
+\emph default
+ removes the file from the local filesystem.
+ If we want to remove a file from the repository but keep it on the local
+ disk, we can do: 
+\family typewriter
+git rm --cached file
 \end_layout
 
 \begin_layout Standard
@@ -3241,11 +3439,6 @@ And `git rm` works in a similar fashion.
 
 \begin_layout Standard
 **Optional:** Exercise
-\end_layout
-
-\begin_layout Standard
-Add a new file `file2.txt`, commit it, make some changes to it, commit them
- again, and then remove it (and don't forget to commit this last step!).
 \end_layout
 
 \begin_layout Subsection
