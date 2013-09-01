@@ -13,6 +13,9 @@ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
  breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true,}
 \end_preamble
 \use_default_options false
+\begin_modules
+knitr
+\end_modules
 \maintain_unincluded_children false
 \language english
 \language_package default
@@ -2588,11 +2591,1032 @@ For more extensive shell programming, it's probably worth learning Python
 \end_layout
 
 \begin_layout Section
-Version Control using Git
+Version Control 
 \end_layout
 
 \begin_layout Standard
-[UNDER CONSTRUCTION]
+At a basic level, a simple principle is to have version numbers for all
+ your work: code, datasets, manuscripts.
+ Whenever you make a change to a dataset, increment the version number.
+ For code and manuscripts, increment when you make substantial changes or
+ have obvious breakpoints in your workflow.
+ 
+\end_layout
+
+\begin_layout Standard
+The basic idea of version control software (VCS) is that instead of manually
+ trying to keep track of what changes you've made to code, data, and documents,
+ you use software to help you manage the process.
+ This has several benefits:
+\end_layout
+
+\begin_layout Itemize
+easily allowing you to go back to earlier versions 
+\end_layout
+
+\begin_layout Itemize
+allowing you to have multiple version you can switch between 
+\end_layout
+
+\begin_layout Itemize
+allowing you to share work easily without worrying about conflicts 
+\end_layout
+
+\begin_layout Itemize
+providing built-in backup
+\end_layout
+
+\begin_layout Standard
+The material that follows is borrowed from Jarrod Millman and Fernando Perez.
+\end_layout
+
+\begin_layout Subsection
+VCS Overview
+\end_layout
+
+\begin_layout Standard
+There are a number of version control systems including CVS and subversion,
+ which use client-server models.
+ Git is a distributed version control system.
+ VCS store your material in a 
+\emph on
+repository
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+The next couple figures show graphical representations of how a repository
+ is structured.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename commit_anatomy.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A snapshot of work at a point in time as stored in a 'commit'.
+ Credit: ProGit book, by Scott Chacon, CC License.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+![Credit: ProGit book, by Scott Chacon, CC License.](figs/threecommits.png)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename threecommits.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A sequence of commits.
+ Credit: ProGit book, by Scott Chacon, CC License.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Recall that we have been using Git in a very simple fashion.
+ We've cloned my class repository onto our local machines and have updated
+ materials from that repository.
+\end_layout
+
+\begin_layout Chunk
+<<chunk0, engine='bash'>>=
+\end_layout
+
+\begin_layout Chunk
+cd /tmp
+\end_layout
+
+\begin_layout Chunk
+git clone https://github.com/paciorek/stat243-fall-2013
+\end_layout
+
+\begin_layout Chunk
+git pull
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Standard
+The goal of this section is to learn how to do more with Git to actually
+ manage a project of your own.
+\end_layout
+
+\begin_layout Subsection
+Hashing
+\end_layout
+
+\begin_layout Standard
+Hashing provides a way to have a unique identifier for a given set of informatio
+n, such as a file or set of files.
+\end_layout
+
+\begin_layout Standard
+A toy "implementation"
+\end_layout
+
+\begin_layout Chunk
+<<chunk1>>=
+\end_layout
+
+\begin_layout Chunk
+library('digest')
+\end_layout
+
+\begin_layout Chunk
+# first commit 
+\end_layout
+
+\begin_layout Chunk
+data1 <- 'This is the start of my paper2.' 
+\end_layout
+
+\begin_layout Chunk
+meta1 <- 'date: 8/20/13' 
+\end_layout
+
+\begin_layout Chunk
+hash1 <- digest(c(data1,meta1), algo="sha1") 
+\end_layout
+
+\begin_layout Chunk
+cat('Hash:', hash1)
+\end_layout
+
+\begin_layout Chunk
+# second commit, linked to the first 
+\end_layout
+
+\begin_layout Chunk
+data2 <- 'Some more text in my paper...' 
+\end_layout
+
+\begin_layout Chunk
+meta2 <- 'date: 8/20/13' 
+\end_layout
+
+\begin_layout Chunk
+# Note we add the parent hash here! 
+\end_layout
+
+\begin_layout Chunk
+hash2 <- digest(c(data2,meta2,hash1), algo="sha1") 
+\end_layout
+
+\begin_layout Chunk
+cat('Hash:', hash2)
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Subsection
+Stage 1: Local, single-user, linear workflow
+\end_layout
+
+\begin_layout Standard
+Simply type 
+\family typewriter
+git
+\family default
+ (or 
+\family typewriter
+git help
+\family default
+) to see a full list of all the 'core' commands.
+ We'll now go through most of these via small practical exercises:
+\end_layout
+
+\begin_layout Chunk
+<<chunk2, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+git help 
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Subsubsection
+Initializing a Git repository
+\end_layout
+
+\begin_layout Standard
+We use 
+\emph on
+git init
+\emph default
+ to create an empty repository
+\end_layout
+
+\begin_layout Chunk
+<<chunk3, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp 
+\end_layout
+
+\begin_layout Chunk
+rm -rf git-demo 
+\end_layout
+
+\begin_layout Chunk
+git init git-demo 
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Standard
+Let's look at what git did:
+\end_layout
+
+\begin_layout Chunk
+<<chunk4, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+ls -al
+\end_layout
+
+\begin_layout Chunk
+ls -al .git
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Subsubsection
+Adding content to a repository 
+\end_layout
+
+\begin_layout Standard
+Now let's edit our first file in the test directory with a text editor...
+ I'm doing it programatically here for automation purposes, but you'd normally
+ be editing by hand
+\end_layout
+
+\begin_layout Chunk
+<<chunk5, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+echo "My first bit of text" > file1.txt 
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Standard
+Now we can tell git about this new file using the 
+\emph on
+add
+\emph default
+ command:
+\end_layout
+
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+git add file1.txt 
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Standard
+We can now ask git about what happened with 
+\emph on
+status
+\emph default
+:
+\end_layout
+
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+git status 
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Subsubsection
+Committing changes
+\end_layout
+
+\begin_layout Standard
+We now permanently record our changes in git's database.
+\end_layout
+
+\begin_layout Standard
+For now, we are always going to call 
+\emph on
+git commit
+\emph default
+ either with the `-a` option or with specific filenames (
+\family typewriter
+git commit file1 file2...
+\family default
+).
+ This delays the discussion of an aspect of git called the 
+\emph on
+index
+\emph default
+ (often referred to also as the 'staging area') that we will cover later.
+ Most everyday work in regular scientific practice doesn't require understanding
+ the extra moving parts that the index involves, so on a first round we'll
+ bypass it.
+ Later on we will discuss how to use it to achieve more fine-grained control
+ of what and how git records our actions.
+\end_layout
+
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+git commit -am"This is our first commit" 
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Standard
+In the commit above, we used the `-m` flag to specify a message at the command
+ line.
+ If we don't do that, git will open the editor we specified in our configuration
+ above and require that we enter a message.
+ By default, git refuses to record changes that don't have a message to
+ go along with them (though you can obviously 'cheat' by using an empty
+ or meaningless string).
+\end_layout
+
+\begin_layout Standard
+We can use git log to see what has been committed to the repository so far:
+\end_layout
+
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+git log 
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Standard
+Let's do a little bit more work...
+ Again, in practice you'll be editing the files by hand, here we do it via
+ shell commands for the sake of automation (and therefore the reproducibility
+ of this tutorial!)
+\end_layout
+
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+echo "And now some more text..." >> file1.txt 
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Standard
+And now we can ask git what is different:
+\end_layout
+
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+git diff 
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Standard
+So the cycle of work in a git context is: work, commit, work, commit, ...
+\end_layout
+
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+git commit -am"I have made great progress on this critical matter." 
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Standard
+Now let's see what the log shows us now:
+\end_layout
+
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+git log 
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Standard
+Sometimes it's handy to see a very summarized version of the log:
+\end_layout
+
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+git log --oneline --topo-order --graph 
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Standard
+Git supports 
+\emph on
+aliases
+\emph default
+, new names given to command combinations.
+ Let's make this handy shortlog an alias, so we only have to type 
+\family typewriter
+git slog
+\family default
+ and see this compact log:
+\end_layout
+
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+# We create our alias (this saves it in git's permanent configuration file):
+ 
+\end_layout
+
+\begin_layout Chunk
+git config --global alias.slog "log --oneline --topo-order --graph" 
+\end_layout
+
+\begin_layout Chunk
+# And now we can use it 
+\end_layout
+
+\begin_layout Chunk
+git slog 
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Subsubsection
+Renaming and removing files
+\end_layout
+
+\begin_layout Standard
+While `git add` is used to add fils to the list git tracks, we must also
+ tell it if we want their names to change or for it to stop tracking them.
+ In familiar Unix fashion, the `mv` and `rm` git commands do precisely this:
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo git mv file1.txt file-newname.txt
+ git status @
+\end_layout
+
+\begin_layout Standard
+Note that these changes must be committed too, to become permanent! In git's
+ world, until something hasn't been committed, it isn't permanently recorded
+ anywhere.
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo git commit -a -m"I like this
+ new name better" echo "Let's look at the log again:" git slog @
+\end_layout
+
+\begin_layout Standard
+And `git rm` works in a similar fashion.
+\end_layout
+
+\begin_layout Standard
+**Optional:** Exercise
+\end_layout
+
+\begin_layout Standard
+Add a new file `file2.txt`, commit it, make some changes to it, commit them
+ again, and then remove it (and don't forget to commit this last step!).
+\end_layout
+
+\begin_layout Subsection
+Branches
+\end_layout
+
+\begin_layout Standard
+What is a branch? Simply a *label for the 'current' commit in a sequence
+ of ongoing commits*:
+\end_layout
+
+\begin_layout Standard
+![](figs/masterbranch.png)
+\end_layout
+
+\begin_layout Standard
+There can be multiple branches alive at any point in time; the working directory
+ is the state of a special pointer called HEAD.
+ In this example there are two branches, *master* and *testing*, and *testing*
+ is the currently active branch since it's what HEAD points to:
+\end_layout
+
+\begin_layout Standard
+![](figs/HEAD_testing.png)
+\end_layout
+
+\begin_layout Standard
+Once new commits are made on a branch, HEAD and the branch label move with
+ the new commits:
+\end_layout
+
+\begin_layout Standard
+![](figs/branchcommit.png)
+\end_layout
+
+\begin_layout Standard
+This allows the history of both branches to diverge:
+\end_layout
+
+\begin_layout Standard
+![](figs/mergescenario.png)
+\end_layout
+
+\begin_layout Standard
+But based on this graph structure, git can compute the necessary information
+ to merge the divergent branches back and continue with a unified line of
+ development:
+\end_layout
+
+\begin_layout Standard
+![](figs/mergeaftermath.png)
+\end_layout
+
+\begin_layout Standard
+# Local user, branching: an example
+\end_layout
+
+\begin_layout Standard
+Let's now illustrate all of this with a concrete example.
+ Let's get our bearings first:
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo git status ls @
+\end_layout
+
+\begin_layout Standard
+We are now going to try two different routes of development: on the `master`
+ branch we will add one file and on the `experiment` branch, which we will
+ create, we will add a different one.
+ We will then merge the experimental branch into `master`.
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo git branch experiment git checkout
+ experiment @
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo echo "Some crazy idea" > experiment.tx
+t git add experiment.txt git commit -a -m"Trying something new" git slog
+ @
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo git checkout master git slog
+ @
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo echo "All the while, more work
+ goes on in master..." >> file-newname.txt git commit -a -m"The mainline keeps
+ moving" git slog @
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo ls @
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo git merge experiment git slog
+ @
+\end_layout
+
+\begin_layout Subsection
+Using remotes as a single user
+\end_layout
+
+\begin_layout Standard
+We are now going to introduce the concept of a *remote repository*: a pointer
+ to another copy of the repository that lives on a different location.
+ This can be simply a different path on the filesystem or a server on the
+ internet.
+\end_layout
+
+\begin_layout Standard
+For this discussion, we'll be using remotes hosted on the [GitHub.com](http://git
+hub.com) service, but you can equally use other services like [BitBucket](http://
+bitbucket.org) or [Gitorious](http://gitorious.org) as well as host your own.
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo ls echo "Let's see if we have
+ any remote repositories here:" git remote -v @
+\end_layout
+
+\begin_layout Standard
+Since the above cell didn't produce any output after the `git remote -v`
+ call, it means we have no remote repositories configured.
+ We will now proceed to do so.
+ Once logged into GitHub, go to the [new repository page](https://github.com/new)
+ and make a repository called `test`.
+ Do **not** check the box that says `Initialize this repository with a README`,
+ since we already have an existing repository here.
+ That option is useful when you're starting first at Github and don't have
+ a repo made already on a local computer.
+\end_layout
+
+\begin_layout Standard
+We can now follow the instructions from the next page:
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo git remote add origin git@github.com:j
+arrodmillman/test.git git push -u origin master @
+\end_layout
+
+\begin_layout Standard
+Let's see the remote situation again:
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo git remote -v @
+\end_layout
+
+\begin_layout Standard
+We can now [see this repository publicly on github](https://github.com/jarrodmill
+man/test).
+\end_layout
+
+\begin_layout Standard
+Let's see how this can be useful for backup and syncing work between two
+ different computers.
+ I'll simulate a 2nd computer by working in a different directory...
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/ # Here I clone my 'test' repo but with
+ a different name, test2, to simulate a 2nd computer git clone git@github.com:jar
+rodmillman/test.git test2 cd test2 pwd git remote -v @
+\end_layout
+
+\begin_layout Standard
+Let's now make some changes in one 'computer' and synchronize them on the
+ second.
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/test2 # working on computer #2 echo "More
+ new content on my experiment" >> experiment.txt git commit -a -m"More work,
+ on machine #2" @
+\end_layout
+
+\begin_layout Standard
+Now we put this new work up on the github server so it's available from
+ the internet
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/test2 # working on computer #2 git push
+ @
+\end_layout
+
+\begin_layout Standard
+Now let's fetch that work from machine #1:
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo git pull @
+\end_layout
+
+\begin_layout Standard
+# An important aside: conflict management
+\end_layout
+
+\begin_layout Standard
+While git is very good at merging, if two different branches modify the
+ same file in the same location, it simply can't decide which change should
+ prevail.
+ At that point, human intervention is necessary to make the decision.
+ Git will help you by marking the location in the file that has a problem,
+ but it's up to you to resolve the conflict.
+ Let's see how that works by intentionally creating a conflict.
+\end_layout
+
+\begin_layout Standard
+We start by creating a branch and making a change to our experiment file:
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo git branch trouble git checkout
+ trouble echo "This is going to be a problem..." >> experiment.txt git commit
+ -a -m"Changes in the trouble branch" @
+\end_layout
+
+\begin_layout Standard
+And now we go back to the master branch, where we change the *same* file:
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo git checkout master echo "More
+ work on the master branch..." >> experiment.txt git commit -a -m"Mainline work"
+ @
+\end_layout
+
+\begin_layout Standard
+So now let's see what happens if we try to merge the `trouble` branch into
+ `master`:
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo git merge trouble @
+\end_layout
+
+\begin_layout Standard
+Let's see what git has put into our file:
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo cat experiment.txt @
+\end_layout
+
+\begin_layout Standard
+At this point, we go into the file with a text editor, decide which changes
+ to keep, and make a new commit that records our decision.
+ To automate my edits, I use the `sed` command.
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo sed -i '/^</d' experiment.txt
+ sed -i '/^>/d' experiment.txt sed -i '/^=/d' experiment.txt @
+\end_layout
+
+\begin_layout Standard
+I've now made the edits, in this case I decided that both pieces of text
+ were useful, so I just accepted both additions.
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo cat experiment.txt @
+\end_layout
+
+\begin_layout Standard
+Let's then make our new commit:
+\end_layout
+
+\begin_layout Standard
+<<chunk, engine='bash'>>= cd /tmp/git-demo git commit -a -m"Completed merge
+ of trouble, fixing conflicts along the way" git slog @
+\end_layout
+
+\begin_layout Standard
+*Note:* While it's a good idea to understand the basics of fixing merge
+ conflicts by hand, in some cases you may find the use of an automated tool
+ useful.
+ Git supports multiple [merge tools](https://www.kernel.org/pub/software/scm/git/d
+ocs/git-mergetool.html): a merge tool is a piece of software that conforms
+ to a basic interface and knows how to merge two files into a new one.
+ Since these are typically graphical tools, there are various to choose
+ from for the different operating systems, and as long as they obey a basic
+ command structure, git can work with any of them.
+\end_layout
+
+\begin_layout Subsection
+Collaborating on github with a small team
+\end_layout
+
+\begin_layout Standard
+Single remote with shared access: we are going to set up a shared collaboration
+ with one partner (the person sitting next to you).
+ This will show the basic workflow of collaborating on a project with a
+ small team where everyone has write privileges to the same repository.
+\end_layout
+
+\begin_layout Standard
+Note for SVN users: this is similar to the classic SVN workflow, with the
+ distinction that commit and push are separate steps.
+ SVN, having no local repository, commits directly to the shared central
+ resource, so to a first approximation you can think of `svn commit` as
+ being synonymous with `git commit; git push`.
+\end_layout
+
+\begin_layout Standard
+We will have two people, let's call them Alice and Bob, sharing a repository.
+ Alice will be the owner of the repo and she will give Bob write privileges.
+\end_layout
+
+\begin_layout Standard
+We begin with a simple synchronization example, much like we just did above,
+ but now between *two people* instead of one person.
+ Otherwise it's the same:
+\end_layout
+
+\begin_layout Standard
+- Bob clones Alice's repository.
+ - Bob makes changes to a file and commits them locally.
+ - Bob pushes his changes to github.
+ - Alice pulls Bob's changes into her own repository.
+\end_layout
+
+\begin_layout Standard
+Next, we will have both parties make non-conflicting changes each, and commit
+ them locally.
+ Then both try to push their changes:
+\end_layout
+
+\begin_layout Standard
+- Alice adds a new file, `alice.txt` to the repo and commits.
+ - Bob adds `bob.txt` and commits.
+ - Alice pushes to github.
+ - Bob tries to push to github.
+ What happens here?
+\end_layout
+
+\begin_layout Standard
+The problem is that Bob's changes create a commit that conflicts with Alice's,
+ so git refuses to apply them.
+ It forces Bob to first do the merge on his machine, so that if there is
+ a conflict in the merge, Bob deals with the conflict manually (git could
+ try to do the merge on the server, but in that case if there's a conflict,
+ the server repo would be left in a conflicted state without a human to
+ fix things up).
+ The solution is for Bob to first pull the changes (pull in git is really
+ fetch+merge), and then push again.
+\end_layout
+
+\begin_layout Subsection
+More Git resources
+\end_layout
+
+\begin_layout Itemize
+Git for Scientists: A Tutorial http://nyuccl.org/pages/GitTutorial/
+\end_layout
+
+\begin_layout Itemize
+Gitwash: workflow for scientific Python projects: http://matthew-brett.github.io/p
+ydagogue/gitwash_build.html
+\end_layout
+
+\begin_layout Itemize
+Git branching demo: http://pcottle.github.io/learnGitBranching/
 \end_layout
 
 \end_body
