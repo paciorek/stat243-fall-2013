@@ -3535,54 +3535,13 @@ Branches
 \end_layout
 
 \begin_layout Standard
-What is a branch? Simply a *label for the 'current' commit in a sequence
- of ongoing commits*:
-\end_layout
-
-\begin_layout Standard
-![](figs/masterbranch.png)
+What is a branch? It's a label for the 'current' commit in a sequence of
+ ongoing commits.
 \end_layout
 
 \begin_layout Standard
 There can be multiple branches alive at any point in time; the working directory
  is the state of a special pointer called HEAD.
- In this example there are two branches, *master* and *testing*, and *testing*
- is the currently active branch since it's what HEAD points to:
-\end_layout
-
-\begin_layout Standard
-![](figs/HEAD_testing.png)
-\end_layout
-
-\begin_layout Standard
-Once new commits are made on a branch, HEAD and the branch label move with
- the new commits:
-\end_layout
-
-\begin_layout Standard
-![](figs/branchcommit.png)
-\end_layout
-
-\begin_layout Standard
-This allows the history of both branches to diverge:
-\end_layout
-
-\begin_layout Standard
-![](figs/mergescenario.png)
-\end_layout
-
-\begin_layout Standard
-But based on this graph structure, git can compute the necessary information
- to merge the divergent branches back and continue with a unified line of
- development:
-\end_layout
-
-\begin_layout Standard
-![](figs/mergeaftermath.png)
-\end_layout
-
-\begin_layout Standard
-# Local user, branching: an example
 \end_layout
 
 \begin_layout Standard
@@ -3590,46 +3549,163 @@ Let's now illustrate all of this with a concrete example.
  Let's get our bearings first:
 \end_layout
 
-\begin_layout Standard
-<<chunk, engine='bash'>>= cd /tmp/git-demo git status ls @
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+git status 
+\end_layout
+
+\begin_layout Chunk
+ls 
+\end_layout
+
+\begin_layout Chunk
+@
 \end_layout
 
 \begin_layout Standard
-We are now going to try two different routes of development: on the `master`
- branch we will add one file and on the `experiment` branch, which we will
- create, we will add a different one.
- We will then merge the experimental branch into `master`.
+We are now going to try two different routes of development: on the 
+\emph on
+master
+\emph default
+ branch we will add one file and on the 
+\emph on
+experiment
+\emph default
+ branch, which we will create, we will add a different one.
+ We will then merge the experimental branch into 
+\emph on
+master
+\emph default
+.
+\end_layout
+
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+git branch experiment 
+\end_layout
+
+\begin_layout Chunk
+git checkout experiment 
+\end_layout
+
+\begin_layout Chunk
+echo "Some crazy idea" > experiment.txt 
+\end_layout
+
+\begin_layout Chunk
+git add experiment.txt 
+\end_layout
+
+\begin_layout Chunk
+git commit -am"Trying something new" 
+\end_layout
+
+\begin_layout Chunk
+ls
+\end_layout
+
+\begin_layout Chunk
+git slog 
+\end_layout
+
+\begin_layout Chunk
+@
 \end_layout
 
 \begin_layout Standard
-<<chunk, engine='bash'>>= cd /tmp/git-demo git branch experiment git checkout
- experiment @
+Here's the change to the master branch.
+\end_layout
+
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+git checkout master 
+\end_layout
+
+\begin_layout Chunk
+ls # notice the lack of 'experiment.txt'
+\end_layout
+
+\begin_layout Chunk
+git slog 
+\end_layout
+
+\begin_layout Chunk
+echo "All the while, more work goes on in master..." >> progress.txt
+\end_layout
+
+\begin_layout Chunk
+git add progress.txt
+\end_layout
+
+\begin_layout Chunk
+git commit -am"The mainline keeps moving" 
+\end_layout
+
+\begin_layout Chunk
+git slog 
+\end_layout
+
+\begin_layout Chunk
+@
 \end_layout
 
 \begin_layout Standard
-<<chunk, engine='bash'>>= cd /tmp/git-demo echo "Some crazy idea" > experiment.tx
-t git add experiment.txt git commit -a -m"Trying something new" git slog
- @
+Now we'll merge the two together.
+ Git can do this without guidance from us because the differences in the
+ two branches do not conflict with each other.
 \end_layout
 
-\begin_layout Standard
-<<chunk, engine='bash'>>= cd /tmp/git-demo git checkout master git slog
- @
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
 \end_layout
 
-\begin_layout Standard
-<<chunk, engine='bash'>>= cd /tmp/git-demo echo "All the while, more work
- goes on in master..." >> file-newname.txt git commit -a -m"The mainline keeps
- moving" git slog @
+\begin_layout Chunk
+cd /tmp/git-demo 
 \end_layout
 
-\begin_layout Standard
-<<chunk, engine='bash'>>= cd /tmp/git-demo ls @
+\begin_layout Chunk
+git checkout master
 \end_layout
 
-\begin_layout Standard
-<<chunk, engine='bash'>>= cd /tmp/git-demo git merge experiment git slog
- @
+\begin_layout Chunk
+ls 
+\end_layout
+
+\begin_layout Chunk
+git merge experiment 
+\end_layout
+
+\begin_layout Chunk
+git slog 
+\end_layout
+
+\begin_layout Chunk
+ls
+\end_layout
+
+\begin_layout Chunk
+@
 \end_layout
 
 \begin_layout Subsection
@@ -3637,31 +3713,76 @@ Using remotes as a single user
 \end_layout
 
 \begin_layout Standard
-We are now going to introduce the concept of a *remote repository*: a pointer
- to another copy of the repository that lives on a different location.
+HERE
+\end_layout
+
+\begin_layout Standard
+We are now going to introduce the concept of a remote repositor
+\emph on
+y
+\emph default
+: a pointer to another copy of the repository that lives on a different
+ location.
  This can be simply a different path on the filesystem or a server on the
  internet.
+ Of course we've already used a remote repository a little by cloning the
+ class repository from Github.
+ 
 \end_layout
 
 \begin_layout Standard
-For this discussion, we'll be using remotes hosted on the [GitHub.com](http://git
-hub.com) service, but you can equally use other services like [BitBucket](http://
-bitbucket.org) or [Gitorious](http://gitorious.org) as well as host your own.
+For this discussion, we'll be using remotes hosted on the Github.com service,
+ but you can equally use other services like BitBucket (http://bitbucket.org)
+ or Gitorious (http://gitorious.org).
+ The SCF provides 
+\begin_inset CommandInset href
+LatexCommand href
+name "hosting of git repositories as well"
+target "statistics.berkeley.edu/computing/git"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+# Let's see if we have any remote repositories here
+\end_layout
+
+\begin_layout Chunk
+git remote -v 
+\end_layout
+
+\begin_layout Chunk
+@
 \end_layout
 
 \begin_layout Standard
-<<chunk, engine='bash'>>= cd /tmp/git-demo ls echo "Let's see if we have
- any remote repositories here:" git remote -v @
-\end_layout
-
-\begin_layout Standard
-Since the above cell didn't produce any output after the `git remote -v`
- call, it means we have no remote repositories configured.
+Since the `git remote -v` call didn't produce any results, it means we have
+ no remote repositories configured.
  We will now proceed to do so.
- Once logged into GitHub, go to the [new repository page](https://github.com/new)
- and make a repository called `test`.
- Do **not** check the box that says `Initialize this repository with a README`,
- since we already have an existing repository here.
+ We need a Github account.
+ Login to GitHub, and go to the new repository page (https://github.com/new).
+ For our demo purposes, we'll make a repository called 
+\emph on
+test
+\emph default
+.
+ Do 
+\series bold
+not
+\series default
+ check the box that says `Initialize this repository with a README`, since
+ we already have an existing repository on our local machine.
  That option is useful when you're starting first at Github and don't have
  a repo made already on a local computer.
 \end_layout
@@ -3670,22 +3791,33 @@ Since the above cell didn't produce any output after the `git remote -v`
 We can now follow the instructions from the next page:
 \end_layout
 
-\begin_layout Standard
-<<chunk, engine='bash'>>= cd /tmp/git-demo git remote add origin git@github.com:j
-arrodmillman/test.git git push -u origin master @
+\begin_layout Chunk
+<<chunk, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+git remote add origin git@github.com:paciorek/test.git 
+\end_layout
+
+\begin_layout Chunk
+git push -u origin master 
+\end_layout
+
+\begin_layout Chunk
+git remote -v
+\end_layout
+
+\begin_layout Chunk
+@
 \end_layout
 
 \begin_layout Standard
-Let's see the remote situation again:
-\end_layout
-
-\begin_layout Standard
-<<chunk, engine='bash'>>= cd /tmp/git-demo git remote -v @
-\end_layout
-
-\begin_layout Standard
-We can now [see this repository publicly on github](https://github.com/jarrodmill
-man/test).
+We can now see the repository publicly [see this repository publicly on
+ github](https://github.com/jarrodmillman/test).
 \end_layout
 
 \begin_layout Standard
