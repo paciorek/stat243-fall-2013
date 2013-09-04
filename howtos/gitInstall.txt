@@ -1,0 +1,19 @@
+Install git by downloading and installing the correct binary from here:
+  http://git-scm.com/downloads
+
+=========================================================================
+
+If you want git to work with RStudio:
+
+Here are some instructions from the RStudio page:
+  http://www.rstudio.com/ide/<wbr />docs/version_control/overview
+ 
+You may need to tell RStudio where the git executable is located as follows.
+ 
+On Windows, the git executable should be installed somewhere like:
+  "C:/Program Files (x86)/Git/bin/git.exe"
+ 
+On MacOS X, you can locate the executable by executing the following in Terminal:
+  which git
+ 
+Once you locate the executable, you may then need to navigate RStudio's menu (maybe something like "Options->Git/SVN->Git executable") and confirm it has the correct information about the location of the git executable.
