@@ -25,13 +25,14 @@ which bash
 # 4 Wildcards
 ####################
 
-cd ~/Desktop/243
+cd stat243-fall-2013/lectures
 
-ls *{pdf,R}
+ls *{pdf,sh}
 
 # in my home directory
-cd ~/teaching/243/lectures
-ls *[0-9]*  
+ls unit[0-9]*
+ls unit[0-9]*pdf
+  
 ls *[!~#]  # don't show automatically-generated backup files
 
 echo cp filename{,old} 
@@ -40,38 +41,37 @@ echo cp filename{,old}
 # 5 Utilities
 #####################
 
-cd research/fusion/hei/write/revisedReport
-grep pdf *q
-
-cd ~/Desktop/243
+cd stat243-fall-2013/lectures
+grep ls *sh
+grep ^ls *sh
+grep ls.- *sh
 
 # in R
 # for(i in 1:10000)  write(mean(rpois(100, 1)), file = 'clt.txt', append = TRUE)
 tail -f clt.txt
 
-grep com  websites.txt
-# any problems? can we be a bit smarter?
 
 #####################
 # 6 Redirection
 #####################
 
 # ls 
+
+grep ls *sh > lsStuff.txt
+
 ls | head -5
 
-cd ~/Desktop/243
 cut -d',' -f2 mileage2009.csv | sort | uniq | wc
 cut -d',' -f2 mileage2009.csv | sort | uniq | nl 
 
-# you won't be able to replicate this as it uses files on my desktop
+# you won't be able to replicate this as it uses files on my SCF machine
 cd /var/tmp/paciorek/extremes/ghcn/ghcnd_all
 cut -b1,2,3,4,5,6,7,8,9,10,11,29,37,45,53,61,69,77,85,93,101,109,117,125,133,141,149,157,165,173,181,189,197,205,213,221,229,237,245,253,261,269  AE000041196.dly | grep "S" | less
 cut -b29,37,45,53,61,69,77,85,93,101,109,117,125,133,141,149,157,165,173,181,189,197,205,213,221,229,237,245,253,261,269 USC*.dly | grep "S" | less
 
-# you won't be able to replicate this as it uses files in my home directory
-cd ~/research/fusion/hei/write/finalReport
-ls -t *.{R,r,q} | head -4 
-grep pdf `ls -t *.{R,r,q} | head -4`
+
+ls -lt *sh | head -3
+grep for `ls -lt *sh | head -4`
 
 files=$(ls)
 echo $files
@@ -87,17 +87,17 @@ R
 C-c
 C-\
 
-R --no-save < code.q >& code.Rout &  # let's parse what this will do
+R --no-save < code.q > code.Rout &  # let's parse what this will do
 
 ssh arwen
 ps -aux | grep R
 
 # in R
-# for(i in 1:1000){
-# x = matrix(rnorm(5000*5000), nr = 5000, nc = 5000)
-# y = crossprod(x)
-# }
-nice -19 R CMD BATCH file.r Rout
+echo 'for(i in 1:1000){' > tmp.R
+echo 'x = matrix(rnorm(5000*5000), nr = 5000, nc = 5000)' >> tmp.R
+echo ' y = crossprod(x)}' >> tmp.R
+
+nice -19 R CMD BATCH tmp.R tmp.Rout &
 
 # monitor on top and watch CPU and memory use
 # notice the priority is 39 = 20 + 19
@@ -113,7 +113,7 @@ ls
 # here are some aliases in my .bashrc
 alias q="exit"
 alias tf="tail -f"
-alias m="less"
+alias l="less"
 alias res="cd ~/research"
 alias todo="emacs ~/todo &"
 alias r="R --no-save"  
@@ -149,17 +149,14 @@ function putscf() {
    scp $1 paciorek@bilbo.berkeley.edu:~/$2 
 }
 
-putscf file.txt teaching/243/lectures/garbage.txt
+echo 'a' >> file.txt
+putscf file.txt teaching/243/garbage.txt
 
 # a few functions from my .bashrc
 
 function mounts(){  # remotely mount filesystems I have access to
     sshfs carver.nersc.gov /accounts/gen/vis/paciorek/nersc
     sshfs bilbo.berkeley.edu: /accounts/gen/vis/paciorek/scf
-}
-
-function a(){
-    acroread $1&
 }
 
 function putweb() {
