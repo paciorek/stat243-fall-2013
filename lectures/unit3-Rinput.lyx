@@ -4,8 +4,7 @@
 \begin_header
 \textclass article
 \begin_preamble
-\usepackage{/accounts/gen/vis/paciorek/latex/paciorek-asa,times,graphics}
-\input{/accounts/gen/vis/paciorek/latex/paciorekMacros}
+\usepackage{times,graphics}
 %\renewcommand{\baselinestretch}{1.5}
 \hypersetup{unicode=true, pdfusetitle,
 bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
@@ -440,97 +439,78 @@ sep=
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk81, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 getwd()  # a common error is not knowing what directory R is looking at
 \end_layout
 
 \begin_layout Chunk
-
 setwd('../data')
 \end_layout
 
 \begin_layout Chunk
-
 dat <- read.table('RTADataSub.csv', sep = ',', head = TRUE)
 \end_layout
 
 \begin_layout Chunk
-
 lapply(dat, class)
 \end_layout
 
 \begin_layout Chunk
-
 levels(dat[ ,2])
 \end_layout
 
 \begin_layout Chunk
-
 dat2 <- read.table('RTADataSub.csv', sep = ',', head = TRUE, 
 \end_layout
 
 \begin_layout Chunk
-
    na.strings = c("NA", "x"), stringsAsFactors = FALSE)
 \end_layout
 
 \begin_layout Chunk
-
 unique(dat2[ ,2])
 \end_layout
 
 \begin_layout Chunk
-
 # hmmm, what happened to the blank values this time?
 \end_layout
 
 \begin_layout Chunk
-
 which(dat[ ,2] == "")
 \end_layout
 
 \begin_layout Chunk
-
 dat2[which(dat[, 2] == "")[1], ] # deconstruct it!
 \end_layout
 
 \begin_layout Chunk
-
 sequ <- read.table('hivSequ.csv', sep = ',', header = TRUE, 
 \end_layout
 
 \begin_layout Chunk
-
   colClasses = c('integer','integer','character',
 \end_layout
 
 \begin_layout Chunk
-
     'character','numeric','integer'))
 \end_layout
 
 \begin_layout Chunk
-
 # let's make sure the coercion worked - sometimes R is obstinant
 \end_layout
 
 \begin_layout Chunk
-
 lapply(sequ, class) 
 \end_layout
 
 \begin_layout Chunk
-
 # that made use of the fact that a data frame is a list
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -586,52 +566,42 @@ readLines()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk81a>>=
 \end_layout
 
 \begin_layout Chunk
-
 dat <- readLines('../data/precip.txt')
 \end_layout
 
 \begin_layout Chunk
-
 id <- as.factor(substring(dat, 4, 11) )
 \end_layout
 
 \begin_layout Chunk
-
 year <- substring(dat, 17, 20)
 \end_layout
 
 \begin_layout Chunk
-
 year[1:5]
 \end_layout
 
 \begin_layout Chunk
-
 class(year)
 \end_layout
 
 \begin_layout Chunk
-
 year <- as.integer(substring(dat, 18, 21))
 \end_layout
 
 \begin_layout Chunk
-
 month <- as.integer(substring(dat, 22, 23))
 \end_layout
 
 \begin_layout Chunk
-
 nvalues <- as.integer(substring(dat, 28, 30))
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -650,27 +620,22 @@ connection
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk82, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 dat <- readLines(pipe("ls -al"))
 \end_layout
 
 \begin_layout Chunk
-
 dat <- read.table(pipe("unzip dat.zip"))
 \end_layout
 
 \begin_layout Chunk
-
 dat <- read.csv(gzfile("dat.csv.gz"))
 \end_layout
 
 \begin_layout Chunk
-
 dat <- readLines("http://www.stat.berkeley.edu/~paciorek/index.html")
 \begin_inset Newline newline
 \end_inset
@@ -700,59 +665,48 @@ readLines()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk83, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 con <- file("../data/precip.txt", "r") # "r" for 'read' - you can also open
  files for writing with "w" (or "a" for appending) 
 \end_layout
 
 \begin_layout Chunk
-
 class(con)
 \end_layout
 
 \begin_layout Chunk
-
 blockSize <- 1000 # obviously this would be large in any real application
  
 \end_layout
 
 \begin_layout Chunk
-
 nLines <- 300000
 \end_layout
 
 \begin_layout Chunk
-
 for(i in 1:ceiling(nLines / blockSize)){ 
 \end_layout
 
 \begin_layout Chunk
-
 	lines <- readLines(con, n = blockSize) 
 \end_layout
 
 \begin_layout Chunk
-
 	# manipulate the lines and store the key stuff
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 close(con) 
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -776,27 +730,22 @@ con
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk84>>=
 \end_layout
 
 \begin_layout Chunk
-
 dat <- readLines('../data/precip.txt')
 \end_layout
 
 \begin_layout Chunk
-
 con <- textConnection(dat[1], "r")
 \end_layout
 
 \begin_layout Chunk
-
 read.fwf(con, c(3,8,4,2,4,2))
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -991,22 +940,18 @@ f
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk111>>=
 \end_layout
 
 \begin_layout Chunk
-
 temps <- c(12.5, 37.234324, 1342434324.79997234, 2.3456e-6, 1e10)
 \end_layout
 
 \begin_layout Chunk
-
 sprintf("%9.4f C", temps)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1029,29 +974,24 @@ print()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk112>>=
 \end_layout
 
 \begin_layout Chunk
-
 val <- 1.5
 \end_layout
 
 \begin_layout Chunk
-
 cat('My value is ', val, '.
 \backslash
 n', sep = '')
 \end_layout
 
 \begin_layout Chunk
-
 print(paste('My value is ', val, '.', sep = ''))
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1064,39 +1004,32 @@ cat()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk113, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 # input
 \end_layout
 
 \begin_layout Chunk
-
 x <- 7
 \end_layout
 
 \begin_layout Chunk
-
 n <- 5
 \end_layout
 
 \begin_layout Chunk
-
 # display powers
 \end_layout
 
 \begin_layout Chunk
-
 cat("Powers of", x, "
 \backslash
 n")
 \end_layout
 
 \begin_layout Chunk
-
 cat("exponent   result
 \backslash
 n
@@ -1105,56 +1038,46 @@ n")
 \end_layout
 
 \begin_layout Chunk
-
 result <- 1
 \end_layout
 
 \begin_layout Chunk
-
 for (i in 1:n) {
 \end_layout
 
 \begin_layout Chunk
-
 	result <- result * x
 \end_layout
 
 \begin_layout Chunk
-
 	cat(format(i, width = 8), format(result, width = 10),"
 \backslash
 n", sep = "")
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 x <- 7
 \end_layout
 
 \begin_layout Chunk
-
 n <- 5
 \end_layout
 
 \begin_layout Chunk
-
 # display powers
 \end_layout
 
 \begin_layout Chunk
-
 cat("Powers of", x, "
 \backslash
 n")
 \end_layout
 
 \begin_layout Chunk
-
 cat("exponent result
 \backslash
 n
@@ -1163,22 +1086,18 @@ n")
 \end_layout
 
 \begin_layout Chunk
-
 result <- 1
 \end_layout
 
 \begin_layout Chunk
-
 for (i in 1:n) {
 \end_layout
 
 \begin_layout Chunk
-
 	result <- result * x
 \end_layout
 
 \begin_layout Chunk
-
 	cat(i, '
 \backslash
 t', result, '
@@ -1187,12 +1106,10 @@ n', sep = '')
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1263,17 +1180,14 @@ In US installations of R, the default encoding is UTF-8; note that various
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk113b>>=
 \end_layout
 
 \begin_layout Chunk
-
 Sys.getlocale()
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1286,29 +1200,24 @@ iconv()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk114>>=
 \end_layout
 
 \begin_layout Chunk
-
 text <- "_Melhore sua seguran
 \backslash
 xe7a_"
 \end_layout
 
 \begin_layout Chunk
-
 iconv(text, from = "latin1", to = "UTF-8")
 \end_layout
 
 \begin_layout Chunk
-
 iconv(text, from = "latin1", to = "ASCII", sub = "???")
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1318,35 +1227,29 @@ You can also mark a string with an encoding, so R knows how to display it
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk114a>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- "fa
 \backslash
 xE7ile" 
 \end_layout
 
 \begin_layout Chunk
-
 Encoding(x) <- "latin1" 
 \end_layout
 
 \begin_layout Chunk
-
 x
 \end_layout
 
 \begin_layout Chunk
-
 # playing around...
  
 \end_layout
 
 \begin_layout Chunk
-
 x <- "
 \backslash
 xa1 
@@ -1361,17 +1264,14 @@ xf2"
 \end_layout
 
 \begin_layout Chunk
-
 Encoding(x) <- "latin1" 
 \end_layout
 
 \begin_layout Chunk
-
 x 
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1385,72 +1285,58 @@ An R error message with "multi-byte string" in the message often indicates
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk115>>=
 \end_layout
 
 \begin_layout Chunk
-
 load('../data/IPs.RData') # loads in an object named 'text'
 \end_layout
 
 \begin_layout Chunk
-
 tmp <- substring(text, 1, 15)
 \end_layout
 
 \begin_layout Chunk
-
 # the issue occurs with the 6402th element (found by trial and error):
 \end_layout
 
 \begin_layout Chunk
-
 tmp <- substring(text[1:6401],1,15)
 \end_layout
 
 \begin_layout Chunk
-
 tmp <- substring(text[1:6402],1,15)
 \end_layout
 
 \begin_layout Chunk
-
 text[6402] # note the Latin-1 character
 \end_layout
 
 \begin_layout Chunk
-
 text <- iconv(text, from = "latin1", to = "UTF-8")
 \end_layout
 
 \begin_layout Chunk
-
 text[6402]
 \end_layout
 
 \begin_layout Chunk
-
 tmp <- substring(text, 1, 15)
 \end_layout
 
 \begin_layout Chunk
-
 tmp[6402]
 \end_layout
 
 \begin_layout Chunk
-
 # Interesting:
 \end_layout
 
 \begin_layout Chunk
-
 table(Encoding(text))
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 

@@ -4,8 +4,7 @@
 \begin_header
 \textclass article
 \begin_preamble
-\usepackage{/accounts/gen/vis/paciorek/latex/paciorek-asa,times,graphics}
-\input{/accounts/gen/vis/paciorek/latex/paciorekMacros}
+\usepackage{times,graphics}
 %\renewcommand{\baselinestretch}{1.5}
 \usepackage[unicode=true]{hyperref}
 \hypersetup{unicode=true, pdfusetitle,
