@@ -558,6 +558,8 @@ To see how much space is free in the various filesystems available on a
 
 \begin_deeper
 \begin_layout Standard
+
+\family typewriter
 > df -h
 \end_layout
 
@@ -568,6 +570,8 @@ To see how much space is used in a directory:
 
 \begin_deeper
 \begin_layout Standard
+
+\family typewriter
 > du -h
 \end_layout
 
@@ -578,6 +582,8 @@ To see how much space you are using out of your overall quota
 
 \begin_deeper
 \begin_layout Standard
+
+\family typewriter
 > quota -s
 \end_layout
 

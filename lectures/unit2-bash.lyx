@@ -170,7 +170,6 @@ To make it your default:
  should be whatever the path to the bash shell is, which you can figure
  out using 
 \family typewriter
-\series bold
 which bash
 \end_layout
 
@@ -186,18 +185,13 @@ file.sh
 \emph default
 , you would type 
 \family typewriter
-\series bold
 ./file.sh
 \family default
-\series default
 .
  Note that if you just typed
 \family typewriter
- 
-\series bold
-file.sh
+ file.sh
 \family default
-\series default
 , the operating system will generally have trouble finding the script and
  recognizing that it is executable.
  To be sure that the operating system knows what shell to use to interpret
@@ -1585,10 +1579,8 @@ stderr
  don't want it to terminate when you log off.
  (Note that this can also be done using 
 \family typewriter
-\series bold
 R CMD BATCH
 \family default
-\series default
 , so this is primarily an illustration.)
 \end_layout
 
@@ -2208,9 +2200,9 @@ $
 \begin_layout Standard
 
 \family typewriter
-> echo $chris
+> echo $
 \family default
-
+name
 \begin_inset Newline newline
 \end_inset
 
@@ -2222,7 +2214,7 @@ You can also enclose the variable name in curly brackets, which comes in
 \begin_layout Standard
 
 \family typewriter
-> echo ${chris}
+> echo ${name}
 \end_layout
 
 \begin_layout Standard
@@ -2731,22 +2723,27 @@ Recall that we have been using Git in a very simple fashion.
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk0, engine='bash', eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp
 \end_layout
 
 \begin_layout Chunk
+
 git clone https://github.com/paciorek/stat243-fall-2013
 \end_layout
 
 \begin_layout Chunk
+
 git pull
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2769,58 +2766,72 @@ A toy "implementation"
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk1>>=
 \end_layout
 
 \begin_layout Chunk
+
 library('digest')
 \end_layout
 
 \begin_layout Chunk
+
 # first commit 
 \end_layout
 
 \begin_layout Chunk
+
 data1 <- 'This is the start of my paper2.' 
 \end_layout
 
 \begin_layout Chunk
+
 meta1 <- 'date: 8/20/13' 
 \end_layout
 
 \begin_layout Chunk
+
 hash1 <- digest(c(data1,meta1), algo="sha1") 
 \end_layout
 
 \begin_layout Chunk
+
 cat('Hash:', hash1)
 \end_layout
 
 \begin_layout Chunk
+
 # second commit, linked to the first 
 \end_layout
 
 \begin_layout Chunk
+
 data2 <- 'Some more text in my paper...' 
 \end_layout
 
 \begin_layout Chunk
+
 meta2 <- 'date: 8/20/13' 
 \end_layout
 
 \begin_layout Chunk
+
 # Note we add the parent hash here! 
 \end_layout
 
 \begin_layout Chunk
+
 hash2 <- digest(c(data2,meta2,hash1), algo="sha1") 
 \end_layout
 
 \begin_layout Chunk
+
 cat('Hash:', hash2)
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2842,14 +2853,17 @@ git help
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk2, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 git help 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2866,22 +2880,27 @@ git init
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk3, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp 
 \end_layout
 
 \begin_layout Chunk
+
 rm -rf git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git init git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2890,22 +2909,27 @@ Let's look at what git did:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk4, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 ls -al
 \end_layout
 
 \begin_layout Chunk
+
 ls -al .git
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2920,18 +2944,22 @@ Now let's edit our first file in the test directory with a text editor...
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk5, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 echo "My first bit of text" > file1.txt 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2944,18 +2972,22 @@ add
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk6, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git add file1.txt 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2968,18 +3000,22 @@ status
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk7, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git status 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3012,18 +3048,22 @@ index
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk8, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am"This is our first commit" 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3042,18 +3082,22 @@ We can use git log to see what has been committed to the repository so far:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk9, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git log 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3065,18 +3109,22 @@ Let's do a little bit more work...
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk10, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 echo "And now some more text..." >> file1.txt 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3085,18 +3133,22 @@ And now we can ask git what is different:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk11, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git diff 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3105,18 +3157,22 @@ So the cycle of work in a git context is: work, commit, work, commit, ...
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk12, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am"I have made great progress on this critical matter." 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3125,18 +3181,22 @@ Now let's see what the log shows us now:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk13, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git log 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3145,18 +3205,22 @@ Sometimes it's handy to see a very summarized version of the log:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk14, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git log --oneline --topo-order --graph 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3174,31 +3238,38 @@ git slog
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk15, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 # We create our alias (this saves it in git's permanent configuration file):
  
 \end_layout
 
 \begin_layout Chunk
+
 git config --global alias.slog "log --oneline --topo-order --graph" 
 \end_layout
 
 \begin_layout Chunk
+
 # And now we can use it 
 \end_layout
 
 \begin_layout Chunk
+
 git slog 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3221,22 +3292,27 @@ rm
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk16, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo git 
 \end_layout
 
 \begin_layout Chunk
+
 git mv file1.txt file-newname.txt 
 \end_layout
 
 \begin_layout Chunk
+
 git status 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3247,22 +3323,27 @@ Note that these changes must be committed too, to become permanent! In git's
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk17, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am"I like this new name better" 
 \end_layout
 
 \begin_layout Chunk
+
 git slog 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3275,54 +3356,67 @@ git rm
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk18, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo git 
 \end_layout
 
 \begin_layout Chunk
+
 echo 'stuff' > test.txt
 \end_layout
 
 \begin_layout Chunk
+
 git add test.txt
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am'added test file'
 \end_layout
 
 \begin_layout Chunk
+
 ls -l test*
 \end_layout
 
 \begin_layout Chunk
+
 echo "============================"
 \end_layout
 
 \begin_layout Chunk
+
 git rm test.txt
 \end_layout
 
 \begin_layout Chunk
+
 ls -l test*
 \end_layout
 
 \begin_layout Chunk
+
 git status
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am'removed test file'
 \end_layout
 
 \begin_layout Chunk
+
 git status
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3347,58 +3441,72 @@ If we want to make a change before we do a commit, we can do that as follows:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk19, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo git 
 \end_layout
 
 \begin_layout Chunk
+
 echo 'stuff' > test.txt
 \end_layout
 
 \begin_layout Chunk
+
 git add test.txt
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am'added test file'
 \end_layout
 
 \begin_layout Chunk
+
 git rm test.txt
 \end_layout
 
 \begin_layout Chunk
+
 git status
 \end_layout
 
 \begin_layout Chunk
+
 # whoops, I want that file!
 \end_layout
 
 \begin_layout Chunk
+
 echo "============================"
 \end_layout
 
 \begin_layout Chunk
+
 git reset -- test.txt # restore file in index (unstage)
 \end_layout
 
 \begin_layout Chunk
+
 git checkout -- test.txt # get a copy of the file back
 \end_layout
 
 \begin_layout Chunk
+
 ls -l test*
 \end_layout
 
 \begin_layout Chunk
+
 git status
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3437,22 +3545,27 @@ Let's now illustrate all of this with a concrete example.
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk20, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git status 
 \end_layout
 
 \begin_layout Chunk
+
 ls -l
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3474,42 +3587,52 @@ master
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk21, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git branch experiment 
 \end_layout
 
 \begin_layout Chunk
+
 git checkout experiment 
 \end_layout
 
 \begin_layout Chunk
+
 echo "Some crazy idea" > experiment.txt 
 \end_layout
 
 \begin_layout Chunk
+
 git add experiment.txt 
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am"Trying something new" 
 \end_layout
 
 \begin_layout Chunk
+
 ls -l
 \end_layout
 
 \begin_layout Chunk
+
 git slog 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3518,46 +3641,57 @@ Here's the change to the master branch.
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk22, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git checkout master 
 \end_layout
 
 \begin_layout Chunk
+
 ls -l # notice the lack of 'experiment.txt'
 \end_layout
 
 \begin_layout Chunk
+
 git slog 
 \end_layout
 
 \begin_layout Chunk
+
 echo "============================"
 \end_layout
 
 \begin_layout Chunk
+
 echo "All the while, more work goes on in master..." >> progress.txt
 \end_layout
 
 \begin_layout Chunk
+
 git add progress.txt
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am"The mainline keeps moving" 
 \end_layout
 
 \begin_layout Chunk
+
 git slog 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3568,38 +3702,47 @@ Now we'll merge the two together.
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk23, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git checkout master
 \end_layout
 
 \begin_layout Chunk
+
 ls -l
 \end_layout
 
 \begin_layout Chunk
+
 echo "============================"
 \end_layout
 
 \begin_layout Chunk
+
 git merge experiment 
 \end_layout
 
 \begin_layout Chunk
+
 git slog 
 \end_layout
 
 \begin_layout Chunk
+
 ls -l
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3638,22 +3781,27 @@ target "statistics.berkeley.edu/computing/git"
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk24, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 # Let's see if we have any remote repositories here
 \end_layout
 
 \begin_layout Chunk
+
 git remote -v 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3687,26 +3835,32 @@ We can now follow the instructions from the next page:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk25, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git remote add origin git@github.com:paciorek/test.git 
 \end_layout
 
 \begin_layout Chunk
+
 git push -u origin master 
 \end_layout
 
 \begin_layout Chunk
+
 git remote -v
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3729,35 +3883,43 @@ Let's see how this can be useful for backup and syncing work between two
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk26, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp # Here I clone my 'test' repo but with a different name, test2,
  to simulate a 2nd computer
 \end_layout
 
 \begin_layout Chunk
+
 # in class we'll actually do this on a separate computer
 \end_layout
 
 \begin_layout Chunk
+
 git clone git@github.com:paciorek/test.git test2 
 \end_layout
 
 \begin_layout Chunk
+
 cd test2 
 \end_layout
 
 \begin_layout Chunk
+
 ls -l
 \end_layout
 
 \begin_layout Chunk
+
 git remote -v
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3767,22 +3929,27 @@ Let's now make some changes in one computer and synchronize them on the
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk27, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/test2 # working on computer #2 
 \end_layout
 
 \begin_layout Chunk
+
 echo "More new content on my experiment" >> experiment.txt 
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am"More work, on machine #2" 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3792,18 +3959,22 @@ Now we put this new work up on the github server so it's available from
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk28, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/test2 # working on computer #2 
 \end_layout
 
 \begin_layout Chunk
+
 git push 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3812,30 +3983,37 @@ Now let's fetch that work from machine #1:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk29, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 ls -l
 \end_layout
 
 \begin_layout Chunk
+
 echo "============================"
 \end_layout
 
 \begin_layout Chunk
+
 git pull 
 \end_layout
 
 \begin_layout Chunk
+
 ls -l
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3858,30 +4036,37 @@ We start by creating a branch and making a change to our experiment file:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk30, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git branch trouble 
 \end_layout
 
 \begin_layout Chunk
+
 git checkout trouble 
 \end_layout
 
 \begin_layout Chunk
+
 echo "This is going to be a problem..." >> experiment.txt 
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am"Changes in the trouble branch" 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3894,26 +4079,32 @@ same
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk31, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git checkout master 
 \end_layout
 
 \begin_layout Chunk
+
 echo "More work on the master branch..." >> experiment.txt 
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am"Mainline work" 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3923,18 +4114,22 @@ So now let's see what happens if we try to merge the `trouble` branch into
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk32, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git merge trouble
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3943,18 +4138,22 @@ Let's see what git has put into our file:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk33, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 cat experiment.txt 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3965,30 +4164,37 @@ At this point, we go into the file with a text editor, decide which changes
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk34, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 sed -i '/^</d' experiment.txt 
 \end_layout
 
 \begin_layout Chunk
+
 sed -i '/^>/d' experiment.txt 
 \end_layout
 
 \begin_layout Chunk
+
 sed -i '/^=/d' experiment.txt 
 \end_layout
 
 \begin_layout Chunk
+
 cat experiment.txt
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -4002,23 +4208,28 @@ Let's then make our new commit:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk35, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
+
 cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
+
 git commit -am"Completed merge of trouble, fixing conflicts along the way"
  
 \end_layout
 
 \begin_layout Chunk
+
 git slog 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
