@@ -2621,6 +2621,15 @@ providing built-in backup
 The material that follows is borrowed from Jarrod Millman and Fernando Perez.
 \end_layout
 
+\begin_layout Standard
+
+\emph on
+Note that the output from the embedded bash code chunks below is a bit annoying
+ in that all the output appears in a group after all of the code lines rather
+ than the output appearing after the individual line of code.
+ This is some sort of issue with how knitr processes bash code chunks.
+\end_layout
+
 \begin_layout Subsection
 VCS Overview
 \end_layout
@@ -2797,7 +2806,9 @@ hash1 <- digest(c(data1,meta1), algo="sha1")
 
 \begin_layout Chunk
 
-cat('Hash:', hash1)
+cat('Hash:', hash1, '
+\backslash
+n')
 \end_layout
 
 \begin_layout Chunk
@@ -2827,7 +2838,9 @@ hash2 <- digest(c(data2,meta2,hash1), algo="sha1")
 
 \begin_layout Chunk
 
-cat('Hash:', hash2)
+cat('Hash:', hash2, '
+\backslash
+n')
 \end_layout
 
 \begin_layout Chunk
@@ -3059,7 +3072,12 @@ cd /tmp/git-demo
 
 \begin_layout Chunk
 
-git commit -am"This is our first commit" 
+git commit -am"This is our first commit"
+\end_layout
+
+\begin_layout Chunk
+
+git status
 \end_layout
 
 \begin_layout Chunk
@@ -3352,7 +3370,8 @@ Let's see
 \emph on
 git rm
 \emph default
- in action:
+ in action.
+ First a little setup.
 \end_layout
 
 \begin_layout Chunk
@@ -3387,7 +3406,16 @@ ls -l test*
 
 \begin_layout Chunk
 
-echo "============================"
+@
+\end_layout
+
+\begin_layout Standard
+Now let's do the removal.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk18a, engine='bash'>>=
 \end_layout
 
 \begin_layout Chunk
@@ -3425,7 +3453,7 @@ Be careful:
 \emph on
 git rm
 \emph default
- removes the file from the local filesystem.
+ removes the file from the local filesystem as well as the repository.
  If we want to remove a file from the repository but keep it on the local
  disk, we can do: 
 \family typewriter
@@ -3477,12 +3505,21 @@ git status
 
 \begin_layout Chunk
 
-# whoops, I want that file!
+@
+\end_layout
+
+\begin_layout Standard
+
+Now suppose I realize I don't want to remove 
+\emph on
+test.txt
+\emph default
+.
 \end_layout
 
 \begin_layout Chunk
 
-echo "============================"
+<<chunk19a, engine='bash'>>+
 \end_layout
 
 \begin_layout Chunk
@@ -3517,8 +3554,8 @@ Note that if you want to unstage an addition before you've committed it,
 git reset -- <file>
 \family default
 .
- If you want to remove a file after you've committed the addition of the
- file, you can do 
+ If you want to remove a file from the repository but not the filesystem
+ after you've committed the addition of the file, you can do 
 \family typewriter
 git rm --cached
 \family default
@@ -3598,12 +3635,12 @@ cd /tmp/git-demo
 
 \begin_layout Chunk
 
-git branch experiment 
+git branch experiment # create the branch
 \end_layout
 
 \begin_layout Chunk
 
-git checkout experiment 
+git checkout experiment  # switch to it
 \end_layout
 
 \begin_layout Chunk
@@ -3637,17 +3674,31 @@ git slog
 \end_layout
 
 \begin_layout Standard
-Here's the change to the master branch.
+We can see the branches, and which branch we are currently in with
+\family typewriter
+ git branch
+\family default
+.
+ We'll switch to the master and notice that 
+\emph on
+experiment.txt
+\emph default
+ is not in the master branch.
 \end_layout
 
 \begin_layout Chunk
 
-<<chunk22, engine='bash'>>= 
+<<chunk21a, engine='bash'>>=
 \end_layout
 
 \begin_layout Chunk
 
 cd /tmp/git-demo 
+\end_layout
+
+\begin_layout Chunk
+
+git branch
 \end_layout
 
 \begin_layout Chunk
@@ -3662,12 +3713,16 @@ ls -l # notice the lack of 'experiment.txt'
 
 \begin_layout Chunk
 
-git slog 
+@
+\end_layout
+
+\begin_layout Standard
+Now, let's make a different change to the master branch.
 \end_layout
 
 \begin_layout Chunk
 
-echo "============================"
+<<chunk22, engine='bash'>>= 
 \end_layout
 
 \begin_layout Chunk
@@ -3714,16 +3769,6 @@ cd /tmp/git-demo
 \begin_layout Chunk
 
 git checkout master
-\end_layout
-
-\begin_layout Chunk
-
-ls -l
-\end_layout
-
-\begin_layout Chunk
-
-echo "============================"
 \end_layout
 
 \begin_layout Chunk
@@ -3924,8 +3969,7 @@ git remote -v
 \end_layout
 
 \begin_layout Standard
-Let's now make some changes in one computer and synchronize them on the
- second.
+Let's now make some changes in one computer.
 \end_layout
 
 \begin_layout Chunk
@@ -3994,22 +4038,12 @@ cd /tmp/git-demo
 
 \begin_layout Chunk
 
-ls -l
-\end_layout
-
-\begin_layout Chunk
-
-echo "============================"
-\end_layout
-
-\begin_layout Chunk
-
 git pull 
 \end_layout
 
 \begin_layout Chunk
 
-ls -l
+cat experiment.txt
 \end_layout
 
 \begin_layout Chunk
