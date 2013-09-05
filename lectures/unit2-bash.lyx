@@ -4019,7 +4019,12 @@ Now we put this new work up on the github server so it's available from
 
 \begin_layout Chunk
 
-cd /tmp/test2 # working on computer #2 
+cd /tmp/test2 
+\end_layout
+
+\begin_layout Chunk
+
+# working on computer #2 
 \end_layout
 
 \begin_layout Chunk
