@@ -3519,7 +3519,7 @@ test.txt
 
 \begin_layout Chunk
 
-<<chunk19a, engine='bash'>>+
+<<chunk19a, engine='bash'>>=
 \end_layout
 
 \begin_layout Chunk
@@ -3635,22 +3635,12 @@ cd /tmp/git-demo
 
 \begin_layout Chunk
 
-echo "Creating the branch:"
+git branch experiment # creating new branch
 \end_layout
 
 \begin_layout Chunk
 
-git branch experiment 
-\end_layout
-
-\begin_layout Chunk
-
-echo "Switching to the new branch:"
-\end_layout
-
-\begin_layout Chunk
-
-git checkout experiment  
+git checkout experiment  # switch to it
 \end_layout
 
 \begin_layout Chunk
