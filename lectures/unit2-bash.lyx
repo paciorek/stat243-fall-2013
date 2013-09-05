@@ -3635,12 +3635,22 @@ cd /tmp/git-demo
 
 \begin_layout Chunk
 
-git branch experiment # create the branch
+echo "Creating the branch:"
 \end_layout
 
 \begin_layout Chunk
 
-git checkout experiment  # switch to it
+git branch experiment 
+\end_layout
+
+\begin_layout Chunk
+
+echo "Switching to the new branch:"
+\end_layout
+
+\begin_layout Chunk
+
+git checkout experiment  
 \end_layout
 
 \begin_layout Chunk
