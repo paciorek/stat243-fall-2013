@@ -2621,12 +2621,22 @@ providing built-in backup
 The material that follows is borrowed from Jarrod Millman and Fernando Perez.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsection
+Warnings about this demo
+\end_layout
 
-\emph on
-Note that the output from the embedded bash code chunks below is a bit annoying
- in that all the output appears in a group after all of the code lines rather
- than the output appearing after the individual line of code.
+\begin_layout Enumerate
+The demo should work if you just run the demo code 'manually' on your machine.
+ However, when compiled via knitr from the Lyx/Latex document, some of the
+ later output in the branching section seems to be out of sync.
+ So the output in this PDF is not quite right in a few places.
+\end_layout
+
+\begin_layout Enumerate
+Also, note that the output from the embedded bash code chunks below is a
+ bit annoying in that all the output appears in a group after all of the
+ code lines rather than the output appearing after the individual line of
+ code.
  This is some sort of issue with how knitr processes bash code chunks.
 \end_layout
 
@@ -3316,7 +3326,7 @@ rm
 
 \begin_layout Chunk
 
-cd /tmp/git-demo git 
+cd /tmp/git-demo
 \end_layout
 
 \begin_layout Chunk
@@ -3381,7 +3391,7 @@ git rm
 
 \begin_layout Chunk
 
-cd /tmp/git-demo git 
+cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
@@ -3416,6 +3426,11 @@ Now let's do the removal.
 \begin_layout Chunk
 
 <<chunk18a, engine='bash'>>=
+\end_layout
+
+\begin_layout Chunk
+
+cd /tmp/git-demo
 \end_layout
 
 \begin_layout Chunk
@@ -3475,7 +3490,7 @@ If we want to make a change before we do a commit, we can do that as follows:
 
 \begin_layout Chunk
 
-cd /tmp/git-demo git 
+cd /tmp/git-demo 
 \end_layout
 
 \begin_layout Chunk
@@ -3520,6 +3535,11 @@ test.txt
 \begin_layout Chunk
 
 <<chunk19a, engine='bash'>>=
+\end_layout
+
+\begin_layout Chunk
+
+cd /tmp/git-demo
 \end_layout
 
 \begin_layout Chunk
@@ -3723,6 +3743,11 @@ Now, let's make a different change to the master branch.
 \begin_layout Chunk
 
 <<chunk22, engine='bash'>>= 
+\end_layout
+
+\begin_layout Chunk
+
+cd /tmp/git-demo
 \end_layout
 
 \begin_layout Chunk
@@ -4338,12 +4363,20 @@ Next, we will have both parties make non-conflicting changes each, and commit
 \end_layout
 
 \begin_layout Itemize
-Alice adds a new file, `alice.txt` to the repo and commits.
+Alice adds a new file, 
+\emph on
+alice.txt
+\emph default
+ to the repo and commits.
  
 \end_layout
 
 \begin_layout Itemize
-Bob adds `bob.txt` and commits.
+Bob adds 
+\emph on
+bob.txt
+\emph default
+ and commits.
 \end_layout
 
 \begin_layout Itemize
@@ -4388,7 +4421,11 @@ target "http://nyuccl.org/pages/GitTutorial/"
 \end_layout
 
 \begin_layout Itemize
-Gitwash: workflow for scientific Python projects: 
+Gitwash: workflow for scientific Python projects:
+\begin_inset Newline newline
+\end_inset
+
+ 
 \begin_inset CommandInset href
 LatexCommand href
 target "http://matthew-brett.github.io/pydagogue/gitwash_build.html"
