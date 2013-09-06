@@ -139,6 +139,11 @@ cd lectures
 # I put the following in my .bashrc
 export PS1="\u@\h:\w> "
 
+# quote stuff
+name="chris"
+echo "My name is $name"
+echo 'My name is $name'
+echo "He said, \"My name is $name.\""
 
 #########################
 # 10 Functions
