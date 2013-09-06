@@ -87,7 +87,8 @@ R
 C-c
 C-\
 
-R --no-save < code.q > code.Rout &  # let's parse what this will do
+matlab -nodesktop -nodisplay < simulate.m > simulate.out & # let's parse what this will do
+R --no-save < code.q > code.Rout &   # "R CMD BATCH" is more standard, but this works too
 
 ssh arwen
 ps -aux | grep R
