@@ -515,6 +515,14 @@ lapply(sequ, class)
 \end_layout
 
 \begin_layout Standard
+Note that you can avoid reading in one or more columns by specifying 
+\emph on
+NULL
+\emph default
+ as the column class for those columns to be omitted.
+\end_layout
+
+\begin_layout Standard
 If possible, it's a good idea to look through the input file in UNIX before
  reading into R to catch such issues in advance.
  Using less on 
