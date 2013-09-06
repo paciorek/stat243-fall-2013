@@ -68,8 +68,7 @@
 
 \makeatletter
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
-\usepackage{/accounts/gen/vis/paciorek/latex/paciorek-asa,times,graphics}
-\input{/accounts/gen/vis/paciorek/latex/paciorekMacros}
+\usepackage{times,graphics}
 %\renewcommand{\baselinestretch}{1.5}
 \hypersetup{unicode=true, pdfusetitle,
 bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
@@ -79,6 +78,9 @@ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 
 \begin{document}
+
+
+
 
 
 
@@ -224,6 +226,9 @@ sequ <- \hlfunctioncall{read.table}(\hlstring{"hivSequ.csv"}, sep = \hlstring{",
 \end{kframe}
 \end{knitrout}
 
+
+Note that you can avoid reading in one or more columns by specifying
+\emph{NULL} as the column class for those columns to be omitted.
 
 If possible, it's a good idea to look through the input file in UNIX
 before reading into R to catch such issues in advance. Using less
