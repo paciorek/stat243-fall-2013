@@ -256,3 +256,268 @@ do
     R CMD BATCH --no-save tmp-$n-$it.R sim-n$n-it$it.Rout&
 done
 # note that base.R should NOT set either 'n' or 'it', but should make use of them, including when creating unique names for output files for each iteration
+
+#######################################################
+### 14 Version control
+#######################################################
+
+### 14.2: VCS overview
+
+cd /tmp
+git clone https://github.com/paciorek/stat243-fall-2013
+git pull
+
+### 14.3 Hashing
+
+library('digest')
+# first commit 
+data1 <- 'This is the start of my paper2.' 
+meta1 <- 'date: 8/20/13' 
+hash1 <- digest(c(data1,meta1), algo="sha1") 
+cat('Hash:', hash1, '\n')
+# second commit, linked to the first 
+data2 <- 'Some more text in my paper...' 
+meta2 <- 'date: 8/20/13' 
+# Note we add the parent hash here! 
+hash2 <- digest(c(data2,meta2,hash1), algo="sha1") 
+cat('Hash:', hash2, '\n')
+
+### 14.4 Local, single-user, linear workflow
+
+git help 
+
+# 14.4.1 Initializing a Git repository
+
+cd /tmp 
+rm -rf git-demo 
+git init git-demo 
+
+cd /tmp/git-demo 
+ls -al
+ls -al .git
+
+# 14.4.2: Adding content to a repository 
+
+cd /tmp/git-demo 
+echo "My first bit of text" > file1.txt 
+
+
+
+cd /tmp/git-demo 
+git add file1.txt 
+
+
+
+cd /tmp/git-demo 
+git status 
+
+# 14.4.3: Committing changes
+
+cd /tmp/git-demo 
+git commit -am"This is our first commit"
+git status
+
+
+
+cd /tmp/git-demo 
+git log 
+
+
+
+cd /tmp/git-demo 
+echo "And now some more text..." >> file1.txt 
+
+
+
+cd /tmp/git-demo 
+git diff 
+
+
+
+cd /tmp/git-demo 
+git commit -am"I have made great progress on this critical matter." 
+
+
+
+cd /tmp/git-demo 
+git log 
+
+
+
+cd /tmp/git-demo 
+git log --oneline --topo-order --graph 
+
+
+
+cd /tmp/git-demo 
+# We create our alias (this saves it in git's permanent configuration file): 
+git config --global alias.slog "log --oneline --topo-order --graph" 
+# And now we can use it 
+git slog 
+
+# 14.4.4: Renaming and removing files
+
+cd /tmp/git-demo
+git mv file1.txt file-newname.txt 
+git status 
+
+
+
+cd /tmp/git-demo 
+git commit -am"I like this new name better" 
+git slog 
+
+
+
+cd /tmp/git-demo 
+echo 'stuff' > test.txt
+git add test.txt
+git commit -am'added test file'
+ls -l test*
+
+
+
+cd /tmp/git-demo
+git rm test.txt
+ls -l test*
+git status
+git commit -am'removed test file'
+git status
+
+# 14.4.5: Undoing changes
+
+cd /tmp/git-demo 
+echo 'stuff' > test.txt
+git add test.txt
+git commit -am'added test file'
+git rm test.txt
+git status
+
+
+
+cd /tmp/git-demo
+git reset -- test.txt # restore file in index (unstage)
+git checkout -- test.txt # get a copy of the file back
+ls -l test*
+git status
+
+### 14.5: Branches
+
+cd /tmp/git-demo 
+git status 
+ls -l
+
+
+
+cd /tmp/git-demo 
+git branch experiment # creating new branch
+git checkout experiment  # switch to it
+echo "Some crazy idea" > experiment.txt 
+git add experiment.txt 
+git commit -am"Trying something new" 
+ls -l
+git slog 
+
+
+
+cd /tmp/git-demo 
+git branch
+git checkout master 
+ls -l # notice the lack of 'experiment.txt'
+
+
+
+cd /tmp/git-demo
+echo "All the while, more work goes on in master..." >> progress.txt
+git add progress.txt
+git commit -am"The mainline keeps moving" 
+git slog 
+
+
+
+cd /tmp/git-demo 
+git checkout master
+git merge experiment 
+git slog 
+ls -l
+
+### 14.6: Using remotes as a single user
+
+cd /tmp/git-demo 
+# Let's see if we have any remote repositories here
+git remote -v 
+
+
+
+cd /tmp/git-demo 
+git remote add origin git@github.com:paciorek/test.git 
+git push -u origin master 
+git remote -v
+
+
+
+cd /tmp # Here I clone my 'test' repo but with a different name, test2, to simulate a 2nd computer
+# in class we'll actually do this on a separate computer
+git clone git@github.com:paciorek/test.git test2 
+cd test2 
+ls -l
+git remote -v
+
+
+
+cd /tmp/test2 # working on computer #2 
+echo "More new content on my experiment" >> experiment.txt 
+git commit -am"More work, on machine #2" 
+
+
+
+cd /tmp/test2 
+# working on computer #2 
+git push 
+
+
+
+cd /tmp/git-demo 
+git pull 
+cat experiment.txt
+
+### 14.7: Conflict management
+
+cd /tmp/git-demo 
+git branch trouble 
+git checkout trouble 
+echo "This is going to be a problem..." >> experiment.txt 
+git commit -am"Changes in the trouble branch" 
+
+
+
+cd /tmp/git-demo 
+git checkout master 
+echo "More work on the master branch..." >> experiment.txt 
+git commit -am"Mainline work" 
+
+
+
+cd /tmp/git-demo 
+git merge trouble
+
+
+
+cd /tmp/git-demo 
+cat experiment.txt 
+
+
+
+cd /tmp/git-demo 
+sed -i '/^</d' experiment.txt 
+sed -i '/^>/d' experiment.txt 
+sed -i '/^=/d' experiment.txt 
+cat experiment.txt
+
+
+
+cd /tmp/git-demo 
+git commit -am"Completed merge of trouble, fixing conflicts along the way" 
+git slog 
+
+

@@ -2775,8 +2775,8 @@ VCS Overview
 \end_layout
 
 \begin_layout Standard
-There are a number of version control systems including CVS and subversion,
- which use client-server models.
+There are a number of version control systems (VCS) including CVS and subversion
+, which use client-server models.
  Git is a distributed version control system.
  VCS store your material in a 
 \emph on
@@ -2969,8 +2969,13 @@ n')
 @
 \end_layout
 
+\begin_layout Standard
+We'll see that Git uses hashes as identifiers for different versions of
+ your work.
+\end_layout
+
 \begin_layout Subsection
-Stage 1: Local, single-user, linear workflow
+Local, single-user, linear workflow
 \end_layout
 
 \begin_layout Standard
