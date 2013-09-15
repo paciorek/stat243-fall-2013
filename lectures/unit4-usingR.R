@@ -420,6 +420,20 @@ myFun(1,3,5,7)
 
 args(dgamma)
 
+
+tmpf = function(x, shape, rate = 1, scale = 1/rate, log = FALSE){
+  print(shape)
+  print(rate)
+  print(scale)
+}
+tmpf(1, 2, rate = 3)
+tmpf(1, 2, scale = 5)
+dgamma(1, 2, scale = 5)
+# does it matter that the rate and scale are inconsistent?
+dgamma
+# why can't we use "rate = 1/scale, scale = 1/rate"? or can we?
+
+
 mat <- matrix(1:9, 3)
 apply(mat, 2, function(vec) vec - vec[1])
 apply(mat, 1, function(vec) vec - vec[1]) 
@@ -717,6 +731,21 @@ for(i in 1:5){
 	print(i)
 }
 
+# while loop example - MLE for zero-truncated Poisson, from p. 59 of Venables and Ripley, 4th edition
+
+yp = rpois(50, lambda = 1)
+y = yp[yp > 0]
+
+ybar = mean(y)
+lam = ybar
+it = 0
+del = 1
+tol = 0.0001
+while(abs(del) > tol && (it <- it + 1) < 10){  # let's parse this
+  del = (lam - ybar * (1- exp(-lam)))/(1 - ybar * exp(-lam))  # adjustment to parameter estimate
+  lam = lam - del  # new parameter value
+  cat(it, lam, "\n")
+}
 
 
 mat <- matrix(1:4, 2)

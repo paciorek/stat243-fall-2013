@@ -1,0 +1,2044 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage[unicode=true]{hyperref}
+\usepackage{/accounts/gen/vis/paciorek/latex/paciorek-asa,times,graphics}
+\input{/accounts/gen/vis/paciorek/latex/paciorekMacros}
+%\renewcommand{\baselinestretch}{1.5}
+\hypersetup{unicode=true, pdfusetitle,bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true,}
+\end_preamble
+\use_default_options false
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing onehalf
+\use_hyperref false
+\papersize letterpaper
+\use_geometry true
+\use_amsmath 1
+\use_esint 0
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Debugging and Good Practices
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+DTL orderBy document from 242
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Sources:
+\end_layout
+
+\begin_layout Itemize
+Chambers
+\end_layout
+
+\begin_layout Itemize
+Roger Peng's 
+\begin_inset CommandInset href
+LatexCommand href
+name "notes"
+target "http://www.biostat.jhsph.edu/~bcaffo/statcomp/files/R-debug-tools.pdf"
+
+\end_inset
+
+ on debugging in R
+\end_layout
+
+\begin_layout Itemize
+Murrell, Introduction to Data Technologies, Ch.
+ 2
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "Journal of Statistical Software vol. 42: 19 Ways of Looking at Statistical Software"
+target "http://www.jstatsoft.org/v42/i02"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "Wilson et at., Best practices for scientific computing, ArXiv:1210:0530"
+target "http://arxiv.org/abs/1210.0530"
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+perhaps post Roger's debugging pdf?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This unit covers debugging (and practices for avoiding bugs), good coding/softwa
+re development practices, and doing reproducible research.
+ As in later units of the course, the material is not in any fundamental
+ way specific to R, but some details and the examples are in R.
+\end_layout
+
+\begin_layout Section
+Common syntax errors and bugs
+\end_layout
+
+\begin_layout Subsection
+Tips for avoiding bugs
+\end_layout
+
+\begin_layout Enumerate
+Plan out your code in advance, including all special cases/possibilities.
+\end_layout
+
+\begin_layout Enumerate
+When doing software development, write tests for your code early in the
+ process.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Build up code in pieces, testing along the way.
+ Make big changes in small steps, sequentially checking to see if the code
+ has broken on test case(s).
+\end_layout
+
+\begin_layout Enumerate
+Code in a modular fashion, making good use of functions, so that you don't
+ need to debug the same code multiple times.
+ Smaller functions are easier to debug, easier to understand, and can be
+ combined in a modular fashion (like the UNIX utilities)
+\end_layout
+
+\begin_layout Enumerate
+Use core R functionality and algorithms already coded.
+ Figure out if a functionality already exists in (or can be adapted from)
+ an R package (or potentially in a C/Fortran library/package): code that
+ is part of standard mathematical/numerical packages will probably be more
+ efficient and bug-free than anything you would write.
+\end_layout
+
+\begin_layout Enumerate
+Remove objects you don't need, to avoid accidentally using values from an
+ old object via the scoping rules.
+\end_layout
+
+\begin_layout Enumerate
+Be careful that the conditions of 
+\emph on
+if
+\emph default
+ statements and the sequences of 
+\emph on
+for
+\emph default
+ loops are robust when they involve evaluating R code.
+\end_layout
+
+\begin_layout Enumerate
+Don't hard code numbers - use variables (e.g., number of iterations, parameter
+ values in simulations), even if you don't expect to change the value, as
+ this makes the code more readable and reduces bugs when you use the same
+ number multiple times: 
+\end_layout
+
+\begin_deeper
+\begin_layout Chunk
+
+<<chunk0, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+speedOfLight <- 3e8
+\begin_inset Newline newline
+\end_inset
+
+nIts <- 1000
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Check that inputs to and outputs from functions (either functions you call
+ or functions you write) are valid and use 
+\emph on
+warning()
+\emph default
+ and 
+\emph on
+stop()
+\emph default
+ to give a warning or stop execution when something unexpected happens (see
+ Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Dealing-with-run-time"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Enumerate
+Use 
+\emph on
+try()
+\emph default
+ with functions that may fail (see Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Dealing-with-run-time"
+
+\end_inset
+
+) in cases where you don't want overall execution to fail because a single
+ piece of the execution fails.
+\end_layout
+
+\begin_layout Enumerate
+Write code for clarity and accuracy first; then worry about efficiency.
+ Write an initial version of the code in the simplest way, without trying
+ to be efficient (e.g., you might use 
+\emph on
+for
+\emph default
+ loops even if you're coding in R); then make a second version that employs
+ efficiency tricks and check that both produce the same output.
+\end_layout
+
+\begin_layout Subsection
+Common syntax errors and bugs
+\end_layout
+
+\begin_layout Standard
+Some of these are not specific to R, though some are.
+\end_layout
+
+\begin_layout Enumerate
+Parenthesis mis-matches
+\end_layout
+
+\begin_layout Enumerate
+
+\emph on
+[[.
+ .
+ .]]
+\emph default
+ vs.
+ 
+\emph on
+[.
+ .
+ .]
+\emph default
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\emph on
+==
+\emph default
+ vs.
+ 
+\emph on
+=
+\emph default
+ 
+\end_layout
+
+\begin_layout Enumerate
+Comparing real numbers exactly using '
+\emph on
+==
+\emph default
+' is dangerous (more in a later Unit).
+ Suppose you generate 
+\emph on
+x = 0.333333
+\emph default
+ in some fashion with some code and then check:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+x == 1/3 # FALSE is the result
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Vectors vs.
+ single values: 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+|| vs.
+ 
+\emph on
+|
+\emph default
+ and 
+\emph on
+&&
+\emph default
+ vs.
+ 
+\emph on
+&
+\end_layout
+
+\begin_layout Enumerate
+You expect a single value but your code gives you a vector
+\end_layout
+
+\begin_layout Enumerate
+You want to compare an entire vector but your code just compares the first
+ value (e.g., in an 
+\emph on
+if
+\emph default
+ statement) -- consider using 
+\emph on
+identical()
+\emph default
+ or 
+\emph on
+all.equal()
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Silent type conversion when you don't want it, or lack of coercion where
+ you're expecting it
+\end_layout
+
+\begin_layout Enumerate
+Using the wrong function or variable name
+\end_layout
+
+\begin_layout Enumerate
+Giving unnamed arguments to a function in the wrong order 
+\end_layout
+
+\begin_layout Enumerate
+In an if-then-else statement, the 
+\emph on
+else
+\emph default
+ cannot be on its own line (unless all the code is enclosed in {}) because
+ R will see the if-then part of the statement, which is a valid R statement,
+ will execute that, and then will encounter the 
+\emph on
+else
+\emph default
+ and return an error.
+ We saw this in Unit 4.
+\end_layout
+
+\begin_layout Enumerate
+Forgetting to define a variable in the environment of a function and having
+ the function, via lexical scoping, get that variable as a global variable
+ from one of the enclosing environments.
+ At best the types are not compatible and you get an error; at worst, you
+ use a garbage value and the bug is hard to trace.
+ In some cases your code may work fine when you develop the code (if the
+ variable exists in the enclosing environment), but then may not work when
+ you restart R if the variable no longer exists or is different.
+\end_layout
+
+\begin_layout Enumerate
+R (usually helpfully) drops matrix and array dimensions that are extraneous;
+ which can sometimes confuse later code that expects an object of a certain
+ dimension.
+ The '[' operator takes an additional optional argument that can avoid dropping
+ dimensions.
+\end_layout
+
+\begin_deeper
+\begin_layout Chunk
+
+<<chunk1>>=
+\end_layout
+
+\begin_layout Chunk
+
+mat <- matrix(1:4, 2, 2)[1, ]
+\end_layout
+
+\begin_layout Chunk
+
+dim(mat); print(mat)
+\end_layout
+
+\begin_layout Chunk
+
+colSums(mat)
+\end_layout
+
+\begin_layout Chunk
+
+mat <- matrix(1:4, 2, 2)[1, , drop = FALSE]
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Debugging Strategies
+\end_layout
+
+\begin_layout Standard
+Debugging is about figuring out what went wrong and where it went wrong.
+\end_layout
+
+\begin_layout Standard
+In compiled languages, one of the difficulties is figuring out what is going
+ on at any given place in the program.
+ This is a lot easier in R by virtue of the fact that R is interpreted and
+ we can step through code line by line at the command line.
+ However, beyond this, there are a variety of helpful tools for debugging
+ R code.
+ In particular these tools can help you step through functions and work
+ inside of functions from packages.
+\end_layout
+
+\begin_layout Subsection
+Basic strategies
+\end_layout
+
+\begin_layout Standard
+Read and think about the error message.
+ Sometimes it's inscrutable, but often it just needs a bit of deciphering.
+ Looking up a given error message in the 
+\begin_inset CommandInset href
+LatexCommand href
+name "R mailing list archive"
+target "http://tolstoy.newcastle.edu.au/R/"
+
+\end_inset
+
+ or on Stack Overflow or simply doing a web search with the exact message
+ in double quotes can be a good strategy.
+\end_layout
+
+\begin_layout Standard
+Fix errors from the top down - fix the first error that is reported, because
+ later errors are often caused by the initial error.
+ It's common to have a string of many errors, which looks daunting, caused
+ by a single initial error.
+\end_layout
+
+\begin_layout Standard
+Is the bug reproducible - does it always happen in the same way at at the
+ same point? It can help to restart R and see if the bug persists - this
+ can sometimes help in figuring out if there is a scoping issue and we are
+ using a global variable that we did not mean to.
+ 
+\end_layout
+
+\begin_layout Standard
+Another basic strategy is to build up code in pieces (or tear it back in
+ pieces to a simpler version).
+ This allows you to isolate where the error is occurring.
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+codetools
+\emph default
+ library has some useful tools for checking code, including a function,
+ 
+\emph on
+findGlobals()
+\emph default
+, that let's you look for the use of global variables
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk2>>=
+\end_layout
+
+\begin_layout Chunk
+
+options(width = 55)
+\end_layout
+
+\begin_layout Chunk
+
+library(codetools)
+\end_layout
+
+\begin_layout Chunk
+
+findGlobals(lm)[1:25]
+\end_layout
+
+\begin_layout Chunk
+
+f <- function() {y <- 3; print(x + y)}
+\end_layout
+
+\begin_layout Chunk
+
+findGlobals(f)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+If you've written your code modularly with lots of functions, you can test
+ individual functions.
+ Often the error will be in what gets passed into and out of each function.
+\end_layout
+
+\begin_layout Standard
+You can have warnings printed as they occurred, rather than saved, using
+ 
+\family typewriter
+options(warn = 1)
+\family default
+.
+ This can help figure out where in a loop a warning is being generated.
+ You can also have R convert warnings to error using
+\family typewriter
+\series bold
+ 
+\series default
+options(warn = 2)
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+At the beginning of time (the 1970s?), the standard debugging strategy was
+ to insert print statements in one's code to see the value of a variable
+ and thereby decipher what could be going wrong.
+ We have better tools nowadays.
+\end_layout
+
+\begin_layout Subsection
+Interactive debugging via the browser
+\end_layout
+
+\begin_layout Standard
+The core strategy for interactive debugging is to use 
+\emph on
+browser()
+\emph default
+, which pauses the current execution, and provides an interpreter, allowing
+ you to view the current state of R.
+ You can invoke 
+\emph on
+browser()
+\emph default
+ in four ways
+\end_layout
+
+\begin_layout Itemize
+by inserting a call to 
+\emph on
+browser()
+\emph default
+ in your code if you suspect where things are going wrong
+\end_layout
+
+\begin_layout Itemize
+by invoking the browser after every step of a function using 
+\emph on
+debug()
+\end_layout
+
+\begin_layout Itemize
+by using 
+\family typewriter
+options(error = recover)
+\family default
+ to invoke the browser when 
+\emph on
+error()
+\emph default
+ is called 
+\end_layout
+
+\begin_layout Itemize
+by temporarily modifying a function to allow browsing using 
+\emph on
+trace()
+\emph default
+ 
+\end_layout
+
+\begin_layout Standard
+Once in the browser, you can execute any R commands you want.
+ In particular, using 
+\emph on
+ls()
+\emph default
+ to look at the objects residing in the current function environment, looking
+ at the values of objects, and examining the classes of objects is often
+ helpful.
+\end_layout
+
+\begin_layout Subsection
+Using 
+\emph on
+debug()
+\emph default
+ to step through code
+\end_layout
+
+\begin_layout Standard
+To step through a function, use 
+\family typewriter
+debug(nameOfFunction)
+\family default
+.
+ Then run your code.
+ When the function is executed, R will pause execution just before the first
+ line of the function.
+ You are now using the browser and can examine the state of R and execute
+ R statements.
+\end_layout
+
+\begin_layout Standard
+In addition, you can use 
+\begin_inset Quotes eld
+\end_inset
+
+n
+\begin_inset Quotes erd
+\end_inset
+
+ or return to step to the next line, 
+\begin_inset Quotes eld
+\end_inset
+
+c
+\begin_inset Quotes erd
+\end_inset
+
+ to execute the entire current function or current loop, and 
+\begin_inset Quotes eld
+\end_inset
+
+Q
+\begin_inset Quotes erd
+\end_inset
+
+ to stop debugging.
+ We'll see an example in the demo code.
+\end_layout
+
+\begin_layout Standard
+To unflag the function so that calling it doesn't invoke debug, use 
+\family typewriter
+undebug(nameOfFunction)
+\family default
+.
+ In addition to working with functions you write you can use debug with
+ standard R functions and functions from packages.
+ For example you could do 
+\family typewriter
+debug(glm)
+\family default
+.
+\end_layout
+
+\begin_layout Subsection
+Tracing errors in the call stack
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+traceback()
+\emph default
+ and 
+\emph on
+recover()
+\emph default
+ allow you to see the call stack (the sequence of nested function calls
+ -- see Unit 4) at the time of an error.
+ This helps pinpoint where in a series of function calls the error may be
+ occurring.
+\end_layout
+
+\begin_layout Standard
+If you've run the code and gotten an error, you can invoke 
+\emph on
+traceback()
+\emph default
+ after things have gone awry.
+ R will show you the call stack, which can help pinpoint where an error
+ is occurring.
+ 
+\end_layout
+
+\begin_layout Standard
+More helpful is to be able to browse within the call stack.
+ To do this invoke 
+\family typewriter
+options(error = recover)
+\family default
+ (potentially in your 
+\emph on
+.Rprofile
+\emph default
+ if you do a lot of programming).
+ Then when an error occurs, 
+\emph on
+recover()
+\emph default
+ gets called, usually from the function in which the error occurred.
+ The call to 
+\emph on
+recover()
+\emph default
+ allows you to navigate the stack of active function calls at the time of
+ the error and browse within the desired call.
+ You just enter the number of the call you'd like to enter (or 0 to exit).
+ You can then look around in the frame of a given function, entering an
+ empty line when you want to return to the list of calls again.
+ 
+\end_layout
+
+\begin_layout Standard
+You can also combine this with 
+\family typewriter
+options(warn = 2)
+\family default
+, which turns warnings into errors to get to the point where a warning was
+ issued.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+[what does options(error = dump.frames) do? try with demo code]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Using 
+\emph on
+trace()
+\emph default
+ to temporarily insert code
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+trace()
+\emph default
+ lets you temporarily insert code into a function (including standard R
+ functions and functions in packages!) that can then be easily removed.
+ You can use trace in a few ways - here's how you would do it most simply,
+ where by default the second argument is invoked at the start of the function
+ given as the first argument, but it is also possible to invoke just before
+ exiting a function:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+trace(lm, recover) # invoke recover() when the function starts
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+trace(lm, exit = browser) # invoke browser() when the function ends
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+trace(lm, browser, exit = browser) # invoke browser() at start and end
+\family default
+
+\begin_inset Newline newline
+\end_inset
+
+Then in this example, once the browser activates I can poke around within
+ the 
+\emph on
+lm()
+\emph default
+ function and see what is going on.
+ 
+\end_layout
+
+\begin_layout Standard
+The most flexible way to use 
+\emph on
+trace()
+\emph default
+ is to use the argument 
+\emph on
+edit = TRUE
+\emph default
+ and then insert whatever code you want whereever you want.
+ If I want to ensure I use a particular editor, such as 
+\emph on
+emacs
+\emph default
+, I can use the argument 
+\emph on
+edit = 
+\begin_inset Quotes eld
+\end_inset
+
+emacs
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ .
+ A standard approach would be to add a line with 
+\emph on
+browser()
+\emph default
+ to step through the code or 
+\emph on
+recover()
+\emph default
+ (to see the call stack and just look at the current state of objects).
+ Alternatively, you can manually change the code in a function without using
+ 
+\emph on
+trace()
+\emph default
+, but it's very easy to forget to change things back and hard to do this
+ with functions in packages, so 
+\emph on
+trace()
+\emph default
+ is a nice way to do things.
+ 
+\end_layout
+
+\begin_layout Standard
+You call 
+\emph on
+untrace()
+\emph default
+, e.g., 
+\family typewriter
+untrace(lm)
+\family default
+, to remove the temporarily inserted code; otherwise it's removed when the
+ session ends.
+ 
+\end_layout
+
+\begin_layout Standard
+Alternatively you can do 
+\family typewriter
+trace(warning, recover)
+\family default
+ which will insert a call to 
+\emph on
+recover() 
+\emph default
+whenever 
+\emph on
+warning()
+\emph default
+ is called.
+\end_layout
+
+\begin_layout Section
+Getting help online
+\end_layout
+
+\begin_layout Subsection
+Searching for help
+\end_layout
+
+\begin_layout Standard
+There are several mailing lists that have lots of useful postings.
+ In general if you have an error, others have already posted about it.
+\end_layout
+
+\begin_layout Itemize
+R help: 
+\begin_inset CommandInset href
+LatexCommand href
+name "R mailing lists archive"
+target "http://tolstoy.newcastle.edu.au/R/"
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "Stack overflow"
+target "http://stackoverflow.com"
+
+\end_inset
+
+ (R stuff will be tagged with [R]: 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://stackoverflow.com/questions/tagged/r"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+R help special interest groups (SIG) such as r-sig-hpc (high performance
+ computing), r-sig-mac (R on Macs), etc.
+ Unfortunately these are not easily searchable, but can often be found by
+ simple web searchs, potentially including the name of the SIG in the search.
+\end_layout
+
+\begin_layout Itemize
+Simple web searches: You may want to include "in R", with the quotes in
+ the search.
+ To search a SIG you might include the name of the SIG in the search string
+ 
+\end_layout
+
+\begin_layout Itemize
+Rseek.org for web searches restricted to sites that have information on R
+\end_layout
+
+\begin_layout Standard
+If you are searching you often want to search for a specific error message.
+ Remember to use double quotes around your error message so it is not broken
+ into individual words by the search engine.
+ 
+\end_layout
+
+\begin_layout Standard
+Just searching the 
+\begin_inset CommandInset href
+LatexCommand href
+name "R mailing list archive"
+target "http://tolstoy.newcastle.edu.au/R/"
+
+\end_inset
+
+ often gives you a hint of how to fix things.
+ An example occurred when I was trying to figure out how fix a problem that
+ was reporting a 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+invalid multibyte string
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ error in some emails in a dataset of Spam emails.
+ I knew it had something to do with the character encoding and R not interpretin
+g the codes for non-ASCII characters correctly but I wasn't sure how to
+ fix it.
+ So I searched for 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+invalid multibyte string
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Around the 8th hit or so there was a comment about using 
+\emph on
+iconv()
+\emph default
+ to convert to the UTF-8 encoding, which solved the problem.
+\end_layout
+
+\begin_layout Standard
+Note: of course the various mailing lists are also helpful for figuring
+ out how to do things, not just for fixing bugs.
+ For example, this 
+\begin_inset CommandInset href
+LatexCommand href
+name "blog post"
+target "http://www.r-bloggers.com/the-guerilla-guide-to-r/?utm_source=feedburner&utm_medium=email&utm_campaign=Feed%3A+RBloggers+%28R+bloggers%29"
+
+\end_inset
+
+ has a guide to R based simply on Stack Overflow posts.
+ 
+\end_layout
+
+\begin_layout Subsection
+Asking questions online
+\end_layout
+
+\begin_layout Standard
+If you've searched the archive and haven't found an answer to your problem,
+ you can often get help by posting to the 
+\emph on
+R-help
+\emph default
+ mailing list or one of the other lists mentioned above.
+ A few guidelines (generally relevant when posting to mailing lists beyond
+ just the R lists): 
+\end_layout
+
+\begin_layout Enumerate
+Search the archives and look through relevant R books or manuals first.
+\end_layout
+
+\begin_layout Enumerate
+Boil your problem down to the essence of the problem, giving an example,
+ including the output and error message
+\end_layout
+
+\begin_layout Enumerate
+Say what version of R, what operating system and what operating system version
+ you're using.
+ Both 
+\emph on
+sessionInfo()
+\emph default
+ and 
+\emph on
+Sys.info()
+\emph default
+ can be helpful for getting this information.
+\end_layout
+
+\begin_layout Enumerate
+Read the 
+\begin_inset CommandInset href
+LatexCommand href
+name "posting guide"
+target "http://www.r-project.org/posting-guide.html"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The mailing list is a way to get free advice from the experts, who include
+ some of the world's most knowledgeable R experts - seriously - members
+ of the R core development team contribute frequently.
+ The cost is that you should do your homework and that sometimes the responses
+ you get may be blunt, along the lines of 
+\begin_inset Quotes eld
+\end_inset
+
+read the manual
+\begin_inset Quotes erd
+\end_inset
+
+.
+ I think it's a pretty good tradeoff - where else do you get the foremost
+ experts in a domain actually helping you?
+\end_layout
+
+\begin_layout Section
+Good coding practices
+\end_layout
+
+\begin_layout Standard
+Some of these tips apply more to software development and some more to analyses
+ done for specific projects; hopefully it will be clear in most cases.
+\end_layout
+
+\begin_layout Subsection
+Editors
+\end_layout
+
+\begin_layout Standard
+Use an editor that supports the language you are using (e.g., 
+\emph on
+Emacs
+\emph default
+/
+\emph on
+Aquamacs
+\emph default
+, 
+\emph on
+vim, TextMate, WinEdt
+\emph default
+, 
+\emph on
+Tinn-R
+\emph default
+, or the built-in editors in 
+\emph on
+RStudio
+\emph default
+ or the Mac R GUI).
+ Some advantages of this can include: (1) helpful color coding of different
+ types of syntax and of strings, (2) automatic indentation and spacing,
+ (3) code can often be run or compiled from within the editor, (4) parenthesis
+ matching, (5) line numbering (good for finding bugs).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+[show them an example by passing stat-mac22 emacs into Mac]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Coding syntax
+\end_layout
+
+\begin_layout Itemize
+Header information: put metainfo on the code into the first few lines of
+ the file as comments.
+ Include who, when, what, how the code fits within a larger program (if
+ appropriate), possibly the versions of R and key packages that you wrote
+ this for
+\end_layout
+
+\begin_layout Itemize
+Indentation: do this systematically (your editor can help here).
+ This helps you and others to read and understand the code and can help
+ in detecting errors in your code because it can expose lack of symmetry.
+\end_layout
+
+\begin_layout Itemize
+Whitespace: use a lot of it.
+ Some places where it is good to have it are (1) around operators (assignment
+ and arithmetic), (2) between function arguments and list elements, (3)
+ between matrix/array indices, in particular for missing indices.
+ 
+\end_layout
+
+\begin_layout Itemize
+Use blank lines to separate blocks of code and comments to say what the
+ block does
+\end_layout
+
+\begin_layout Itemize
+Split long lines at meaningful places.
+\end_layout
+
+\begin_layout Itemize
+Use parentheses for clarity even if not needed for order of operations.
+ For example, 
+\family typewriter
+a/y*x
+\family default
+ will work but is not easy to read and you can easily induce a bug if you
+ forget the order of ops.
+\end_layout
+
+\begin_layout Itemize
+Documentation - add lots of comments (but don't belabor the obvious).
+ Remember that in a few months, you may not follow your own code any better
+ than a stranger.
+ Some key things to document: (1) summarizing a block of code, (2) explaining
+ a very complicated piece of code - recall our complicated regular expressions,
+ (3) explaining arbitrary constant values.
+\end_layout
+
+\begin_layout Itemize
+For software development, break code into separate files (<2000-3000 lines
+ per file) with meaningful file names and related functions grouped within
+ a file.
+\end_layout
+
+\begin_layout Itemize
+Choose a consistent naming style for objects and functions: e.g.
+ 
+\emph on
+nIts
+\emph default
+ vs.
+ 
+\emph on
+n.its
+\emph default
+ vs 
+\emph on
+numberOfIts
+\emph default
+ vs.
+ 
+\emph on
+n_its
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+This 
+\begin_inset CommandInset href
+LatexCommand href
+name "R journal article"
+target "http://journal.r-project.org/archive/2012-2/RJournal_2012-2_Baaaath.pdf"
+
+\end_inset
+
+summarizes the state of naming styles on CRAN.
+ 
+\end_layout
+
+\begin_layout Itemize
+Adler and 
+\begin_inset CommandInset href
+LatexCommand href
+name "Google's R style guide"
+target "http://google-styleguide.googlecode.com/svn/trunk/Rguide.xml"
+
+\end_inset
+
+ recommend naming objects with lowercase words, separated by periods, while
+ naming functions by capitalizing the name of each word that is joined together,
+ with no periods.
+ 
+\end_layout
+
+\begin_layout Itemize
+On the other hand, programmers who use other languages dislike R code with
+ periods in it except in the context of object-oriented programming.
+ E.g., 
+\emph on
+summary.lm
+\emph default
+ is clear in that the period distinguishes the method from the class.
+ Naming a method something like 
+\emph on
+special.summary.lm
+\emph default
+ or an object 
+\emph on
+my.summary
+\emph default
+ then confuses things.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Try to have the names be informative without being overly long.
+\end_layout
+
+\begin_layout Itemize
+Don't overwrite names of objects/functions that already exist in R.
+ E.g., don't use 'lm'.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> exists(
+\begin_inset Quotes eld
+\end_inset
+
+lm
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Use active names for functions (e.g., 
+\emph on
+calc.loglik
+\emph default
+, 
+\emph on
+calcLogLik
+\emph default
+)
+\end_layout
+
+\begin_layout Itemize
+Learn from others' code
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+[show my api2.R code]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This semester, someone will be reading your code - Tessa and me when we
+ look at your assignments.
+ So to help us in understanding your code and develop good habits, put these
+ ideas into practice in your assignments.
+\end_layout
+
+\begin_layout Subsection
+Coding style
+\end_layout
+
+\begin_layout Standard
+This is particularly focused on software development, but some of the ideas
+ are useful for data analysis as well.
+\end_layout
+
+\begin_layout Itemize
+Break down tasks into core units
+\end_layout
+
+\begin_layout Itemize
+Write reusable code for core functionality and keep a single copy of the
+ code (w/ backups of course) so you only need to change it once
+\end_layout
+
+\begin_layout Itemize
+Smaller functions are easier to debug, easier to understand, and can be
+ combined in a modular fashion (like the UNIX utilities)
+\end_layout
+
+\begin_layout Itemize
+Write functions that take data as an argument and not lines of code that
+ operate on specific data objects.
+ Why? Functions allow us to reuse blocks of code easily for later use and
+ for recreating an analysis (reproducible research).
+ It's more transparent than sourcing a file of code because the inputs and
+ outputs are specified formally, so you don't have to read through the code
+ to figure out what it does.
+\end_layout
+
+\begin_layout Itemize
+Functions should: 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+be modular (having a single task); 
+\end_layout
+
+\begin_layout Itemize
+have meaningful name; and
+\end_layout
+
+\begin_layout Itemize
+have a comment describing their purpose, inputs and outputs (see the help
+ file for an R function for how this is done in that context).
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Object orientation is a nice way to go
+\end_layout
+
+\begin_layout Itemize
+Don't hard code numbers - use variables (e.g., number of iterations, parameter
+ values in simulations), even if you don't expect to change the value, as
+ this makes the code more readable: 
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family typewriter
+> speedOfLight <- 3e8
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Use R lists to keep disparate parts of related data together
+\end_layout
+
+\begin_layout Itemize
+Practice defensive programming
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+check function inputs and warn users if the code will do something they
+ might not expect or makes particular choices;
+\end_layout
+
+\begin_layout Itemize
+check inputs to 
+\emph on
+if
+\emph default
+ and the ranges in 
+\emph on
+for
+\emph default
+ loops;
+\end_layout
+
+\begin_layout Itemize
+provide reasonable default arguments;
+\end_layout
+
+\begin_layout Itemize
+document the range of valid inputs;
+\end_layout
+
+\begin_layout Itemize
+check that the output produced is valid; and
+\end_layout
+
+\begin_layout Itemize
+stop execution based on checks and give an informative error message.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Try to avoid system-dependent code that only runs on a specific version
+ of an OS or specific OS
+\end_layout
+
+\begin_layout Itemize
+Learn from others' code
+\end_layout
+
+\begin_layout Itemize
+Consider rewriting your code once you know all the settings and conditions;
+ often analyses and projects meander as we do our work and the initial plan
+ for the code no longer makes sense and the code is no longer designed specifica
+lly for the job being done.
+\end_layout
+
+\begin_layout Subsection
+Version control
+\end_layout
+
+\begin_layout Standard
+Some basic ideas of version control are as follows:
+\end_layout
+
+\begin_layout Itemize
+Whenever you make changes to the structure of your code/program, make it
+ a new version, numbering sequentially (or with more sophisticated version
+ numbering used by software developers).
+\end_layout
+
+\begin_layout Itemize
+Keep a text file that documents what changes from version to version (or
+ do this in the document header).
+ I find this easier than trying to name my code files informatively.
+\end_layout
+
+\begin_layout Itemize
+DO NOT get rid of old code versions (text is cheap to store) and DO NOT
+ get rid of blocks of code that work.
+\end_layout
+
+\begin_layout Itemize
+Keep a running file (or comments in the code) of what you'd like to change
+ in the future.
+\end_layout
+
+\begin_layout Standard
+Even better than doing this manually, both for data analysis and your own
+ project work, you can use a formal version control system (VCS), in particular
+ git.
+ 
+\emph on
+cvs
+\emph default
+ and 
+\emph on
+svn
+\emph default
+ are other VCS.
+ You can host a 
+\emph on
+git
+\emph default
+ repository at 
+\emph on
+github.com
+\emph default
+ for free (provided you don't mind having others see it).
+\end_layout
+
+\begin_layout Subsection
+Dealing with run-time errors
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Dealing-with-run-time"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When writing functions, and software more generally, you'll want to warn
+ the user or stop execution when there is an error and exit gracefully,
+ giving the user some idea of what happened.
+ The 
+\emph on
+warning()
+\emph default
+ and 
+\emph on
+stop()
+\emph default
+ functions allow you to do this; in general they would be called based on
+ an if statement.
+ To stop code if a condition is not satisfied, you can use 
+\emph on
+stopifnot()
+\emph default
+, e.g.,
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> x <- 3
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+> stopifnot(is(x, "matrix"))
+\end_layout
+
+\begin_layout Standard
+These approaches allow you to catch errors that can be anticipated.
+\end_layout
+
+\begin_layout Standard
+Here's an example of building a robust square root function using 
+\emph on
+stop()
+\emph default
+ and 
+\emph on
+warning()
+\emph default
+.
+ Note you could use stopifnot(is.numeric(x)) in place of one of the checks
+ here.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk3>>=
+\end_layout
+
+\begin_layout Chunk
+
+mysqrt <- function(x) {
+\end_layout
+
+\begin_layout Chunk
+
+	if (is.list(x)) {
+\end_layout
+
+\begin_layout Chunk
+
+		warning("x is a list; converting to a vector")
+\end_layout
+
+\begin_layout Chunk
+
+		x <- unlist(x)
+\end_layout
+
+\begin_layout Chunk
+
+	}
+\end_layout
+
+\begin_layout Chunk
+
+	if (!is.numeric(x)) {
+\end_layout
+
+\begin_layout Chunk
+
+		stop("What is the square root of 'bob'?")
+\end_layout
+
+\begin_layout Chunk
+
+	} else {
+\end_layout
+
+\begin_layout Chunk
+
+		if (any(x < 0)) {
+\end_layout
+
+\begin_layout Chunk
+
+			warning("mysqrt: found negative values; proceeding anyway")
+\end_layout
+
+\begin_layout Chunk
+
+			x[x >= 0] <- (x[x >= 0])^(1/2)
+\end_layout
+
+\begin_layout Chunk
+
+			x[x < 0] <- NaN
+\end_layout
+
+\begin_layout Chunk
+
+			return(x)
+\end_layout
+
+\begin_layout Chunk
+
+		} else return(x^(1/2))
+\end_layout
+
+\begin_layout Chunk
+
+	}
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+mysqrt(c(1, 2, 3))
+\end_layout
+
+\begin_layout Chunk
+
+mysqrt(c(5, -7))
+\end_layout
+
+\begin_layout Chunk
+
+mysqrt(c("asdf", "sdf"))
+\end_layout
+
+\begin_layout Chunk
+
+mysqrt(list(5, 3, "ab"))
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+You can control what happens when a warning occurs with 
+\emph on
+options()$warning
+\emph default
+.
+ This can be helpful for debugging - e.g., you can force R to stop if a warning
+ is issued rather than continuing so you can delve into what happened.
+\end_layout
+
+\begin_layout Standard
+Also, sometimes a function you call will fail, but you want to continue
+ execution.
+ For example, suppose you are fitting a bunch of linear models and occasionally
+ the design matrix is singular.
+ You can wrap a function call within the 
+\emph on
+try()
+\emph default
+ function (or 
+\emph on
+tryCatch()
+\emph default
+) and then your code won't stop.
+ You can also evaluate whether a given function call executed properly or
+ not.
+ Here's an example of fitting a model for extreme values:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk4>>=
+\end_layout
+
+\begin_layout Chunk
+
+library(ismev)
+\end_layout
+
+\begin_layout Chunk
+
+library(methods)
+\end_layout
+
+\begin_layout Chunk
+
+n <- 100; nDays <- 365
+\end_layout
+
+\begin_layout Chunk
+
+x <- matrix(rnorm(nDays * n), nr = nDays)
+\end_layout
+
+\begin_layout Chunk
+
+x <- apply(x, 2, max)
+\end_layout
+
+\begin_layout Chunk
+
+x <- cbind(rep(0, 100), x)
+\end_layout
+
+\begin_layout Chunk
+
+params <- matrix(NA, nr = ncol(x), nc = 3)
+\end_layout
+
+\begin_layout Chunk
+
+for(i in 1:ncol(x)){
+\end_layout
+
+\begin_layout Chunk
+
+	fit <- try(gev.fit(x[ ,i], show = FALSE))
+\end_layout
+
+\begin_layout Chunk
+
+	if(!is(fit, "try-error")) 
+\end_layout
+
+\begin_layout Chunk
+
+		params[i, ] = fit$mle
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+params
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Challenge
+\series default
+: figure out how to use 
+\emph on
+tryCatch()
+\emph default
+ to deal with the error above.
+ Note that I haven't used it and it seemed somewhat inscrutable on quick
+ look.
+\end_layout
+
+\begin_layout Section
+Tips for running analyses
+\end_layout
+
+\begin_layout Standard
+Save your output at intermediate steps (including the random seed state)
+ so you can restart if an error occurs or a computer fails.
+ Using 
+\emph on
+save()
+\emph default
+ and 
+\emph on
+save.image()
+\emph default
+ to write to 
+\emph on
+.RData
+\emph default
+ files work well for this.
+\end_layout
+
+\begin_layout Standard
+Run your code on a small subset of the problem before setting off a job
+ that runs for hours or days.
+ Make sure that the code works on the small subset and saves what you need
+ properly at the end.
+ 
+\end_layout
+
+\begin_layout Section
+Reproducible research
+\end_layout
+
+\begin_layout Standard
+The idea of 
+\begin_inset Quotes eld
+\end_inset
+
+reproducible research
+\begin_inset Quotes erd
+\end_inset
+
+ has gained a lot of attention in recent years because of the increasing
+ complexity of research projects, lack of details in the published literature,
+ failures in being able to replicate or reproduce others' work, fraudulent
+ research, and for other reasons.
+\end_layout
+
+\begin_layout Standard
+We've seen a number of tools that can help with doing reproducible research,
+ including version control systems such as git, the use of scripting such
+ as bash and R scripts, and literate programming tools such as knitr, Sweave
+ and R Markdown.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Provenance
+\emph default
+ is becoming increasingly important in science.
+ It basically means being able to trace the steps of an analysis back to
+ its origins.
+ 
+\emph on
+Replicability
+\emph default
+ is a related concept - the idea is that you or someone else could replicate
+ the analysis that you've done.
+ This can be surprisingly hard as time passes even if you're the one attempting
+ the replication.
+ 
+\end_layout
+
+\begin_layout Standard
+Open question: What is required for something to be replicable? What are
+ the challenges in doing so?
+\end_layout
+
+\begin_layout Subsection
+Some basic strategies
+\end_layout
+
+\begin_layout Itemize
+Have a directory for each project with meaningful subdirectories: e.g., 
+\emph on
+code
+\emph default
+, 
+\emph on
+data
+\emph default
+, 
+\emph on
+paper
+\end_layout
+
+\begin_layout Itemize
+Keep a document describing your running analysis with dates in a text file
+ (i.e., a lab book)
+\end_layout
+
+\begin_layout Itemize
+Note where data were obtained (and when, which can be helpful when publishing)
+ and pre-processing steps in the lab book.
+ Have data version numbers with a file describing the changes and dates
+ (or in lab book).
+\end_layout
+
+\begin_layout Itemize
+Have a file of code for pre-processing, one or more for analysis, and one
+ for figure/table preparation.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Have the code file for the figures produce the EXACT manuscript figures,
+ operating on an RData file that contains all the objects necessary to run
+ the figure-producing code; the code producing the RData file should be
+ in your analysis code file (or somewhere else sensible).
+\end_layout
+
+\begin_layout Itemize
+Alternatively, use 
+\emph on
+Sweave
+\emph default
+ or 
+\emph on
+knitr
+\emph default
+ for your document preparation.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Note what code files do what in the lab book.
+\end_layout
+
+\begin_layout Subsection
+More formal tools
+\end_layout
+
+\begin_layout Enumerate
+In some cases you may be able to carry out your complete workflow in a knitr/Swe
+ave/R Markdown document.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Or in Python, you may be able to use the iPython Notebook.
+\end_layout
+
+\begin_layout Enumerate
+You might consider using the UNIX utility 
+\emph on
+make
+\emph default
+, which is generally used for compiling code, as a tool for reproducible
+ research: see 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://kbroman.github.io/minimal_make/"
+
+\end_inset
+
+ for more details.
+\end_layout
+
+\end_body
+\end_document
