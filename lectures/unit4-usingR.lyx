@@ -1,0 +1,7502 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{/accounts/gen/vis/paciorek/latex/paciorek-asa,times,graphics}
+\input{/accounts/gen/vis/paciorek/latex/paciorekMacros}
+%\renewcommand{\baselinestretch}{1.5}
+\hypersetup{unicode=true, pdfusetitle,
+bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true,}
+\end_preamble
+\use_default_options false
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing onehalf
+\use_hyperref false
+\papersize letterpaper
+\use_geometry true
+\use_amsmath 1
+\use_esint 0
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Chunk
+
+<<setup, include=FALSE, cache=TRUE>>= 
+\end_layout
+
+\begin_layout Chunk
+
+library(knitr) 
+\end_layout
+
+\begin_layout Chunk
+
+opts_chunk$set(fig.path = 'figure/listings-') 
+\end_layout
+
+\begin_layout Chunk
+
+options(replace.assign = TRUE, width = 55) 
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Title
+Using R
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Note that in this material, I often sneak an extra trick into my example
+ code.
+ Focus first on the key thing I'm illustrating and then you might absorb
+ the extra trick.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This will cover some of the more advanced features of R that were not covered,
+ or were treated lightly in the R bootcamp.
+ It's a bit of a mish-mash because I'm assuming you have a working familiarity
+ with the first 8 or so units from the bootcamp.
+\end_layout
+
+\begin_layout Standard
+References: 
+\end_layout
+
+\begin_layout Itemize
+Adler
+\end_layout
+
+\begin_layout Itemize
+Chambers
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "R intro manual"
+target "http://cran.r-project.org/doc/manuals/R-intro.html"
+
+\end_inset
+
+ on CRAN (R-intro).
+\end_layout
+
+\begin_layout Itemize
+Venables and Ripley, Modern Applied Statistics with S
+\end_layout
+
+\begin_layout Itemize
+Murrell, Introduction to Data Technologies.
+ 
+\end_layout
+
+\begin_layout Standard
+I'm going to try to refer to R syntax as statements, where a statement is
+ any code that is a valid, complete R expression.
+ I'll try not to use the term 
+\emph on
+expression
+\emph default
+, as this actually means a specific type of object within the R language.
+ 
+\end_layout
+
+\begin_layout Standard
+One of my goals in our coverage of R is for us to think about why things
+ are the way they are in R.
+ I.e., what principles were used in creating the language.
+\end_layout
+
+\begin_layout Section
+Interacting with the operating system from R
+\end_layout
+
+\begin_layout Standard
+I'll assume everyone knows about the following functions/functionality in
+ R:
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+getwd(), setwd(), source(), pdf(), save(), save.image(), load()
+\end_layout
+
+\begin_layout Itemize
+To run UNIX commands from within R, use 
+\emph on
+system()
+\emph default
+, as follows, noting that we can save the result of a system call to an
+ R object:
+\end_layout
+
+\begin_deeper
+\begin_layout Chunk
+
+<<chunk1>>=
+\end_layout
+
+\begin_layout Chunk
+
+system("ls -al") 
+\end_layout
+
+\begin_layout Chunk
+
+# knitr/Sweave doesn't seem to show the output of system()
+\end_layout
+
+\begin_layout Chunk
+
+files <- system("ls", intern = TRUE)
+\end_layout
+
+\begin_layout Chunk
+
+files[1:5]
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+There are also a bunch of functions that will do specific queries of the
+ filesystem, including
+\end_layout
+
+\begin_deeper
+\begin_layout Chunk
+
+<<chunk2, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+file.exists("file.txt")
+\end_layout
+
+\begin_layout Chunk
+
+list.files("~/research")
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+To get some info on the system you're running on:
+\end_layout
+
+\begin_deeper
+\begin_layout Chunk
+
+<<chunk3>>=
+\end_layout
+
+\begin_layout Chunk
+
+Sys.info()
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+To see some of the options that control how R behaves, try the 
+\emph on
+options()
+\emph default
+ function.
+ The 
+\emph on
+width
+\emph default
+ option changes the number of characters of width printed to the screen,
+ while the 
+\emph on
+max.print
+\emph default
+ option prevents too much of a large object from being printed to the screen.
+ The 
+\emph on
+digits
+\emph default
+ option changes the number of digits of numbers printed to the screen (but
+ be careful as this can be deceptive if you then try to compare two numbers
+ based on what you see on the screen).
+\end_layout
+
+\begin_deeper
+\begin_layout Chunk
+
+<<chunk4>>=
+\end_layout
+
+\begin_layout Chunk
+
+# options()  # this would print out a long list of options
+\end_layout
+
+\begin_layout Chunk
+
+options()[1:5]
+\end_layout
+
+\begin_layout Chunk
+
+options()[c('width', 'digits')]
+\end_layout
+
+\begin_layout Chunk
+
+# options(width = 120) # often nice to have more characters on screen
+\end_layout
+
+\begin_layout Chunk
+
+options(width = 55)  # for purpose of making the pdf of this document
+\end_layout
+
+\begin_layout Chunk
+
+options(max.print = 5000)
+\end_layout
+
+\begin_layout Chunk
+
+options(digits = 3)
+\end_layout
+
+\begin_layout Chunk
+
+a <- 0.123456; b <- 0.1234561
+\end_layout
+
+\begin_layout Chunk
+
+a; b; a == b
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Use 
+\family typewriter
+Ctrl-C
+\family default
+ to interrupt execution.
+ This will generally back out gracefully, returning you to a state as if
+ the command had not been started.
+ Note that if R is exceeding memory availability, there can be a long delay.
+ This can be frustrating, particularly since a primary reason you would
+ want to interrupt is when R runs out of memory.
+\end_layout
+
+\begin_layout Itemize
+The 
+\begin_inset CommandInset href
+LatexCommand href
+name "R mailing list archives"
+target "http://tolstoy.newcastle.edu.au/R/"
+
+\end_inset
+
+ are very helpful for getting help - always search the archive before posting
+ a question.
+ More info on where to find R help in Unit 5 on debugging.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+sessionInfo()
+\emph default
+ gives information on the current R session - it's a good idea to include
+ this information (and information on the operating system such as from
+ 
+\emph on
+Sys.info()
+\emph default
+) when you ask for help on a mailing list
+\end_layout
+
+\begin_deeper
+\begin_layout Chunk
+
+<<chunk4a>>=
+\end_layout
+
+\begin_layout Chunk
+
+sessionInfo()
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+Any code that you wanted executed automatically when starting R can be placed
+ in 
+\emph on
+~/.Rprofile
+\emph default
+ (or in individual 
+\emph on
+.Rprofile
+\emph default
+ files in specific directories).
+ This could include loading packages (see below), sourcing files with user-defin
+ed functions (you can also put the function code itself in 
+\emph on
+.Rprofile
+\emph default
+), assigning variables, and specifying options via 
+\emph on
+options()
+\emph default
+.
+\end_layout
+
+\begin_layout Itemize
+You can have an R script act as a shell command (like running a bash shell
+ script) as follows.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Write your R code in a text file, say 
+\emph on
+file.R
+\emph default
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+As the first line of the file, include 
+\family typewriter
+#!/usr/bin/Rscript
+\family default
+ (like 
+\family typewriter
+#!/bin/bash
+\family default
+ in a bash shell file, as seen in Unit 2).
+ 
+\end_layout
+
+\begin_layout Enumerate
+Make the R code file executable with 
+\emph on
+chmod
+\emph default
+.
+\end_layout
+
+\begin_layout Enumerate
+Run the script from the command line: 
+\family typewriter
+./file.R
+\end_layout
+
+\begin_layout Standard
+If you want to pass arguments into your script, you can do so as long as
+ you set up the R code to interpret the incoming arguments:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk00, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+args <- commandArgs(TRUE)
+\begin_inset Newline newline
+\end_inset
+
+# now args is a character vector containing the arguments.
+\begin_inset Newline newline
+\end_inset
+
+# Suppose the first argument should be interpreted as a number 
+\end_layout
+
+\begin_layout Chunk
+
+# and the second as a character string and the third as a boolean:
+\begin_inset Newline newline
+\end_inset
+
+numericArg <- as.numeric(args[1])
+\begin_inset Newline newline
+\end_inset
+
+charArg <- args[2]
+\begin_inset Newline newline
+\end_inset
+
+logicalArg <- as.logical(args[3]
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Packages
+\end_layout
+
+\begin_layout Standard
+One of the killer apps of R is the extensive collection of add-on packages
+ on 
+\begin_inset CommandInset href
+LatexCommand href
+name "CRAN (www.cran.r-project.org)"
+target "www.cran.r-project.org"
+
+\end_inset
+
+ that provide much of R's functionality.
+ To make use of a package it needs to be installed on your system (using
+ 
+\emph on
+install.packages()
+\emph default
+ once only) and loaded into R (using 
+\emph on
+library()
+\emph default
+ every time you start R).
+ 
+\end_layout
+
+\begin_layout Standard
+Some packages are 
+\emph on
+installed
+\emph default
+ by default with R and of these, some are 
+\emph on
+loaded
+\emph default
+ by default, while others require a call to 
+\emph on
+library()
+\emph default
+.
+ For packages I use a lot, I install them once and then load them automatically
+ every time I start R using my 
+\emph on
+~/.Rprofile
+\emph default
+ file.
+\end_layout
+
+\begin_layout Paragraph
+Loading packages
+\end_layout
+
+\begin_layout Standard
+You can use 
+\emph on
+library()
+\emph default
+ to either (1) make a package available (loading it) or (2) to see all the
+ installed packages.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk6>>=
+\end_layout
+
+\begin_layout Chunk
+
+library(fields)
+\end_layout
+
+\begin_layout Chunk
+
+library(help = fields)
+\end_layout
+
+\begin_layout Chunk
+
+# library()  # I don't want to run this on SCF because so many are installed
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Notice that some of the packages are in a system directory and some are
+ in my home directory.
+ Packages often depend on other packages.
+ In general, if one package depends on another, R will load the dependency,
+ but if the dependency is installed locally (see below), R may not find
+ it automatically and you may have to use 
+\emph on
+library()
+\emph default
+ to load the dependency first.
+ 
+\emph on
+.libPaths()
+\emph default
+ shows where R looks for packages on your system and searchpaths() shows
+ where individual packages are loaded from.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk6aa>>=
+\end_layout
+
+\begin_layout Chunk
+
+.libPaths()
+\end_layout
+
+\begin_layout Chunk
+
+searchpaths()
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Paragraph
+Installing packages
+\end_layout
+
+\begin_layout Standard
+If a package is on CRAN but not on your system, you can install it easily
+ (usually).
+ You don't need root permission on a machine to install a package (though
+ sometimes you run into hassles if you are installing it just as a user,
+ so if you have administrative privileges it may help to use them).
+ 
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk6a, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+install.packages('fields', lib = '~/Rlibs') # ~/Rlibs needs to exist!
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+You can also download the zipped source file from CRAN and install from
+ the file; see the help page for 
+\emph on
+install.packages()
+\emph default
+.
+ 
+\end_layout
+
+\begin_layout Paragraph
+Accessing objects from packages
+\end_layout
+
+\begin_layout Standard
+The objects in a package (primarily functions, but also data) are in their
+ own workspaces, and are accessible after you load the package using 
+\emph on
+library()
+\emph default
+, but are not directly visible when you use 
+\emph on
+ls()
+\emph default
+.
+ We'll talk more about this when we talk about scope and environments.
+ If we want to see the objects in one of the other workspaces, we can do
+ the following:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk7>>=
+\end_layout
+
+\begin_layout Chunk
+
+search()
+\end_layout
+
+\begin_layout Chunk
+
+# ls(pos = 8) # for the stats package
+\end_layout
+
+\begin_layout Chunk
+
+ls(pos = 8)[1:5] # just show the first few
+\end_layout
+
+\begin_layout Chunk
+
+ls("package:stats")[1:5] # equivalent
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Section
+Objects in R 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+(PS, VR, Ch[overly complex])
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Assignment and coercion
+\end_layout
+
+\begin_layout Standard
+We assign into an object using either '
+\emph on
+=
+\emph default
+' or '
+\emph on
+<-
+\emph default
+'.
+ A rule of thumb is that for basic assignments where you have an object
+ name, then the assignment operator, and then some code, '
+\emph on
+=
+\emph default
+' is fine, but otherwise use '
+\emph on
+<-
+\emph default
+'.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk8>>=
+\end_layout
+
+\begin_layout Chunk
+
+out = mean(rnorm(7)) # OK
+\end_layout
+
+\begin_layout Chunk
+
+system.time(out = rnorm(10000)) 
+\end_layout
+
+\begin_layout Chunk
+
+# NOT OK, system.time() expects its argument to be a complete R expression
+\end_layout
+
+\begin_layout Chunk
+
+system.time(out <- rnorm(10000))
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Let's look at these examples to understand the distinction between '=' and
+ '<-' when passing arguments to a function.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk9>>=
+\end_layout
+
+\begin_layout Chunk
+
+mean
+\end_layout
+
+\begin_layout Chunk
+
+x <- 0; y <- 0
+\end_layout
+
+\begin_layout Chunk
+
+out <- mean(x = c(3,7)) # usual way to pass an argument to a function
+\end_layout
+
+\begin_layout Chunk
+
+# what does the following do?
+\end_layout
+
+\begin_layout Chunk
+
+out <- mean(x <- c(3,7)) # this is allowable, though perhaps not useful
+\end_layout
+
+\begin_layout Chunk
+
+out <- mean(y = c(3,7))
+\end_layout
+
+\begin_layout Chunk
+
+out <- mean(y <- c(3,7))
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+What can you tell me about what is going on in each case above?
+\end_layout
+
+\begin_layout Standard
+One situation in which you want to use '
+\emph on
+<-
+\emph default
+' is if it is being used as part of an argument to a function, so that R
+ realizes you're not indicating one of the function arguments, e.g.:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk9a>>=
+\end_layout
+
+\begin_layout Chunk
+
+mat <- matrix(c(1, NA, 2, 3), nrow = 2, ncol = 2)
+\end_layout
+
+\begin_layout Chunk
+
+apply(mat, 1, sum.isna <- function(vec) {return(sum(is.na(vec)))})
+\end_layout
+
+\begin_layout Chunk
+
+# What is the side effect of what I have done here?
+\end_layout
+
+\begin_layout Chunk
+
+apply(mat, 1, sum.isna = function(vec) {return(sum(is.na(vec)))}) # NOPE
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+R often treats integers as numerics, but we can force R to store values
+ as integers:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk10>>=
+\end_layout
+
+\begin_layout Chunk
+
+vals <- c(1, 2, 3)
+\end_layout
+
+\begin_layout Chunk
+
+class(vals)
+\end_layout
+
+\begin_layout Chunk
+
+vals <- 1:3
+\end_layout
+
+\begin_layout Chunk
+
+class(vals)
+\end_layout
+
+\begin_layout Chunk
+
+vals <- c(1L, 2L, 3L)
+\end_layout
+
+\begin_layout Chunk
+
+vals
+\end_layout
+
+\begin_layout Chunk
+
+class(vals)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+We convert between classes using variants on 
+\emph on
+as()
+\emph default
+: e.g., 
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk11>>=
+\end_layout
+
+\begin_layout Chunk
+
+as.character(c(1,2,3))
+\end_layout
+
+\begin_layout Chunk
+
+as.numeric(c("1", "2.73"))
+\end_layout
+
+\begin_layout Chunk
+
+as.factor(c("a", "b", "c"))
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Some common conversions are converting numbers that are being interpreted
+ as characters into actual numbers, converting between factors and characters,
+ and converting between logical TRUE/FALSE vectors and numeric 1/0 vectors.
+ In some cases R will automatically do conversions behind the scenes in
+ a smart way (or occasionally not so smart way).
+ We saw see implicit conversion (also called coercion) when we read in character
+s into R using 
+\emph on
+read.table()
+\emph default
+ - strings are often automatically coerced to factors.
+ Consider these examples of implicit coercion:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk13>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- rnorm(5)
+\end_layout
+
+\begin_layout Chunk
+
+x[3] <- 'hat' # What do you think is going to happen?
+\end_layout
+
+\begin_layout Chunk
+
+indices = c(1, 2.73)
+\end_layout
+
+\begin_layout Chunk
+
+myVec = 1:10
+\end_layout
+
+\begin_layout Chunk
+
+myVec[indices]
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+In other languages, converting between different classes is sometimes called
+ 
+\emph on
+casting
+\emph default
+ a variable.
+\end_layout
+
+\begin_layout Standard
+Here's an example we can work through that will help illustrate how type
+ conversions occur behind the scenes in R.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk11a>>=
+\end_layout
+
+\begin_layout Chunk
+
+n <- 5
+\end_layout
+
+\begin_layout Chunk
+
+df <- data.frame(rep('a', n), rnorm(n), rnorm(n))
+\end_layout
+
+\begin_layout Chunk
+
+apply(df, 1, function(x) x[2] + x[3])
+\end_layout
+
+\begin_layout Chunk
+
+# why does that not work?
+\end_layout
+
+\begin_layout Chunk
+
+apply(df[ , 2:3], 1, function(x) x[1] + x[2])
+\end_layout
+
+\begin_layout Chunk
+
+df2 <- data.frame(cbind(rep('a', n), rnorm(n), rnorm(5)))
+\end_layout
+
+\begin_layout Chunk
+
+apply(df2[ , 2:3], 1, function(x) x[1] + x[2])
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Subsection
+Type vs.
+ class
+\end_layout
+
+\begin_layout Standard
+You should be familiar with vectors as the basic data structure in R, with
+ character, integer, numeric, etc.
+ classes.
+ Objects also have a type, which relates to what kind of values are in the
+ objects and how objects are stored internally in R (i.e., in C).
+ 
+\end_layout
+
+\begin_layout Standard
+Let's look at Adler's Table 7.1 to see some other types.
+ 
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk12>>=
+\end_layout
+
+\begin_layout Chunk
+
+a <- data.frame(x = 1:2)
+\end_layout
+
+\begin_layout Chunk
+
+class(a)
+\end_layout
+
+\begin_layout Chunk
+
+typeof(a)
+\end_layout
+
+\begin_layout Chunk
+
+m <- matrix(1:4, nrow = 2) 
+\end_layout
+
+\begin_layout Chunk
+
+class(m) 
+\end_layout
+
+\begin_layout Chunk
+
+typeof(m)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Everything in R is an object and all objects have a class.
+ For simple objects class and type are often closely related, but this is
+ not the case for more complicated objects.
+ The class describes what the object contains and standard functions associated
+ with it.
+ In general, you mainly need to know what class an object is rather than
+ its type.
+ Classes can 
+\emph on
+inherit
+\emph default
+ from other classes; for example, the 
+\emph on
+glm
+\emph default
+ class inherits characteristics from the 
+\emph on
+lm
+\emph default
+ class.
+ We'll see more on the details of object-oriented programming in the R programmi
+ng unit.
+\end_layout
+
+\begin_layout Standard
+We can create objects with our own defined class.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk14>>=
+\end_layout
+
+\begin_layout Chunk
+
+me <- list(firstname = 'Chris', surname = 'Paciorek')
+\end_layout
+
+\begin_layout Chunk
+
+class(me) <- 'personClass'  # it turns out R already has a 'person' class
+\end_layout
+
+\begin_layout Chunk
+
+class(me)
+\end_layout
+
+\begin_layout Chunk
+
+is.list(me)
+\end_layout
+
+\begin_layout Chunk
+
+typeof(me)
+\end_layout
+
+\begin_layout Chunk
+
+typeof(me$firstname)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Subsection
+Information about objects
+\end_layout
+
+\begin_layout Standard
+Some functions that give information about objects are:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk15>>=
+\end_layout
+
+\begin_layout Chunk
+
+is(me, 'personClass')
+\end_layout
+
+\begin_layout Chunk
+
+str(me)
+\end_layout
+
+\begin_layout Chunk
+
+attributes(me)
+\end_layout
+
+\begin_layout Chunk
+
+mat <- matrix(1:4, 2)
+\end_layout
+
+\begin_layout Chunk
+
+class(mat)
+\end_layout
+
+\begin_layout Chunk
+
+typeof(mat)
+\end_layout
+
+\begin_layout Chunk
+
+length(mat) 
+\end_layout
+
+\begin_layout Chunk
+
+# recall that a matrix can be thought of as a vector with dimensions
+\end_layout
+
+\begin_layout Chunk
+
+attributes(mat)
+\end_layout
+
+\begin_layout Chunk
+
+dim(mat)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Attributes
+\emph default
+ are information about an object attached to an object as something that
+ looks like a named list.
+ Attributes are often copied when operating on an object.
+ This can lead to some weird-looking formatting:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk16>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- rnorm(10 * 365)
+\end_layout
+
+\begin_layout Chunk
+
+qs <- quantile(x, c(.025, .975))
+\end_layout
+
+\begin_layout Chunk
+
+qs
+\end_layout
+
+\begin_layout Chunk
+
+qs[1] + 3
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Thus in an subsequent operations with 
+\emph on
+qs
+\emph default
+, the 
+\emph on
+names
+\emph default
+ attribute will often get carried along.
+ We can get rid of it:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk17>>=
+\end_layout
+
+\begin_layout Chunk
+
+names(qs) <- NULL
+\end_layout
+
+\begin_layout Chunk
+
+qs
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+A common use of attributes is that rows and columns may be named in matrices
+ and data frames, and elements in vectors:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk18>>=
+\end_layout
+
+\begin_layout Chunk
+
+row.names(mtcars)[1:6]
+\end_layout
+
+\begin_layout Chunk
+
+names(mtcars)
+\end_layout
+
+\begin_layout Chunk
+
+mat <- data.frame(x = 1:2, y = 3:4)
+\end_layout
+
+\begin_layout Chunk
+
+row.names(mat) <- c("first", "second")
+\end_layout
+
+\begin_layout Chunk
+
+mat
+\end_layout
+
+\begin_layout Chunk
+
+vec <- c(first = 7, second = 1, third = 5)
+\end_layout
+
+\begin_layout Chunk
+
+vec['first']
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Subsection
+The workspace
+\end_layout
+
+\begin_layout Standard
+Objects exist in a workspace, which in R is called an environment.
+ 
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk19>>=
+\end_layout
+
+\begin_layout Chunk
+
+# objects() # what objects are in my workspace
+\end_layout
+
+\begin_layout Chunk
+
+identical(ls(), objects()) # synonymous
+\end_layout
+
+\begin_layout Chunk
+
+dat <- 7; dat2 <- 9; subdat <- 3; obj <- 5; obj2 <- 7
+\end_layout
+
+\begin_layout Chunk
+
+objects(pattern = "^dat") 
+\end_layout
+
+\begin_layout Chunk
+
+rm(dat2, subdat)
+\end_layout
+
+\begin_layout Chunk
+
+rm(list = c("obj", "obj2")) 
+\end_layout
+
+\begin_layout Chunk
+
+# a bit confusing - the 'list' argument should be a character vector
+\end_layout
+
+\begin_layout Chunk
+
+rm(list = ls(pattern = "^dat")) 
+\end_layout
+
+\begin_layout Chunk
+
+exists('dat') # can be helpful when programming
+\end_layout
+
+\begin_layout Chunk
+
+dat <- rnorm(500000)
+\end_layout
+
+\begin_layout Chunk
+
+object.size(dat)
+\end_layout
+
+\begin_layout Chunk
+
+print(object.size(dat), units = "Mb") # this seems pretty clunky!
+\end_layout
+
+\begin_layout Chunk
+
+# but we'll understand why it's clunky when we see S3 classes in detail
+\end_layout
+
+\begin_layout Chunk
+
+rm(list = ls()) # what does this do?
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Subsection
+Some other details
+\end_layout
+
+\begin_layout Paragraph
+Special objects
+\end_layout
+
+\begin_layout Standard
+There are also some special objects, which often begin with a period, like
+ hidden files in UNIX.
+ One is 
+\emph on
+.Last.value
+\emph default
+, which stores the last result.
+ 
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk20>>=
+\end_layout
+
+\begin_layout Chunk
+
+rnorm(10)
+\end_layout
+
+\begin_layout Chunk
+
+# .Last.value  # this should return the 10 random normals but knitr is messing
+ things up, commented out here
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Paragraph
+Scientific notation
+\end_layout
+
+\begin_layout Standard
+R uses the syntax 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+xep
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ to mean 
+\begin_inset Formula $x*10^{p}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk20a, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- 1e5
+\end_layout
+
+\begin_layout Chunk
+
+log10(x)
+\end_layout
+
+\begin_layout Chunk
+
+y <- 100000
+\end_layout
+
+\begin_layout Chunk
+
+x <- 1e-8
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Paragraph
+Information about functions
+\end_layout
+
+\begin_layout Standard
+To get help on functions (I'm having trouble evaluating these with knitr,
+ so just putting these in as text here):
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+?lm # or help(lm)
+\end_layout
+
+\begin_layout Plain Layout
+
+help.search('lm')
+\end_layout
+
+\begin_layout Plain Layout
+
+apropos('lm')
+\end_layout
+
+\begin_layout Plain Layout
+
+help('[[') # operators are functions too 
+\end_layout
+
+\begin_layout Plain Layout
+
+args(lm)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Strings and quotation
+\end_layout
+
+\begin_layout Standard
+Working with strings and quotes (see 
+\family typewriter
+?Quotes
+\family default
+ in R).
+ Generally one uses double quotes to denote text.
+ If we want a quotation symbol in text, we can do something like the following,
+ either combining single and double quotes or escaping the quotation:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk20b>>=
+\end_layout
+
+\begin_layout Chunk
+
+ch1 <- "Chris's
+\backslash
+n"
+\end_layout
+
+\begin_layout Chunk
+
+ch2 <- 'He said, "hello."
+\backslash
+n'
+\end_layout
+
+\begin_layout Chunk
+
+ch3 <- "He said, 
+\backslash
+"hello.
+\backslash
+"
+\backslash
+n"
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Be careful when cutting and pasting from documents that are not text files
+ as you may paste in something that looks like a single or double quote,
+ but which R cannot interpret as a quote because it's some other ASCII quote
+ character.
+\end_layout
+
+\begin_layout Section
+Working with data structures
+\end_layout
+
+\begin_layout Subsection
+Lists and dataframes
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+[draw out a list as a set of boxes (containers) for different items and
+ what [[ does - comment on fact that I like to think graphically about what
+ the computer is doing, though that might not be how everyone does it]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Extraction
+\end_layout
+
+\begin_layout Standard
+You extract from lists with 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+[[
+\emph default
+
+\begin_inset Quotes eld
+\end_inset
+
+ or with 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+[
+\emph default
+
+\begin_inset Quotes eld
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk21>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- list(a = 1:2, b = 3:4, sam = rnorm(4))
+\end_layout
+
+\begin_layout Chunk
+
+x[[2]] # extracts the indicated component, which can be anything, 
+\end_layout
+
+\begin_layout Chunk
+
+# in this case just an integer vector
+\end_layout
+
+\begin_layout Chunk
+
+x[c(1, 3)] # extracts subvectors, which since it is a list, 
+\end_layout
+
+\begin_layout Chunk
+
+# will also be a list
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+When working with lists, it's handy to be able to use the same function
+ on each element of the list:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk22>>=
+\end_layout
+
+\begin_layout Chunk
+
+lapply(x, length)
+\end_layout
+
+\begin_layout Chunk
+
+sapply(x, length) # returns things in a user-friendly way
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Note that to operate on a data frame, which is a list, we'll generally want
+ to use 
+\emph on
+lapply()
+\emph default
+ or 
+\emph on
+sapply()
+\emph default
+, as 
+\emph on
+apply()
+\emph default
+ is really designed for working with elements that are all of the same type:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk23>>=
+\end_layout
+
+\begin_layout Chunk
+
+apply(CO2, 2, class) # hmmm
+\end_layout
+
+\begin_layout Chunk
+
+sapply(CO2, class)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Here's a nice trick to pull out a specific component from each element of
+ a list.
+ (Note the use of the additional argument(s) to 
+\emph on
+sapply()
+\emph default
+ - this can also be done in the other 
+\emph on
+apply()
+\emph default
+ variants.)
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk24>>=
+\end_layout
+
+\begin_layout Chunk
+
+params <- list( a = list(mn = 7, sd = 3), b = list(mn = 6, sd =1), c = list(mn
+ = 2, sd = 1))
+\end_layout
+
+\begin_layout Chunk
+
+sapply(params, '[[', 1)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Finally, we can flatten a list with 
+\emph on
+unlist()
+\emph default
+.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk25>>=
+\end_layout
+
+\begin_layout Chunk
+
+unlist(x)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Paragraph
+Calculations in the context of stratification
+\end_layout
+
+\begin_layout Standard
+Note that some of the basic R functionality for doing stratified analysis
+ is mentioned here.
+ For a new way to do such split-apply-combine operations see the 
+\emph on
+plyr
+\emph default
+ package.
+\end_layout
+
+\begin_layout Standard
+We can also use an 
+\emph on
+apply()
+\emph default
+ variant to do calculations on subgroups, defined based on a factor or factors.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk26>>=
+\end_layout
+
+\begin_layout Chunk
+
+tapply(mtcars$mpg, mtcars$cyl, mean) 
+\end_layout
+
+\begin_layout Chunk
+
+tapply(mtcars$mpg, list(mtcars$cyl, mtcars$gear), mean)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Check out 
+\emph on
+aggregate()
+\emph default
+ and 
+\emph on
+by()
+\emph default
+ for nice wrappers to 
+\emph on
+tapply()
+\emph default
+ when working with data frames.
+ 
+\emph on
+aggregate()
+\emph default
+ returns a data frame and works when the output of the function is univariate,
+ while 
+\emph on
+by()
+\emph default
+ returns a list, so can return multivariate output:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk28>>=
+\end_layout
+
+\begin_layout Chunk
+
+aggregate(mtcars, by = list(cyl = mtcars$cyl), mean) 
+\end_layout
+
+\begin_layout Chunk
+
+# this uses the function on each column of mtcars, split by the 'by' argument
+\end_layout
+
+\begin_layout Chunk
+
+by(warpbreaks, warpbreaks$tension, function(x) {lm(breaks ~ wool, data =
+ x)})
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+In some cases you may actually need an object containing the subsets of
+ the data, for which you can use 
+\emph on
+split()
+\emph default
+:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk29, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+split(mtcars, mtcars$cyl)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+To stratify based on a continuous variable, you can create a factor with
+ the 
+\emph on
+cut()
+\emph default
+ function.
+ By default the levels are not formally ordered, but we can manipulate them
+ with 
+\emph on
+relevel()
+\emph default
+, or make sure they're ordered by using the 
+\emph on
+ordered_result
+\emph default
+ argument to 
+\emph on
+cut()
+\emph default
+.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk110>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- rnorm(100)
+\end_layout
+
+\begin_layout Chunk
+
+f <-  cut(x, breaks = c(-Inf, -1, 1, Inf), labels = c('low', 'medium', 'high'))
+\end_layout
+
+\begin_layout Chunk
+
+levels(f) # note that f is not explicitly ordered
+\end_layout
+
+\begin_layout Chunk
+
+f <- relevel(f, 'high') # puts high as first level
+\end_layout
+
+\begin_layout Chunk
+
+f <-  cut(x, breaks = c(-Inf, -1, 1, Inf), labels = c('low', 'medium', 'high'),
+ ordered_result = TRUE)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+do.call()
+\emph default
+ function will apply a function to the elements of a list.
+ For example, we can 
+\emph on
+rbind()
+\emph default
+ together (if compatible) the elements of a list of vectors instead of having
+ to loop over the elements or manually type them in:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk30>>=
+\end_layout
+
+\begin_layout Chunk
+
+myList <- list(a = 1:3, b = 11:13, c = 21:23)
+\end_layout
+
+\begin_layout Chunk
+
+args(rbind)
+\end_layout
+
+\begin_layout Chunk
+
+rbind(myList$a, myList$b, myList$c)
+\end_layout
+
+\begin_layout Chunk
+
+rbind(myList)
+\end_layout
+
+\begin_layout Chunk
+
+do.call(rbind, myList)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Why couldn't we just use 
+\emph on
+rbind()
+\emph default
+ directly? Basically we're using 
+\emph on
+do.call()
+\emph default
+ to use functions that take 
+\begin_inset Quotes eld
+\end_inset
+
+...
+\begin_inset Quotes erd
+\end_inset
+
+ as input (i.e., functions accepting an arbitrary number of arguments) and
+ to use the list as the input instead (i.e., to use the list elements).
+ 
+\end_layout
+
+\begin_layout Subsection
+Vectors and matrices
+\end_layout
+
+\begin_layout Paragraph
+Column-major vs.
+ row-major matrix storage
+\end_layout
+
+\begin_layout Standard
+Matrices in R are column-major ordered, which means they are stored by column
+ as a vector of concatenated columns.
+ 
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk31>>=
+\end_layout
+
+\begin_layout Chunk
+
+mat <- matrix(rnorm(500), nr = 50) 
+\end_layout
+
+\begin_layout Chunk
+
+identical(mat[1:50], mat[ , 1])
+\end_layout
+
+\begin_layout Chunk
+
+identical(mat[1:10], mat[1, ])
+\end_layout
+
+\begin_layout Chunk
+
+vec <- c(mat) 
+\end_layout
+
+\begin_layout Chunk
+
+mat2 <- matrix(vec, nr = 50) 
+\end_layout
+
+\begin_layout Chunk
+
+identical(mat,mat2) 
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+If you want to fill a matrix row-wise:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk32>>=
+\end_layout
+
+\begin_layout Chunk
+
+matrix(1:4, 2, byrow = TRUE)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Column-major ordering is also used in Matlab and Fortran, while row-major
+ ordering is used in C.
+\end_layout
+
+\begin_layout Paragraph
+Identifying elements by index
+\end_layout
+
+\begin_layout Standard
+You can figure out the indices of elements having a given characteristic
+ using 
+\emph on
+which()
+\emph default
+:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk36>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- c(1, 10, 2, 9, 3, 8)
+\end_layout
+
+\begin_layout Chunk
+
+which(x < 3)
+\end_layout
+
+\begin_layout Chunk
+
+x <- matrix(1:6, nrow = 2)
+\end_layout
+
+\begin_layout Chunk
+
+which(x < 3, arr.ind = TRUE)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+which.max()
+\emph default
+ and 
+\emph on
+which.min()
+\emph default
+ have similar sort of functionality.
+\end_layout
+
+\begin_layout Standard
+We can determine which elements match those in another set with 
+\emph on
+%in%
+\emph default
+ (to return logicals) or 
+\emph on
+match()
+\emph default
+ (to return indices that describe the mapping):
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk36aa>>=
+\end_layout
+
+\begin_layout Chunk
+
+set <- c("Mazda RX4", "Merc 240D", "Fiat 128")
+\end_layout
+
+\begin_layout Chunk
+
+row.names(mtcars) %in% set
+\end_layout
+
+\begin_layout Chunk
+
+which(row.names(mtcars) %in% set)
+\end_layout
+
+\begin_layout Chunk
+
+match(row.names(mtcars), set)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Paragraph
+Vectorized subsetting
+\end_layout
+
+\begin_layout Standard
+We can subset vectors, matrices, and rows of data frames by index or by
+ logical vectors.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk36a>>=
+\end_layout
+
+\begin_layout Chunk
+
+set.seed(0)
+\end_layout
+
+\begin_layout Chunk
+
+vec <- rnorm(8); mat <- matrix(rnorm(9), 3)
+\end_layout
+
+\begin_layout Chunk
+
+vec; mat
+\end_layout
+
+\begin_layout Chunk
+
+vec[vec < 0]
+\end_layout
+
+\begin_layout Chunk
+
+vec[vec < 0] <- 0
+\end_layout
+
+\begin_layout Chunk
+
+vec
+\end_layout
+
+\begin_layout Chunk
+
+mat[mat[ , 1] < 0, ] # similarly for data frames
+\end_layout
+
+\begin_layout Chunk
+
+mat[mat[ , 1] < 0, 2:3]  # similarly for data frames
+\end_layout
+
+\begin_layout Chunk
+
+mat[ , mat[1, ] < 0]
+\end_layout
+
+\begin_layout Chunk
+
+mat[mat[ , 1] < 0, 2:3] <- 0
+\end_layout
+
+\begin_layout Chunk
+
+set.seed(0) # so we get the same vec as we had before
+\end_layout
+
+\begin_layout Chunk
+
+vec <- rnorm(8)
+\end_layout
+
+\begin_layout Chunk
+
+wh <- which(vec < 0)
+\end_layout
+
+\begin_layout Chunk
+
+logicals <- vec < 0
+\end_layout
+
+\begin_layout Chunk
+
+logicals; wh
+\end_layout
+
+\begin_layout Chunk
+
+identical(vec[wh], vec[logicals])
+\end_layout
+
+\begin_layout Chunk
+
+vec <- c(1L, 2L, 1L)
+\end_layout
+
+\begin_layout Chunk
+
+is.integer(vec)
+\end_layout
+
+\begin_layout Chunk
+
+vec[vec == 1L] # in general, not safe with numeric vectors
+\end_layout
+
+\begin_layout Chunk
+
+vec[vec != 3L] # nor this
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Finally, we can also subset a matrix with a two-column matrix of {row,column}
+ indices.
+ 
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk36b>>=
+\end_layout
+
+\begin_layout Chunk
+
+mat <- matrix(rnorm(25), 5)
+\end_layout
+
+\begin_layout Chunk
+
+rowInd <- c(1, 3, 5); colInd <- c(1, 1, 4)
+\end_layout
+
+\begin_layout Chunk
+
+mat[cbind(rowInd, colInd)]
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Paragraph
+Indexing and factors
+\end_layout
+
+\begin_layout Standard
+
+Be careful of using factors as indices for subsetting:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk36c>>=
+\end_layout
+
+\begin_layout Chunk
+
+students <- factor(c("basic", "proficient", "advanced", "basic", "advanced",
+ "minimal"))
+\end_layout
+
+\begin_layout Chunk
+
+score = c(minimal = 3, basic = 1, advanced = 13, proficient = 7)
+\end_layout
+
+\begin_layout Chunk
+
+score["advanced"]
+\end_layout
+
+\begin_layout Chunk
+
+score[students[3]]
+\end_layout
+
+\begin_layout Chunk
+
+score[as.character(students[3])]
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+
+What has gone wrong?
+\end_layout
+
+\begin_layout Paragraph
+apply()
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+apply()
+\emph default
+ function will apply a given function to either the rows or columns of a
+ matrix or a set of dimensions of an array:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk37>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- matrix(1:6, nr = 2)
+\end_layout
+
+\begin_layout Chunk
+
+x
+\end_layout
+
+\begin_layout Chunk
+
+apply(x, 1, min) # by row 
+\end_layout
+
+\begin_layout Chunk
+
+apply(x, 2, min) # by column
+\end_layout
+
+\begin_layout Chunk
+
+x <- array(1:24, c(2, 3, 4))
+\end_layout
+
+\begin_layout Chunk
+
+apply(x, 2, min) # for(j in 1:3) print(min(x[ , j, ]))
+\end_layout
+
+\begin_layout Chunk
+
+apply(x, c(2, 3), min) 
+\end_layout
+
+\begin_layout Chunk
+
+#  equivalent to: 
+\end_layout
+
+\begin_layout Chunk
+
+#  for(j in 1:3) {
+\end_layout
+
+\begin_layout Chunk
+
+#   for(k in 1:4) { 
+\end_layout
+
+\begin_layout Chunk
+
+#     print(min(x[ , j, k]))
+\end_layout
+
+\begin_layout Chunk
+
+#   }}
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+This can get confusing, but can be very powerful.
+ Basically, I'm calculating the min for each element of the second dimension
+ in the second-to-last example and for each pair of elements in the first
+ and third dimensions in the final example.
+ Caution: if the result of each subcalculation is a vector, these will be
+ 
+\emph on
+cbind()
+\emph default
+'ed together (recall column-major order), so if you used 
+\emph on
+apply()
+\emph default
+ on the row margin, you'll need to transpose the result.
+ 
+\end_layout
+
+\begin_layout Paragraph
+Why use apply(), lapply(), etc.?
+\end_layout
+
+\begin_layout Standard
+The various 
+\emph on
+apply()
+\emph default
+ functions (apply, lapply, sapply, tapply, etc.) may be faster than a loop
+ (when a substantial part of the work lies in the overhead of the looping),
+ but if the dominant part of the calculation lies in the time required by
+ the function on each of the elements, then the main reason for using an
+ 
+\emph on
+apply()
+\emph default
+ variant is code clarity.
+ 
+\end_layout
+
+\begin_layout Standard
+Here's an example where 
+\emph on
+apply()
+\emph default
+ is not faster than a loop.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk38, cache=TRUE>>=
+\end_layout
+
+\begin_layout Chunk
+
+n <- 500000; nr <- 10000; nCalcs <- n/nr
+\end_layout
+
+\begin_layout Chunk
+
+mat <- matrix(rnorm(n), nrow = nr)
+\end_layout
+
+\begin_layout Chunk
+
+times <- 1:nr
+\end_layout
+
+\begin_layout Chunk
+
+system.time(out1 <- apply(mat, 2, function(vec) {mod = lm(vec ~ times); return(mo
+d$coef[2])})) 
+\end_layout
+
+\begin_layout Chunk
+
+system.time({out2 = rep(NA, nCalcs); for(i in 1:nCalcs){out2[i] = lm(mat[
+ , i] ~ times)$coef[2]}}) 
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Subsection
+Long and wide formats
+\end_layout
+
+\begin_layout Standard
+Finally, we may want to convert between so-called 'long' and 'wide' formats,
+ which are motivated by working with longitudinal data (multiple observations
+ per subject).
+ The wide format has repeated measurements for a subject in separate columns,
+ while the long format has repeated measurements in separate rows, with
+ a column for differentiating the repeated measurements.
+ 
+\emph on
+stack()
+\emph default
+ converts from wide to long while 
+\emph on
+unstack()
+\emph default
+ does the reverse.
+
+\series bold
+\emph on
+ 
+\series default
+reshape()
+\series bold
+\emph default
+ 
+\series default
+is similar but more flexible and it can go in either direction.
+ The wide format is useful for doing separate analyses by group, while the
+ long format is useful for doing a single analysis that makes use of the
+ groups, such as ANOVA or mixed models.
+ Let's use the precipitation data as an example.
+ 
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk109a, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+load('../data/prec.RData')
+\end_layout
+
+\begin_layout Chunk
+
+prec <- prec[1:1000, ] # just to make the example code run faster
+\end_layout
+
+\begin_layout Chunk
+
+precVars <- 5:ncol(prec)
+\end_layout
+
+\begin_layout Chunk
+
+precStacked <- stack(prec, select = precVars)
+\end_layout
+
+\begin_layout Chunk
+
+out <- unstack(precStacked)
+\end_layout
+
+\begin_layout Chunk
+
+# to use reshape, we need a unique id for each row since reshape considers
+ each row in the wide format as a subject
+\end_layout
+
+\begin_layout Chunk
+
+prec <- cbind(unique = 1:nrow(prec), prec)
+\end_layout
+
+\begin_layout Chunk
+
+precVars <- precVars + 1
+\end_layout
+
+\begin_layout Chunk
+
+precLong <- reshape(prec, varying = names(prec)[precVars], idvar = 'unique',
+ direction = 'long', sep = '')
+\end_layout
+
+\begin_layout Chunk
+
+precLong <- precLong[!is.na(precLong$prec), ]
+\end_layout
+
+\begin_layout Chunk
+
+precWide <- reshape(precLong, v.names = 'prec', idvar = 'unique', direction
+ = 'wide', sep='')
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Check out 
+\emph on
+melt()
+\emph default
+ and 
+\emph on
+cast()
+\emph default
+ in the 
+\emph on
+reshape2
+\emph default
+ package for easier argument formats than 
+\emph on
+reshape()
+\emph default
+.
+\end_layout
+
+\begin_layout Subsection
+Linear algebra
+\end_layout
+
+\begin_layout Standard
+We'll focus on matrices here.
+ A few helpful functions are 
+\emph on
+nrow()
+\emph default
+ and 
+\emph on
+ncol()
+\emph default
+, which tell the dimensions of the matrix.
+ The 
+\emph on
+row()
+\emph default
+ and 
+\emph on
+col()
+\emph default
+ functions will return matrices of the same size as the original, but filled
+ with the row or column number of each element.
+ So to get the upper triangle of a matrix, 
+\emph on
+X
+\emph default
+, we can do:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk39>>=
+\end_layout
+
+\begin_layout Chunk
+
+X <- matrix(rnorm(9), 3)
+\end_layout
+
+\begin_layout Chunk
+
+X
+\end_layout
+
+\begin_layout Chunk
+
+X[col(X) >= row(X)]
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+See also the 
+\emph on
+upper.tri()
+\emph default
+ and 
+\emph on
+lower.tri()
+\emph default
+ functions, as well as the 
+\emph on
+diag()
+\emph default
+ function.
+ 
+\emph on
+diag()
+\emph default
+ is quite handy - you can extract the diagonals, assign into the diagonals,
+ or create a diagonal matrix:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk40>>=
+\end_layout
+
+\begin_layout Chunk
+
+diag(X)
+\end_layout
+
+\begin_layout Chunk
+
+diag(X) <- 1
+\end_layout
+
+\begin_layout Chunk
+
+X
+\end_layout
+
+\begin_layout Chunk
+
+d <- diag(c(rep(1, 2), rep(2, 2)))
+\end_layout
+
+\begin_layout Chunk
+
+d
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+To transpose a matrix, use 
+\emph on
+t()
+\emph default
+, e.g., 
+\family typewriter
+t(X).
+\end_layout
+
+\begin_layout Paragraph
+Basic operations
+\end_layout
+
+\begin_layout Standard
+The basic matrix-vector operations are:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk41, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+X %*% Y # matrix multiplication
+\end_layout
+
+\begin_layout Chunk
+
+X * Y # direct product
+\end_layout
+
+\begin_layout Chunk
+
+x %o% y # outer product of vectors x, y: x times t(y)
+\end_layout
+
+\begin_layout Chunk
+
+outer(x, y) # same thing
+\end_layout
+
+\begin_layout Chunk
+
+# evaluation of f(x,y) for all pairs of x,y values:
+\end_layout
+
+\begin_layout Chunk
+
+outer(x, y, function(x, y) cos(y)/(1 + x^2)) 
+\end_layout
+
+\begin_layout Chunk
+
+crossprod(X, Y) # same as but faster than t(X) %*% Y!
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+For inverses (
+\begin_inset Formula $X^{-1}$
+\end_inset
+
+) and solutions of systems of linear equations (
+\begin_inset Formula $X^{-1}y$
+\end_inset
+
+):
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk42, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+solve(X) # inverse of X
+\end_layout
+
+\begin_layout Chunk
+
+solve(X, y) # (inverse of X) %*% y
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Note that if all you need to do is solve the linear system, you should never
+ explicitly find the inverse, UNLESS you need the actual matrix, e.g., to
+ get a covariance matrix of parameters.
+\end_layout
+
+\begin_layout Standard
+Otherwise, to find many solutions, all with the same matrix, 
+\begin_inset Formula $X$
+\end_inset
+
+, you can use 
+\emph on
+solve()
+\emph default
+ with the second argument being a matrix with each column a different 'y'
+ vector for which you want the solution.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+solve()
+\emph default
+ is an example of using a matrix decomposition to solve a system of equations
+ (in particular the LU decomposition).
+ We'll defer matrix decompositions (LU, Cholesky, eigendecomposition, SVD,
+ QR) until the numerical linear algebra unit.
+ 
+\end_layout
+
+\begin_layout Section
+Functions, variable scoping, and frames
+\end_layout
+
+\begin_layout Standard
+Functions are at the heart of R.
+ In general, you should try to have functions be self-contained - operating
+ only on arguments provided to them, and producing no side effects, though
+ in some cases there are good reasons for making an exception.
+\end_layout
+
+\begin_layout Standard
+Functions that are not implemented internally in R (i.e., user-defined functions)
+ are also referred to offically as 
+\emph on
+closures
+\emph default
+ (this is their 
+\emph on
+type
+\emph default
+) - this terminology sometimes comes up in error messages.
+\end_layout
+
+\begin_layout Subsection
+Inputs
+\end_layout
+
+\begin_layout Standard
+Arguments can be specifed in the correct order, or given out of order by
+ specifying 
+\emph on
+name = value
+\emph default
+.
+ In general the more important arguments are specified first.
+ You can see the arguments and defaults for a function using 
+\emph on
+args()
+\emph default
+:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk43>>=
+\end_layout
+
+\begin_layout Chunk
+
+args(lm)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Functions may have unspecified arguments, which is designated using '...'.
+ Unspecified arguments occurring at the beginning of the argument list are
+ generally a collection of like objects that will be manipulated (consider
+ 
+\emph on
+paste()
+\emph default
+, 
+\emph on
+c()
+\emph default
+, and 
+\emph on
+rbind()
+\emph default
+), while unspecified arguments occurring at the end are often optional arguments
+ (consider 
+\emph on
+plot()
+\emph default
+).
+ These optional arguments are sometimes passed along to a function within
+ the function.
+ For example, here's my own wrapper for plotting, where any additional arguments
+ specified by the user will get passed along to plot:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk44>>=
+\end_layout
+
+\begin_layout Chunk
+
+pplot <- function(x, y, pch = 16, cex = 0.4, ...) {
+\end_layout
+
+\begin_layout Chunk
+
+	plot(x, y, pch = pch, cex = cex, ...)
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Do you see any issues that might arise in using my 
+\emph on
+pplot()
+\emph default
+ function - what am I getting at here? Can we fix it?
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+pplot=function(x,y,pch=16,cex=.4,...) plot(x,y,pch=pch,cex=cex,...)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you want to manipulate what the user passed in as the 
+\emph on
+...
+
+\emph default
+ args, rather than just passing them along, you can extract them (the following
+ code would be used within a function to which 
+\emph on
+'...'
+\emph default
+ is an argument:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk45>>=
+\end_layout
+
+\begin_layout Chunk
+
+myFun <- function(...){
+\end_layout
+
+\begin_layout Chunk
+
+print(..2) 
+\end_layout
+
+\begin_layout Chunk
+
+args <- list(...)
+\end_layout
+
+\begin_layout Chunk
+
+print(args[[2]])
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+myFun(1,3,5,7)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+You can check if an argument is missing with 
+\emph on
+missing()
+\emph default
+.
+ Arguments can also have default values, which may be 
+\emph on
+NULL
+\emph default
+.
+ If you are writing a function and designate the default as 
+\emph on
+argname = NULL
+\emph default
+, you can check whether the user provided anything using
+\family typewriter
+ is.null(argname).
+
+\family default
+ The default values can also relate to other arguments.
+ As an example, consider 
+\emph on
+dgamma()
+\emph default
+:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk46>>=
+\end_layout
+
+\begin_layout Chunk
+
+args(dgamma)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Functions can be passed in as arguments (e.g., see the variants of 
+\emph on
+apply()
+\emph default
+).
+ Note that one does not need to pass in a named function - you can create
+ the function on the spot - this is called an 
+\emph on
+anonymous function
+\emph default
+:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk47>>=
+\end_layout
+
+\begin_layout Chunk
+
+mat <- matrix(1:9, 3)
+\end_layout
+
+\begin_layout Chunk
+
+apply(mat, 2, function(vec) vec - vec[1])
+\end_layout
+
+\begin_layout Chunk
+
+apply(mat, 1, function(vec) vec - vec[1]) 
+\end_layout
+
+\begin_layout Chunk
+
+# explain why the result of the last expression is transposed
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+We can see the arguments using 
+\emph on
+args()
+\emph default
+ and extract the arguments using 
+\emph on
+formals().
+
+\emph default
+ 
+\emph on
+formals()
+\emph default
+ can be helpful if you need to manipulate the arguments.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk48>>=
+\end_layout
+
+\begin_layout Chunk
+
+f <- function(x, y = 2, z = 3 / y) { x + y + z }
+\end_layout
+
+\begin_layout Chunk
+
+args(f)
+\end_layout
+
+\begin_layout Chunk
+
+formals(f)
+\end_layout
+
+\begin_layout Chunk
+
+class(formals(f))
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+match.call()
+\emph default
+ will show the user-suppled arguments explicitly matched to named arguments.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk49>>=
+\end_layout
+
+\begin_layout Chunk
+
+match.call(mean, quote(mean(y, na.rm = TRUE))) 
+\end_layout
+
+\begin_layout Chunk
+
+# what do you think quote does? Why is it needed?
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Paragraph
+Pass by value vs.
+ pass by reference
+\end_layout
+
+\begin_layout Standard
+Note that R makes a copy of all objects that are arguments to a function,
+ with the copy residing in the frame (the environment) of the function (we'll
+ see more about frames just below).
+ This is a case of 
+\emph on
+pass by value
+\emph default
+.
+ In other languages it is also possible to 
+\emph on
+pass by reference
+\emph default
+, in which case, changes to the object made within the function affect the
+ value of the argument in the calling environment.
+ R's designers chose not to allow pass by reference because they didn't
+ like the idea that a function could have the side effect of changing an
+ object.
+ However, passing by reference can sometimes be very helpful, and we'll
+ see ways of passing by reference in the R programming unit.
+\end_layout
+
+\begin_layout Standard
+An important exception is 
+\emph on
+par()
+\emph default
+.
+ If you change graphics parameters by calling 
+\emph on
+par()
+\emph default
+ in a user-defined function, they are changed permanently.
+ One trick is as follows:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk50, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+f <- function(){
+\end_layout
+
+\begin_layout Chunk
+
+	oldpar <- par()
+\end_layout
+
+\begin_layout Chunk
+
+	par(cex = 2)
+\end_layout
+
+\begin_layout Chunk
+
+	# body of code
+\end_layout
+
+\begin_layout Chunk
+
+	par() <- oldpar
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Note that changing graphics parameters within a specific plotting function
+ - e.g., 
+\family typewriter
+plot(x, y, pch = '+')
+\family default
+, doesn't change things except for that particular plot.
+\end_layout
+
+\begin_layout Subsection
+Outputs
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+return(x)
+\family default
+ will specify 
+\emph on
+x
+\emph default
+ as the output of the function.
+ By default, if 
+\emph on
+return()
+\emph default
+ is not specified, the output is the result of the last evaluated statement.
+ 
+\emph on
+return()
+\emph default
+ can occur anywhere in the function, and allows the function to exit as
+ soon as it is done.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk50a>>=
+\end_layout
+
+\begin_layout Chunk
+
+f <- function(x) { res <- x^2}
+\end_layout
+
+\begin_layout Chunk
+
+f(3)
+\end_layout
+
+\begin_layout Chunk
+
+a <- f(3)
+\end_layout
+
+\begin_layout Chunk
+
+a
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+invisible(x)
+\emph default
+ will return 
+\emph on
+x
+\emph default
+ and the result can be assigned in the calling environment but it will not
+ be printed if not assigned:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk51>>=
+\end_layout
+
+\begin_layout Chunk
+
+f <- function(x){ invisible(x^2) }
+\end_layout
+
+\begin_layout Chunk
+
+f(3)
+\end_layout
+
+\begin_layout Chunk
+
+a <- f(3)
+\end_layout
+
+\begin_layout Chunk
+
+a
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+A function can only return a single object (unlike Matlab, e.g.), but of course
+ we can tack things together as a list and return that, as with 
+\emph on
+lm()
+\emph default
+ and many other functions.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk52>>=
+\end_layout
+
+\begin_layout Chunk
+
+mod <- lm(mpg ~ cyl, data = mtcars)
+\end_layout
+
+\begin_layout Chunk
+
+class(mod)
+\end_layout
+
+\begin_layout Chunk
+
+is.list(mod)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Subsection
+Variable scope
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+[*** See Sean's scoping issue 4/7/13 email]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To consider variable scope, we need to define the terms 
+\emph on
+environment
+\emph default
+ and 
+\emph on
+frame
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+Environments and frames are closely related.
+ An environment is a collection of named objects (a frame), with a pointer
+ to the 'enclosing environment', i.e., the next environment to look for something
+ in, also called the parent.
+ (Be careful as this is different than the parent frame of a function.)
+\end_layout
+
+\begin_layout Standard
+Variables in the enclosing environment (the environment in which a function
+ is defined, also called the parent environment) are available within a
+ function.
+ This is the analog of 
+\emph on
+global variables
+\emph default
+ in other languages.
+ Note that enclosing/parent environment is NOT the environment from which
+ the function was called.
+ This is called 
+\emph on
+lexical scoping
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+Be careful when using variables from the enclosing environment as the value
+ of that variable in the enclosing environment may well not be what you
+ expect it to be.
+ In general it's bad practice to use variables that are taken from environments
+ outside that of a function, but it some cases it can be useful.
+ 
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk53, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- 3
+\end_layout
+
+\begin_layout Chunk
+
+f <- function() {x <- x^2; print(x)}
+\end_layout
+
+\begin_layout Chunk
+
+f(x)
+\end_layout
+
+\begin_layout Chunk
+
+x # what do you expect?
+\end_layout
+
+\begin_layout Chunk
+
+f <- function() {assign('x', x^2, env = .GlobalEnv)} 
+\end_layout
+
+\begin_layout Chunk
+
+# careful, this could be dangerous as a variable is changed as a side effect
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Here are some examples to illustrate scope:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk54, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- 3
+\end_layout
+
+\begin_layout Chunk
+
+f <- function() { 
+\end_layout
+
+\begin_layout Chunk
+
+f2 <- function() { print(x) }
+\end_layout
+
+\begin_layout Chunk
+
+f2()
+\end_layout
+
+\begin_layout Chunk
+
+} 
+\end_layout
+
+\begin_layout Chunk
+
+f() # what will happen?
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Chunk
+
+f <- function() {
+\end_layout
+
+\begin_layout Chunk
+
+f2 <- function() { print(x) }
+\end_layout
+
+\begin_layout Chunk
+
+x <- 7
+\end_layout
+
+\begin_layout Chunk
+
+f2()
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+f() # what will happen?
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Chunk
+
+f2 <- function() print(x)
+\end_layout
+
+\begin_layout Chunk
+
+f <- function() {
+\end_layout
+
+\begin_layout Chunk
+
+x <- 7
+\end_layout
+
+\begin_layout Chunk
+
+f2()
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+f() # what will happen?
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Here's a somewhat tricky example:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk55>>=
+\end_layout
+
+\begin_layout Chunk
+
+y <- 100
+\end_layout
+
+\begin_layout Chunk
+
+f <- function(){
+\end_layout
+
+\begin_layout Chunk
+
+	y <- 10
+\end_layout
+
+\begin_layout Chunk
+
+	g <- function(x) x + y
+\end_layout
+
+\begin_layout Chunk
+
+	return(g)
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+# you can think of f() as a function constructor
+\end_layout
+
+\begin_layout Chunk
+
+h <- f()
+\end_layout
+
+\begin_layout Chunk
+
+h(3)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Let's work through this:
+\end_layout
+
+\begin_layout Enumerate
+What is the enclosing environment of the function 
+\emph on
+g()
+\emph default
+?
+\end_layout
+
+\begin_layout Enumerate
+What does 
+\emph on
+g()
+\emph default
+ use for 
+\emph on
+y
+\emph default
+?
+\end_layout
+
+\begin_layout Enumerate
+When 
+\emph on
+f()
+\emph default
+ finishes, does its environment disappear? What would happen if it did?
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+g would not have an enclosing env't!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+What is the enclosing environment of 
+\emph on
+h()
+\emph default
+?
+\end_layout
+
+\begin_layout Paragraph
+Where are arguments evaluated?
+\end_layout
+
+\begin_layout Standard
+User-supplied arguments are evaluated in the calling frame, while default
+ arguments are evaluated in the frame of the function:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk56>>=
+\end_layout
+
+\begin_layout Chunk
+
+z <- 3
+\end_layout
+
+\begin_layout Chunk
+
+x <- 100
+\end_layout
+
+\begin_layout Chunk
+
+f <- function(x, y = x*3) {x+y}
+\end_layout
+
+\begin_layout Chunk
+
+f(z*5)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Here, when 
+\emph on
+f()
+\emph default
+ is called, 
+\emph on
+z
+\emph default
+ is evaluated in the calling frame and assigned to 
+\emph on
+x
+\emph default
+ in the frame of the function, while 
+\family typewriter
+y = x*3
+\family default
+ is evaluated in the frame of the function.
+\end_layout
+
+\begin_layout Subsection
+Environments and the search path
+\end_layout
+
+\begin_layout Standard
+So far we've seen lexical scoping in action primarily in terms of finding
+ variables in a single enclosing environment.
+ But what if the variable is not found in either the frame/environment of
+ the function or the enclosing environment? When R goes looking for an object
+ (in the form of a symbol), it starts in the current environment (e.g., the
+ frame/environment of a function) and then runs up through the enclosing
+ environments, until it reaches the global environment, which is where R
+ starts when you start it (it actually continues further up; see below).
+ In general, as we've seen, these are not the frames on the stack.
+ 
+\end_layout
+
+\begin_layout Standard
+By default objects are created in the global environment, 
+\emph on
+.GlobalEnv
+\emph default
+.
+ As we've seen, the environment within a function call has as its enclosing
+ environment the environment where the function was defined (not the environment
+ from which it was called), and this is next place that is searched if an
+ object can't be found in the frame of the function call.
+ This is called lexical scoping (and differs from the S language on which
+ R was based).
+ As an example, if an object couldn't be found within the environment of
+ an 
+\emph on
+lm()
+\emph default
+ function call, R would first look in the environment (also called the namespace
+) of the stats package (since this is the environment where 
+\emph on
+lm()
+\emph default
+ is defined), then in packages imported by the stats package, then the base
+ package, and then the global environment.
+\end_layout
+
+\begin_layout Standard
+If R can't find the object when reaching the global environment, it runs
+ through the search path, which you can see with 
+\emph on
+search()
+\emph default
+.
+ The search path is a set of additional environments.
+ Generally packages are created with namespaces, i.e., each has its own environmen
+t, as we see based on 
+\emph on
+search()
+\emph default
+.
+ Data frames or list that you attach using 
+\emph on
+attach()
+\emph default
+ generally are placed just after the global environment.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk59>>=
+\end_layout
+
+\begin_layout Chunk
+
+search()
+\end_layout
+
+\begin_layout Chunk
+
+searchpaths()
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+We can also see the nestedness of environments using the following code,
+ using 
+\emph on
+environmentName()
+\emph default
+, which prints out a nice-looking version of the environment name.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk60>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- .GlobalEnv
+\end_layout
+
+\begin_layout Chunk
+
+parent.env(x)
+\end_layout
+
+\begin_layout Chunk
+
+while (environmentName(x) != environmentName(emptyenv())) {
+\end_layout
+
+\begin_layout Chunk
+
+	print(environmentName(parent.env(x)))
+\end_layout
+
+\begin_layout Chunk
+
+	x <- parent.env(x)
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Note that eventually the global environment and the environments of the
+ packages are nested within the base environment (of the base package) and
+ the empty environment.
+ Note that here 
+\emph on
+parent
+\emph default
+ 
+\series bold
+is
+\series default
+ referring to the enclosing environment.
+\end_layout
+
+\begin_layout Standard
+We can look at the objects of an environment as follows:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk61>>=
+\end_layout
+
+\begin_layout Chunk
+
+ls(pos = 7)[1:5] # what does this do?
+\end_layout
+
+\begin_layout Chunk
+
+ls("package:stats")[1:5]
+\end_layout
+
+\begin_layout Chunk
+
+environment(lm)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+
+The enclosing environments for a function from an attached package are a
+ bit more complicated:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk61a>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- environment(lm)
+\end_layout
+
+\begin_layout Chunk
+
+parent.env(x)
+\end_layout
+
+\begin_layout Chunk
+
+while (environmentName(x) != environmentName(emptyenv())) {
+\end_layout
+
+\begin_layout Chunk
+
+	print(environmentName(parent.env(x)))
+\end_layout
+
+\begin_layout Chunk
+
+	x <- parent.env(x)
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+We can retrieve and assign objects in a particular environment as follows:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk62>>=
+\end_layout
+
+\begin_layout Chunk
+
+lm <- function() {return(NULL)} # this seems dangerous but isn't
+\end_layout
+
+\begin_layout Chunk
+
+x <- 1:3; y <- rnorm(3); mod <- lm(y ~ x)
+\end_layout
+
+\begin_layout Chunk
+
+mod <- get('lm', pos = 'package:stats')(y ~ x)
+\end_layout
+
+\begin_layout Chunk
+
+mod <- stats::lm(y ~ x) # an alternative
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Note that our (bogus) 
+\emph on
+lm()
+\emph default
+ function masks but does not overwrite the default function.
+ If we remove ours, then the default one is still there.
+\end_layout
+
+\begin_layout Subsection
+Frames and the call stack
+\end_layout
+
+\begin_layout Standard
+R keeps track of the call stack, which is the set of nested calls to functions.
+ The stack operates like a stack of cafeteria trays - when a function is
+ called, it is added to the stack (pushed) and when it finishes, it is removed
+ (popped).
+ There are a bunch of functions that let us query what frames are on the
+ stack and access objects in particular frames of interest.
+ This gives us the ability to work with objects in the environment(s) from
+ which a function was called.
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+sys.nframe()
+\emph default
+ returns the number of the current frame and 
+\emph on
+sys.parent()
+\emph default
+ the number of the parent, while parent.frame() gives the name of the parent
+ environment.
+ Careful: here, 
+\emph on
+parent
+\emph default
+ now refers to the parent in terms of the call stack, not the enclosing
+ environment.
+ 
+\emph on
+sys.frame()
+\emph default
+ gives the name of the environment for a given frame number (for non-negative
+ numbers).
+ For negative numbers, it goes back that many frames in the call stack and
+ returns the name of the associated environment.
+ I won't print the results here because 
+\emph on
+knitr
+\emph default
+ messes up the frame counting somehow.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk57, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+sys.nframe()
+\end_layout
+
+\begin_layout Chunk
+
+f <- function() {
+\end_layout
+
+\begin_layout Chunk
+
+	cat('f: Frame number is ', sys.nframe(), '; parent frame number is ', sys.parent(
+), '.
+\backslash
+n', sep = '')
+\end_layout
+
+\begin_layout Chunk
+
+	cat('f: Frame (i.e., environment) is: ')
+\end_layout
+
+\begin_layout Chunk
+
+	print(sys.frame(sys.nframe()))
+\end_layout
+
+\begin_layout Chunk
+
+	cat('f: Parent is ')
+\end_layout
+
+\begin_layout Chunk
+
+	print(parent.frame())
+\end_layout
+
+\begin_layout Chunk
+
+	cat('f: Two frames up is ')
+\end_layout
+
+\begin_layout Chunk
+
+	print(sys.frame(-2))
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+f()
+\end_layout
+
+\begin_layout Chunk
+
+f2 <- function() {
+\end_layout
+
+\begin_layout Chunk
+
+	cat('f2: Frame (i.e., environment) is: ')
+\end_layout
+
+\begin_layout Chunk
+
+	print(sys.frame(sys.nframe()))
+\end_layout
+
+\begin_layout Chunk
+
+	cat('f2: Parent is ')
+\end_layout
+
+\begin_layout Chunk
+
+	print(parent.frame())	
+\end_layout
+
+\begin_layout Chunk
+
+	f()
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+f2() 
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Now let's look at some code that gets more information about the call stack
+ and the frames involved using 
+\emph on
+sys.status()
+\emph default
+, 
+\emph on
+sys.calls()
+\emph default
+, 
+\emph on
+sys.parents()
+\emph default
+ and 
+\emph on
+sys.frames()
+\emph default
+.
+ 
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk58, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+# exploring functions that give us information the frames in the stack
+\end_layout
+
+\begin_layout Chunk
+
+g <- function(y) {
+\end_layout
+
+\begin_layout Chunk
+
+	gg <- function() {
+\end_layout
+
+\begin_layout Chunk
+
+		# this gives us the information from sys.calls(), sys.parents() and sys.frames()
+ as one object
+\end_layout
+
+\begin_layout Chunk
+
+		#print(sys.status()) 
+\end_layout
+
+\begin_layout Chunk
+
+		tmp <- sys.status()
+\end_layout
+
+\begin_layout Chunk
+
+		print(tmp)
+\end_layout
+
+\begin_layout Chunk
+
+	}
+\end_layout
+
+\begin_layout Chunk
+
+	if(y > 0) g(y-1) else gg()
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+g(3)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+If you're interested in parsing a somewhat complicated example of frames
+ in action, Adler provides a user-defined timing function that evaluates
+ statements in the calling frame.
+\end_layout
+
+\begin_layout Subsection
+with() and within()
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+with()
+\emph default
+ provides a clean way to use a function (or any R code, specified as R statement
+s enclosed within {}, unless you are evaluating a single expression as in
+ the demo here) within the context of a data frame (or an environment).
+ 
+\emph on
+within()
+\emph default
+ is similar, evaluating within the context of a data frame or a list, but
+ it allows you to modify the data frame (or list) and returns the result.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk63>>=
+\end_layout
+
+\begin_layout Chunk
+
+with(mtcars, cyl*mpg)
+\end_layout
+
+\begin_layout Chunk
+
+new.mtcars <- within(mtcars, crazy <- cyl*mpg)
+\end_layout
+
+\begin_layout Chunk
+
+names(new.mtcars)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Section
+Flow control and logical operations
+\end_layout
+
+\begin_layout Subsection
+Logical operators
+\end_layout
+
+\begin_layout Standard
+Everyone should be familiar with the comparison operators, 
+\emph on
+<
+\series bold
+, 
+\series default
+<=
+\series bold
+, 
+\series default
+>
+\series bold
+, 
+\series default
+>=
+\series bold
+, 
+\series default
+==
+\series bold
+, 
+\series default
+!=
+\emph default
+.
+ Logical operators are slightly trickier:
+\end_layout
+
+\begin_layout Paragraph
+Logical operators for vectors and subsetting 
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+&
+\emph default
+ and 
+\emph on
+|
+\emph default
+ are the 
+\begin_inset Quotes eld
+\end_inset
+
+AND
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+OR
+\begin_inset Quotes erd
+\end_inset
+
+ operators used when subsetting - they act in a vectorized way:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk64>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- rnorm(10)
+\end_layout
+
+\begin_layout Chunk
+
+x[x > 1 | x < -1]
+\end_layout
+
+\begin_layout Chunk
+
+x <- 1:10; y <- c(rep(10, 9), NA)
+\end_layout
+
+\begin_layout Chunk
+
+x > 5 | y > 5 # note that TRUE | NA evaluates to TRUE
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Paragraph
+Logical operators for 
+\emph on
+if
+\emph default
+ statements
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+&&
+\emph default
+ and 
+\emph on
+||
+\emph default
+ use only the first element of a vector and also proceed from left to right,
+ returning the result as soon as possible and then ignoring the remaining
+ comparisons (this can be handy because in some cases the second condition
+ may give an error if the first condition is not passed).
+ They are used in flow control (i.e., with 
+\emph on
+if
+\emph default
+ statements).
+ Let's consider how the single and double operators differ:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk65>>=
+\end_layout
+
+\begin_layout Chunk
+
+a <- 7; b <- NULL
+\end_layout
+
+\begin_layout Chunk
+
+a < 8 | b > 3
+\end_layout
+
+\begin_layout Chunk
+
+a < 8 || b > 3
+\end_layout
+
+\begin_layout Chunk
+
+a <- c(0, 3); b <- c(4, 2)
+\end_layout
+
+\begin_layout Chunk
+
+if(a < 7 & b < 7) print('this is buggy code')
+\end_layout
+
+\begin_layout Chunk
+
+if(a < 7 && b < 7) 
+\end_layout
+
+\begin_layout Chunk
+
+   print('this is buggy code too, but runs w/o warnings')
+\end_layout
+
+\begin_layout Chunk
+
+if(a[1] < 7 && b[1] < 7) 
+\end_layout
+
+\begin_layout Chunk
+
+   print('this code is correct and the condition is TRUE')
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+You can use ! to indicate negation:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk66>>=
+\end_layout
+
+\begin_layout Chunk
+
+a <- 7; b <- 5
+\end_layout
+
+\begin_layout Chunk
+
+!(a < 8 & b < 6)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Subsection
+If statements
+\end_layout
+
+\begin_layout Standard
+If statements are at the core of programming.
+ In R, the syntax is 
+\family typewriter
+\series bold
+if(condition) statement else other_statement
+\family default
+\series default
+, e.g.,
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk67>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- 5
+\end_layout
+
+\begin_layout Chunk
+
+if(x > 7){
+\end_layout
+
+\begin_layout Chunk
+
+	x <- x + 3
+\end_layout
+
+\begin_layout Chunk
+
+} else{
+\end_layout
+
+\begin_layout Chunk
+
+	x <- x - 3
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+When one of the statements is a single statement, you don't need the curly
+ braces around that statement.
+ 
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk68>>=
+\end_layout
+
+\begin_layout Chunk
+
+if(x > 7) 
+\end_layout
+
+\begin_layout Chunk
+
+x <- x + 3 else x <- x - 3
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+An extension of 
+\emph on
+if
+\emph default
+ looks like:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk69>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- -3
+\end_layout
+
+\begin_layout Chunk
+
+if (x > 7){
+\end_layout
+
+\begin_layout Chunk
+
+	x <- x + 3
+\end_layout
+
+\begin_layout Chunk
+
+	print(x)
+\end_layout
+
+\begin_layout Chunk
+
+} else if (x > 4){
+\end_layout
+
+\begin_layout Chunk
+
+	x <- x + 1
+\end_layout
+
+\begin_layout Chunk
+
+	print(x)
+\end_layout
+
+\begin_layout Chunk
+
+} else if (x > 0){
+\end_layout
+
+\begin_layout Chunk
+
+	x <- x - 3
+\end_layout
+
+\begin_layout Chunk
+
+	print(x)
+\end_layout
+
+\begin_layout Chunk
+
+} else{
+\end_layout
+
+\begin_layout Chunk
+
+	x <- x - 7
+\end_layout
+
+\begin_layout Chunk
+
+	print(x)
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Finally, be careful that 
+\emph on
+else
+\emph default
+ should not start its own line, unless it is preceded by a closing brace
+ on the same line.
+ Why?
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+if(x > 7) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement1 } # what happens at this point?
+\end_layout
+
+\begin_layout Plain Layout
+
+else{ # what happens now?
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement2
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There's also the 
+\emph on
+ifelse()
+\emph default
+ function, which operates in a vectorized fashion:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk71>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- rnorm(6)
+\end_layout
+
+\begin_layout Chunk
+
+truncx <- ifelse(x > 0, x, 0)
+\end_layout
+
+\begin_layout Chunk
+
+truncx
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Common bugs in the condition of an if statement include the following:
+\end_layout
+
+\begin_layout Enumerate
+Only the first element of 
+\emph on
+condition
+\emph default
+ is evaluated.
+ You should be careful that 
+\emph on
+condition
+\emph default
+ is a single logical value and does not evaluate to a vector as this would
+ generally be a bug.
+ [see p.
+ 152 of Chambers]
+\end_layout
+
+\begin_layout Enumerate
+Use 
+\emph on
+identical()
+\emph default
+ or 
+\emph on
+all.equal()
+\emph default
+ rather than 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+==
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ to ensure that you deal properly with vectors and always get a single logical
+ value back.
+ We'll talk more about issues that can arise when comparing decimal numbers
+ on a computer later in the course.
+\end_layout
+
+\begin_layout Enumerate
+If 
+\emph on
+condition
+\emph default
+ includes some R code, it can fail and produce something that is neither
+ TRUE nor FALSE.
+ Defensive programming practice is to check the condition for validity.
+\end_layout
+
+\begin_deeper
+\begin_layout Chunk
+
+<<chunk72>>=
+\end_layout
+
+\begin_layout Chunk
+
+vals <- c(1, 2, NA); eps <- 1e-9 
+\end_layout
+
+\begin_layout Chunk
+
+# now pretend vals comes from some other chunk of code that we don't control
+\end_layout
+
+\begin_layout Chunk
+
+if(min(vals) > eps) # not good practice
+\end_layout
+
+\begin_layout Chunk
+
+   { print(vals) } 
+\end_layout
+
+\begin_layout Chunk
+# better practice:
+\end_layout
+
+\begin_layout Chunk
+
+minval <- min(vals) 
+\end_layout
+
+\begin_layout Chunk
+
+if(!is.na(minval) && minval > eps) { print(vals) } 
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+switch()
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+switch()
+\emph default
+ is handy for choosing amongst multiple outcomes depending on an input,
+ avoiding a long set of if-else syntax.
+ The first argument is a statement that determines what choice is made and
+ the second is a list of the outcomes, in order or by name:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk73>>=
+\end_layout
+
+\begin_layout Chunk
+
+x <- 2; y <- 10
+\end_layout
+
+\begin_layout Chunk
+
+switch(x, log(y), sqrt(y), y) 
+\end_layout
+
+\begin_layout Chunk
+
+center <- function(x, type){
+\end_layout
+
+\begin_layout Chunk
+
+	switch(type, 
+\end_layout
+
+\begin_layout Chunk
+
+	mean = mean(x), # make sure to use = and not <-
+\end_layout
+
+\begin_layout Chunk
+
+	median = median(x),
+\end_layout
+
+\begin_layout Chunk
+
+	trimmed = mean(x, trim = .1))
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+x <- rgamma(100, 1)
+\end_layout
+
+\begin_layout Chunk
+
+center(x, 'median')
+\end_layout
+
+\begin_layout Chunk
+
+center(x, 'mean')
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Subsection
+Loops
+\end_layout
+
+\begin_layout Standard
+Loops are at the core of programming in other functional languages, but
+ in R, we often try to avoid them as they're often (but not always) slow.
+ In many cases looping can be avoided by using vectorized calculations,
+ versions of 
+\emph on
+apply()
+\emph default
+, and other tricks.
+ But sometimes they're unavoidable and for quick and dirty coding and small
+ problems, they're fine.
+ And in some cases they may be faster than other alternatives.
+ One case we've already seen is that in working with lists they may be faster
+ than their 
+\emph on
+lapply
+\emph default
+-style counterpart, though often they will not be.
+\end_layout
+
+\begin_layout Standard
+The workhorse loop is the 
+\emph on
+for
+\emph default
+ loop, which as the syntax: 
+\family typewriter
+\series bold
+for(var in sequence) statement
+\family default
+\series default
+, where, as with the 
+\emph on
+if
+\emph default
+ statement, we need curly braces around the body of the loop if it contains
+ more than one valid R statement:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk74>>=
+\end_layout
+
+\begin_layout Chunk
+
+nIts <- 500; means <- rep(NA, nIts)
+\end_layout
+
+\begin_layout Chunk
+
+for(it in 1:nIts){ 
+\end_layout
+
+\begin_layout Chunk
+
+	means[it] <- mean(rnorm(100))
+\end_layout
+
+\begin_layout Chunk
+
+	if(identical(it %% 100, 0)) cat('Iteration', it, date(), '
+\backslash
+n')
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Challenge: how do I do this much faster?
+\end_layout
+
+\begin_layout Standard
+You can also loop over a non-numeric vector of values.
+ 
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk75>>=
+\end_layout
+
+\begin_layout Chunk
+
+for(state in c('Ohio', 'Iowa','Georgia')) {
+\end_layout
+
+\begin_layout Chunk
+
+	sub <- row.names(state.x77) == state
+\end_layout
+
+\begin_layout Chunk
+
+	print(state.x77[sub, "Income"])
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Challenge: how can I do this faster?
+\end_layout
+
+\begin_layout Standard
+Note that to print to the screen in a loop you explicitly need to use 
+\emph on
+print()
+\emph default
+ or 
+\emph on
+cat()
+\emph default
+; just writing the name of the object will not work.
+ This is similar to 
+\emph on
+if
+\emph default
+ statements and functions.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk76>>=
+\end_layout
+
+\begin_layout Chunk
+
+for(i in 1:10) i
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+You can use the commands 
+\emph on
+break
+\emph default
+ (to end the looping) and 
+\emph on
+next
+\emph default
+ (to go to the next iteration) to control the flow:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk77>>=
+\end_layout
+
+\begin_layout Chunk
+
+for(i in 1:10){
+\end_layout
+
+\begin_layout Chunk
+
+	if(i == 5) break
+\end_layout
+
+\begin_layout Chunk
+
+	print(i)
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+for(i in 1:5){
+\end_layout
+
+\begin_layout Chunk
+
+	if(i == 2) next
+\end_layout
+
+\begin_layout Chunk
+
+	print(i)
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+while
+\emph default
+ loops are used less frequently, but can be handy: 
+\series bold
+while(condition) statement
+\series default
+, e.g.
+ in optimization.
+ See p.
+ 59 of Venables and Ripley, 4th ed., whose code I've included in the demo
+ code file.
+\end_layout
+
+\begin_layout Standard
+A common cause of bugs in for loops is when the range ends at zero or a
+ missing value:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk78>>=
+\end_layout
+
+\begin_layout Chunk
+
+mat <- matrix(1:4, 2)
+\end_layout
+
+\begin_layout Chunk
+
+submat <- mat[mat[1, ] > 5]
+\end_layout
+
+\begin_layout Chunk
+
+for(i in 1:nrow(submat)) print(i)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Section
+Formulas
+\end_layout
+
+\begin_layout Standard
+Formulas were initially introduced into R to specify linear models, but
+ are now used more generally.
+\end_layout
+
+\begin_layout Standard
+Here are some examples of formulas in R, used to specify a model structure:
+\end_layout
+
+\begin_layout Itemize
+Additive model:
+\family typewriter
+
+\begin_inset Newline newline
+\end_inset
+
+y ~ x1 + x2 + x3
+\end_layout
+
+\begin_layout Itemize
+Additive model without the intercept:
+\family typewriter
+
+\begin_inset Newline newline
+\end_inset
+
+y ~ x1 + x2 + x3 -1
+\end_layout
+
+\begin_layout Itemize
+All the other variables in the data frame are used as covariates:
+\family typewriter
+
+\begin_inset Newline newline
+\end_inset
+
+y ~ .
+\end_layout
+
+\begin_layout Itemize
+All possible interactions:
+\family typewriter
+
+\begin_inset Newline newline
+\end_inset
+
+y ~ x1 * x2 * x3
+\end_layout
+
+\begin_layout Itemize
+Only specified interactions (in this case 
+\emph on
+x1
+\emph default
+ by 
+\emph on
+x2
+\emph default
+) (of course, you'd rarely want to fit this without 
+\emph on
+x2
+\emph default
+):
+\family typewriter
+
+\begin_inset Newline newline
+\end_inset
+
+y ~ x1 + x3 + x1:x2
+\end_layout
+
+\begin_layout Itemize
+Creating a factor on the fly:
+\family typewriter
+
+\begin_inset Newline newline
+\end_inset
+
+y ~ x1 + factor(x2)
+\end_layout
+
+\begin_layout Itemize
+Protecting arithmetic expressions:
+\family typewriter
+
+\begin_inset Newline newline
+\end_inset
+
+y ~ x1 + I(x1^2) + I(x1^3)
+\end_layout
+
+\begin_layout Itemize
+Using functions of variables
+\family typewriter
+
+\begin_inset Newline newline
+\end_inset
+
+y ~ x1 + log(x2) + sin(x3)
+\end_layout
+
+\begin_layout Standard
+In some contexts, such as 
+\emph on
+lattice
+\emph default
+ package graphics, the 
+\begin_inset Quotes eld
+\end_inset
+
+|
+\begin_inset Quotes erd
+\end_inset
+
+ indicates conditioning, so 
+\family typewriter
+y ~ x | z
+\family default
+ would mean to plot 
+\emph on
+y
+\emph default
+ on 
+\emph on
+x
+\emph default
+ within groups of 
+\emph on
+z
+\emph default
+.
+ In the context of lme-related packages (e.g., 
+\emph on
+lme4
+\emph default
+, 
+\emph on
+nlme
+\emph default
+, etc.), variables after 
+\begin_inset Quotes eld
+\end_inset
+
+|
+\begin_inset Quotes erd
+\end_inset
+
+ are 
+\emph on
+grouping
+\emph default
+ variables (e.g., if you have a random effect for each hospital, hospital
+ would be the grouping variable) and multiple grouping variables are separated
+ by 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+/
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+We can manipulate formulae as objects, allowing automation.
+ Consider how this sort of thing could be used to write code for automated
+ model selection.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk79>>=
+\end_layout
+
+\begin_layout Chunk
+
+resp <- 'y ~'
+\end_layout
+
+\begin_layout Chunk
+
+covTerms <- 'x1'
+\end_layout
+
+\begin_layout Chunk
+
+for(i in 2:5){ covTerms <- paste(covTerms, '+ x', i, sep='')}
+\end_layout
+
+\begin_layout Chunk
+
+form <- as.formula(paste(resp, covTerms, sep = ''))
+\end_layout
+
+\begin_layout Chunk
+
+# lm(form, data = dat)
+\end_layout
+
+\begin_layout Chunk
+
+form
+\end_layout
+
+\begin_layout Chunk
+
+class(form)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+The for loop is a bit clunky/inefficient - let's do better:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk80>>=
+\end_layout
+
+\begin_layout Chunk
+
+resp <- 'y ~'
+\end_layout
+
+\begin_layout Chunk
+
+covTerms <- paste('x', 1:5, sep = '', collapse = ' + ')
+\end_layout
+
+\begin_layout Chunk
+
+form <- as.formula(paste(resp, covTerms))
+\end_layout
+
+\begin_layout Chunk
+
+form
+\end_layout
+
+\begin_layout Chunk
+
+# lm(form, data = dat)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Standard arguments in model fitting functions, in addition to the formula
+ are 
+\emph on
+weights
+\emph default
+, 
+\emph on
+data
+\emph default
+ (indicating the data frame in which to interpret the variable names), 
+\emph on
+subset
+\emph default
+ (for using a subset of data), and 
+\emph on
+na.action
+\emph default
+.
+ Note that the default 
+\emph on
+na.action
+\emph default
+ in R is set in 
+\emph on
+options()$na.action
+\emph default
+ and is 
+\emph on
+na.omit
+\emph default
+, so be wary in fitting models in that you are dropping cases with NAs and
+ may not be aware of it.
+ 
+\end_layout
+
+\begin_layout Standard
+There is some more specialized syntax given in 
+\emph on
+R-intro.pdf
+\emph default
+ on CRAN.
+\end_layout
+
+\begin_layout Section
+Text manipulations and regular expressions
+\end_layout
+
+\begin_layout Standard
+Text manipulations in R have a number of things in common with Perl, Python
+ and UNIX, as many of these evolved from UNIX.
+ When I use the term 
+\emph on
+string
+\emph default
+ here, I'll be refering to any sequence of characters that may include numbers,
+ white space, and special characters, rather than to the character class
+ of R objects.
+ The string or strings will generally be stored as R character vectors.
+\end_layout
+
+\begin_layout Subsection
+Basic text manipulation
+\end_layout
+
+\begin_layout Standard
+A few of the basic R functions for manipulating strings are 
+\emph on
+paste()
+\emph default
+, 
+\emph on
+strsplit()
+\emph default
+, and 
+\emph on
+substring()
+\emph default
+.
+ 
+\emph on
+paste()
+\emph default
+ and 
+\emph on
+strsplit()
+\emph default
+ are basically inverses of each other: 
+\emph on
+paste()
+\emph default
+ concatenates together an arbitrary set of strings (or a vector, if using
+ the 
+\emph on
+collapse
+\emph default
+ argument) with a user-specified separator character, while 
+\emph on
+strsplit()
+\emph default
+ splits apart based on a delimiter/separator.
+
+\series bold
+ 
+\series default
+\emph on
+substring()
+\emph default
+ splits apart the elements of a character vector based on fixed widths.
+ Note that all of these operate in a vectorized fashion.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk85>>=
+\end_layout
+
+\begin_layout Chunk
+
+out <- paste("My", "name", "is", "Chris", ".", sep = " ")
+\end_layout
+
+\begin_layout Chunk
+
+paste(c("My", "name", "is", "Chris", "."), collapse = " ") # equivalent
+\end_layout
+
+\begin_layout Chunk
+
+strsplit(out, split = ' ')
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Note that 
+\emph on
+strsplit()
+\emph default
+ returns a list because it can operate on a character vector (i.e., on multiple
+ strings).
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+nchar()
+\emph default
+ tells the number of characters in a string.
+\end_layout
+
+\begin_layout Standard
+To identify particular subsequences in strings, there are several related
+ R functions.
+ 
+\emph on
+grep()
+\emph default
+ will look for a specified string within an R character vector and report
+ back indices identifying the elements of the vector in which the string
+ was found in (using the 
+\emph on
+fixed=TRUE
+\emph default
+ argument ensures that regular expressions are NOT used).
+ 
+\emph on
+gregexpr()
+\emph default
+ will indicate the position in each string that the specified string is
+ found (use 
+\emph on
+regexpr()
+\emph default
+ if you only want the first occurrence).
+ 
+\emph on
+gsub()
+\emph default
+ can be used to replace a specified string with a replacement string (use
+ 
+\emph on
+sub()
+\emph default
+ if you only want to replace only the first occurrence).
+ 
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk86>>=
+\end_layout
+
+\begin_layout Chunk
+
+vars <- c("P", "HCA24", "SOH02")
+\end_layout
+
+\begin_layout Chunk
+
+substring(vars, 2, 3)
+\end_layout
+
+\begin_layout Chunk
+
+vars <- c("date98", "size98", "x98weights98", "sdfsd")
+\end_layout
+
+\begin_layout Chunk
+
+grep("98", vars)
+\end_layout
+
+\begin_layout Chunk
+
+gregexpr("98", vars)
+\end_layout
+
+\begin_layout Chunk
+
+gsub("98", "04", vars)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Subsection
+Regular expressions (regexp/regex)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+(see CK slides 25/26) as homework
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+see stringr
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Overview and core syntax
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+grep()
+\emph default
+, 
+\emph on
+gregexpr()
+\emph default
+ and 
+\emph on
+gsub()
+\emph default
+ functions are more powerful when used with regular expressions.
+ Regular expressions are a domain-specific language for finding patterns
+ and are one of the key functionalities in scripting languages such as Perl
+ and Python, as well as the UNIX utilities 
+\emph on
+sed
+\emph default
+, 
+\emph on
+awk
+\emph default
+ and 
+\emph on
+grep
+\emph default
+.
+ Duncan Temple Lang (UC Davis Statistics) has written a nice tutorial that
+ I've put in the repository (
+\emph on
+regexpr-Lang.pdf
+\emph default
+) or check out Sections 9.9 and 11 of Murrell.
+ We'll just cover the use of regular expressions in R, but once you know
+ that, it would be easy to use them elsewhere (Python, grep and other UNIX
+ commands, etc.).
+ What I describe here is the 
+\begin_inset Quotes eld
+\end_inset
+
+extended regular expression
+\begin_inset Quotes erd
+\end_inset
+
+ syntax (POSIX 1003.2), but with the argument 
+\family typewriter
+Perl=TRUE
+\family default
+, you can get Perl-style regular expressions.
+ At the level we'll consider them, the syntax is quite similar.
+\end_layout
+
+\begin_layout Standard
+The basic idea of regular expressions is that they allow us to find matches
+ of strings or patterns in strings, as well as do substitution.
+ Regular expressions are good for tasks such as:
+\end_layout
+
+\begin_layout Itemize
+extracting pieces of text - for example finding all the links in an html
+ document;
+\end_layout
+
+\begin_layout Itemize
+creating variables from information found in text;
+\end_layout
+
+\begin_layout Itemize
+cleaning and transforming text into a uniform format;
+\end_layout
+
+\begin_layout Itemize
+mining text by treating documents as data; and
+\end_layout
+
+\begin_layout Itemize
+scraping the web for data.
+\end_layout
+
+\begin_layout Standard
+Regular expressions are constructed from three things: 
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Literal characters
+\emph default
+ are matched only by the characters themselves,
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Character classes
+\emph default
+ are matched by any single member in the class, and
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Modifiers
+\emph default
+ operate on either of the above or combinations of them.
+\end_layout
+
+\begin_layout Standard
+Note that the syntax is very concise, so it's helpful to break down individual
+ regular expressions into the component parts to understand them.
+ As Murrell notes, since regexp are their own language, it's a good idea
+ to build up a regexp in pieces as a way of avoiding errors just as we would
+ with any computer code.
+ 
+\emph on
+gregexpr()
+\emph default
+ is particularly useful in seeing 
+\series bold
+what
+\series default
+ was matched to help in understanding and learning regular expression syntax
+ and debugging your regexp.
+\end_layout
+
+\begin_layout Standard
+The special characters (meta-characters) used for defining regular expressions
+ are: 
+\emph on
+* .
+ ^ $ + ? ( ) [ ] { } | 
+\backslash
+ 
+\emph default
+.
+ To use these characters literally as characters, we have to 'escape' them.
+ In R, we have to use two backslashes insstead of a single backslash because
+ R uses a single backslash to symbolize certain control characters, such
+ as 
+\emph on
+
+\backslash
+n
+\emph default
+ for newline.
+ Outside of R, one would only need a single backslash.
+\end_layout
+
+\begin_layout Paragraph
+Character sets and character classes
+\end_layout
+
+\begin_layout Standard
+If we want to search for any one of a set of characters, we use a character
+ set, such as 
+\family typewriter
+[13579]
+\family default
+ or 
+\family typewriter
+[abcd]
+\family default
+ or 
+\family typewriter
+[0-9]
+\family default
+ (where the dash indicates a sequence) or 
+\family typewriter
+[0-9a-z]
+\family default
+ or 
+\family typewriter
+[ 
+\backslash
+t]
+\family default
+.
+ To indicate any character not in a set, we place a ^ just inside the first
+ bracket: 
+\family typewriter
+[^abcd]
+\family default
+.
+ The period stands for any character.
+\end_layout
+
+\begin_layout Standard
+There are a bunch of named character classes so that we don't have write
+ out common sets of characters.
+ The syntax is 
+\family typewriter
+[:class:]
+\family default
+ where 
+\emph on
+class
+\emph default
+ is the name of the class.
+ The classes include the 
+\emph on
+digit
+\emph default
+, 
+\emph on
+alpha
+\emph default
+, 
+\emph on
+alnum
+\emph default
+, 
+\emph on
+lower
+\emph default
+, 
+\emph on
+upper
+\emph default
+, 
+\emph on
+punct
+\emph default
+, 
+\emph on
+blank
+\emph default
+, 
+\emph on
+space 
+\emph default
+(see 
+\family typewriter
+?regexp
+\family default
+ in R for formal definitions of all of these, but most are fairly self-explanato
+ry).
+ To make a character set with a character class you need two square brackets,
+ e.g.
+ the digit class: 
+\family typewriter
+[[:digit:]]
+\family default
+.
+ Or we can make a combined character set such as 
+\family typewriter
+[[:alnum]_]
+\family default
+.
+ E.g., the latter would be useful in looking for email addresses.
+ If you use the 
+\family typewriter
+[:class:]
+\family default
+ syntax, you need to use the 
+\family typewriter
+perl=TRUE
+\family default
+ argument to the relevant function to make use of Perl-style regular expressions.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk87>>=
+\end_layout
+
+\begin_layout Chunk
+
+addresses <- c("john@att.com", "stat243@bspace.berkeley.edu", "john_smith@att.com")
+\end_layout
+
+\begin_layout Chunk
+
+grep("[[:digit:]_]", addresses, perl = TRUE)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Some synonyms for the various classes are: 
+\family typewriter
+
+\backslash
+
+\backslash
+w
+\family default
+ = 
+\family typewriter
+[:alnum:]
+\family default
+, 
+\family typewriter
+
+\backslash
+
+\backslash
+W
+\family default
+ = 
+\family typewriter
+^[:alnum:]
+\family default
+, 
+\family typewriter
+
+\backslash
+
+\backslash
+d = [:digit]
+\family default
+, 
+\family typewriter
+
+\backslash
+
+\backslash
+D
+\family default
+ = 
+\family typewriter
+^[:digit:]
+\family default
+, 
+\family typewriter
+
+\backslash
+
+\backslash
+s
+\family default
+ = 
+\family typewriter
+[:space:]
+\family default
+, 
+\family typewriter
+
+\backslash
+
+\backslash
+S
+\family default
+ = 
+\family typewriter
+^[:space:]
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Challenge
+\series default
+: how would we find a spam-like pattern with digits or non-letters inside
+ a word? E.g., I want to find 
+\end_layout
+
+\begin_layout Standard
+"V1agra" or "Fancy repl!c@ted watches".
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+[[:alpha:]][[:digit:][:punct:]][[:alpha:]]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Location-specific matches
+\end_layout
+
+\begin_layout Standard
+To find a pattern at the beginning of the string, we use ^ (note this was
+ also used for negation, but in that case occurs only inside square brackets)
+ and to find it at the end we use $.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk88, eval=TRUE>>=
+\end_layout
+
+\begin_layout Chunk
+
+text <- c("john","jennifer pierce","Juan carlos rey")
+\end_layout
+
+\begin_layout Chunk
+
+grep("^[[:upper:]]", text) # finds text starting with upper case letter
+\end_layout
+
+\begin_layout Chunk
+
+grep("[[:digit:]]$", text) # finds text with a number at the end
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+What does this match: 
+\family typewriter
+^[^[:lower:]]$
+\family default
+ ?
+\end_layout
+
+\begin_layout Standard
+Here are some more examples, illustrating the use of regexp in 
+\emph on
+grep()
+\emph default
+, 
+\emph on
+gregexpr(),
+\emph default
+ and 
+\emph on
+gsub()
+\emph default
+.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk89>>=
+\end_layout
+
+\begin_layout Chunk
+
+text <- c("john","jennifer pierce","Juan carlos rey")
+\end_layout
+
+\begin_layout Chunk
+
+grep("[ 
+\backslash
+t]", text)
+\end_layout
+
+\begin_layout Chunk
+
+gregexpr("[ 
+\backslash
+t]", text)
+\end_layout
+
+\begin_layout Chunk
+
+gsub("^j", "J", text)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout LyX-Code
+
+\family roman
+To extract the actual matching sequences and not just which elements match
+ and where they match, you can use 
+\emph on
+regmatches()
+\emph default
+:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk89b>>=
+\end_layout
+
+\begin_layout Chunk
+
+text <- c("john","jennifer pierce","Juan carlos rey")
+\end_layout
+
+\begin_layout Chunk
+
+matches <- gregexpr("^[[:upper:]][[:lower:]]+ ", text)
+\end_layout
+
+\begin_layout Chunk
+
+regmatches(text, matches)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Paragraph
+Repetitions
+\end_layout
+
+\begin_layout Standard
+Now suppose I wanted to be able to detect 
+\begin_inset Quotes eld
+\end_inset
+
+V1@gra
+\begin_inset Quotes erd
+\end_inset
+
+ as well.
+ I need to be able to deal with repetitions of character sets.
+\end_layout
+
+\begin_layout Standard
+I can indicate repetitions as indicated in these examples:
+\end_layout
+
+\begin_layout Itemize
+[[:digit:]]* -- any number of digits (zero or more)
+\end_layout
+
+\begin_layout Itemize
+[[:digit:]]+ -- at least one digit
+\end_layout
+
+\begin_layout Itemize
+[[:digit:]]? -- zero or one digits
+\end_layout
+
+\begin_layout Itemize
+[[:digit:]]{1,3} -- at least one and no more than three digits
+\end_layout
+
+\begin_layout Itemize
+[[:digit:]]{2,} -- two or more digits
+\end_layout
+
+\begin_layout Standard
+An example is that 
+\family typewriter
+
+\backslash
+
+\backslash
+[.*
+\backslash
+
+\backslash
+]
+\family default
+ is the pattern of any number of characters (
+\emph on
+.*
+\emph default
+) separated by square brackets.
+\end_layout
+
+\begin_layout Standard
+So the spam search might become: 
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk90>>=
+\end_layout
+
+\begin_layout Chunk
+
+text <- c("hi John", "V1@gra", "here's the problem set")
+\end_layout
+
+\begin_layout Chunk
+
+grep("[[:alpha:]]+[[:digit:][:punct:]]+[[:alpha:]]*", text) 
+\end_layout
+
+\begin_layout Chunk
+
+# ok, so that doesn't quite work...
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Paragraph
+Grouping and references
+\end_layout
+
+\begin_layout Standard
+We often want to be able to look for multi-character patterns and to be
+ able to refer back to the patterns that are found.
+ Both are accomplished with parentheses.
+ We can search for a group of characters as follows by putting the group
+ in parentheses, such as 
+\family typewriter
+([[:digit:]]{1,3}
+\backslash
+
+\backslash
+.)
+\family default
+ to find a 1 to 3 digit number followed by a period.
+ Here's an example of searching for an IP number:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk90a, eval=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+grep("([[:digit:]]{1,3}
+\backslash
+
+\backslash
+.){3}[[:digit:]]{1,3}", text)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+see regExpExample.q from stat243fall11 and ps2prep.q from stat243fall12
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It's often helpful to be able to save a pattern as a variable and refer
+ back to it.
+ Here's an example that might have been helpful in dealing with the extra
+ commas in the comma-delimited FAO file in PS1: 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+We saw an example of this in the sed syntax I gave you in PS1.
+ Let's translate that syntax here:
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk91>>=
+\end_layout
+
+\begin_layout Chunk
+
+text <- ('"H4NY07011","ACKERMAN, GARY L.","H","$13,242",,,')
+\end_layout
+
+\begin_layout Chunk
+
+gsub("([^
+\backslash
+",]),", "
+\backslash
+
+\backslash
+1", text)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+We can have multiple sets of parentheses, referred to using 
+\family typewriter
+
+\backslash
+
+\backslash
+1
+\family default
+, 
+\family typewriter
+
+\backslash
+
+\backslash
+2
+\family default
+, etc.
+\end_layout
+
+\begin_layout Standard
+We can indicate any one of a set of multi-character sequences as: 
+\family typewriter
+(http|ftp)
+\family default
+.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk92>>=
+\end_layout
+
+\begin_layout Chunk
+
+gregexpr("(http|ftp):
+\backslash
+
+\backslash
+/
+\backslash
+
+\backslash
+/", c("at the site http://www.ibm.com", "other text", "ftp://ibm.com"))
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Challenge
+\series default
+: How would I extract an email address from an arbitrary text string? Comment:
+ if you want to just return the address using 
+\family typewriter
+gsub(pattern, 
+\begin_inset Quotes eld
+\end_inset
+
+
+\backslash
+
+\backslash
+1
+\begin_inset Quotes erd
+\end_inset
+
+, text)
+\family default
+ will not do the trick.
+ Why not? 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+[[:alphanum:]_]+@[[:alphanum:]_
+\backslash
+
+\backslash
+.]+
+\backslash
+
+\backslash
+.[[:alphanum:]_
+\backslash
+
+\backslash
+.]{2,}[[:space:]]+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Challenge
+\series default
+: Suppose a text string has dates in the form 
+\begin_inset Quotes eld
+\end_inset
+
+Aug-3
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+May-9
+\begin_inset Quotes erd
+\end_inset
+
+, etc.
+ and I want them in the form 
+\begin_inset Quotes eld
+\end_inset
+
+3 Aug
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+9 May
+\begin_inset Quotes erd
+\end_inset
+
+, etc.
+ How would I do this search/replace? 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+gsub(
+\begin_inset Quotes eld
+\end_inset
+
+(Jan|Feb|Dec)-([[:digit:]]{1,2})
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+
+\backslash
+
+\backslash
+2 
+\backslash
+
+\backslash
+1
+\begin_inset Quotes erd
+\end_inset
+
+, text)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Greedy matching
+\end_layout
+
+\begin_layout Standard
+It turns out the pattern matching is 'greedy' - it looks for the longest
+ match possible.
+\end_layout
+
+\begin_layout Standard
+Suppose we want to strip out html tags as follows:
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk93>>=
+\end_layout
+
+\begin_layout Chunk
+
+text <- "Students may participate in an internship <b> in place
+\end_layout
+
+\begin_layout Chunk
+
+   </b> of <b> one </b> of their courses."
+\end_layout
+
+\begin_layout Chunk
+
+gsub("<.*>", "", text)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+One solution is to append a ? to the repetition syntax to cause the matching
+ to be non-greedy.
+ Here's an example.
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk93a>>=
+\end_layout
+
+\begin_layout Chunk
+gsub("<.*?>", "", text)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+However, one can also avoid greedy matching by being more clever.
+ 
+\series bold
+Challenge
+\series default
+: How could we change our regexp to avoid the greedy matching without using
+ the 
+\begin_inset Quotes eld
+\end_inset
+
+?
+\begin_inset Quotes erd
+\end_inset
+
+? 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+<[^>]+>
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Example 2: use CK spam or CK election data examples
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Regular expressions in other contexts
+\end_layout
+
+\begin_layout Standard
+Regular expression can be used in a variety of places.
+ E.g., to split by any number of white space characters
+\end_layout
+
+\begin_layout Chunk
+
+<<chunk94>>=
+\end_layout
+
+\begin_layout Chunk
+
+line <- "a dog
+\backslash
+tjumped
+\backslash
+nover 
+\backslash
+tthe moon."
+\end_layout
+
+\begin_layout Chunk
+
+cat(line)
+\end_layout
+
+\begin_layout Chunk
+
+strsplit(line, split = "[[:space:]]+")
+\end_layout
+
+\begin_layout Chunk
+
+strsplit(line, split = "[[:blank:]]+")
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Paragraph
+Summary
+\end_layout
+
+\begin_layout Standard
+Table 1 summarizes the key syntax in regular expressions.
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Regular expression syntax
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="15" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="5in">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Syntax
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+What it matches
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+^ab
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+match 'ab' at the beginning of the string
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+ab$
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+match 'ab' at the end of the string
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+[abc]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+match a or b or c anywhere (this is a character class)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+[ 
+\backslash
+t]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+match a space or a tab
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\emph on
+(ab|cd|def)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+match any of the strings in the set
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\emph on
+(ab){2,9}
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+match 'ab' repeated at least 2 and no more than 9 times
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+(ab){2,}
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+match 'ab' repeated 2 or more times
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+[0-9a-z]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+match a single digit or lower-case alphabetical
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+[^0-9]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+match any single character except a digit
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+\emph on
+a.b
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+match a and b separated by a single character
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+a.*b
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+match a and b separated by any number of (or no) characters
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+a.+b
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+like a.*b but must have at least one character in between
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+[[:digit:]]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+match 
+\emph on
+digit
+\emph default
+ class; other classes are 
+\emph on
+alpha
+\emph default
+, 
+\emph on
+alnum
+\emph default
+, 
+\emph on
+lower
+\emph default
+, 
+\emph on
+upper
+\emph default
+, 
+\emph on
+punct
+\emph default
+, 
+\emph on
+blank
+\emph default
+, 
+\emph on
+space 
+\emph default
+(see ?regexp)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+
+\backslash
+
+\backslash
+[
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+double backslashes are used if we want to search for a meta-character used
+ in regexp syntax
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
