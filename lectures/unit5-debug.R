@@ -126,7 +126,7 @@ options(error = NULL) # reset things
 # 2.5 Using trace()
 
 # insert "browser()" manually at some point in calcVar()
-trace(calcVar, edit = TRUE)
+trace(calcVar, edit = 'emacs')
 # or fix(calcVar, editor = 'emacs')
 
 calcVar

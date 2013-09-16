@@ -1987,6 +1987,43 @@ Have a file of code for pre-processing, one or more for analysis, and one
 
 \begin_deeper
 \begin_layout Itemize
+The pre-processing may involve time-consuming steps.
+ Save the output of the pre-processing as a file that can be read in to
+ the analysis script.
+ 
+\end_layout
+
+\begin_layout Itemize
+You may want to name your files something like this, so there is an obvious
+ ordering: 
+\begin_inset Quotes eld
+\end_inset
+
+1-prep.R
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+2-anal.R
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+3-figs.R
+\begin_inset Quotes erd
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
 Have the code file for the figures produce the EXACT manuscript figures,
  operating on an RData file that contains all the objects necessary to run
  the figure-producing code; the code producing the RData file should be
