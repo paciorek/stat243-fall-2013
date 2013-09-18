@@ -2521,7 +2521,6 @@ Indexing and factors
 \end_layout
 
 \begin_layout Standard
-
 Be careful of using factors as indices for subsetting:
 \end_layout
 
@@ -2562,7 +2561,6 @@ score[as.character(students[3])]
 \end_layout
 
 \begin_layout Standard
-
 What has gone wrong?
 \end_layout
 
@@ -4240,7 +4238,6 @@ environment(lm)
 \end_layout
 
 \begin_layout Standard
-
 The enclosing environments for a function from an attached package are a
  bit more complicated:
 \end_layout
@@ -4620,6 +4617,18 @@ names(new.mtcars)
 \begin_layout Chunk
 
 @
+\end_layout
+
+\begin_layout Subsection
+Summing up
+\end_layout
+
+\begin_layout Standard
+What happens when an R function is evaluated? The user-provided function
+ arguments are matched to the argument names in the function definition.
+ A new environment is created, and assignment to those names is done in
+ the environment, including any default arguments.
+ The body of the function is evaluated in the environment.
 \end_layout
 
 \begin_layout Section
@@ -5173,6 +5182,7 @@ if(min(vals) > eps) # not good practice
 \end_layout
 
 \begin_layout Chunk
+
 # better practice:
 \end_layout
 
@@ -6986,6 +6996,7 @@ One solution is to append a ? to the repetition syntax to cause the matching
 \end_layout
 
 \begin_layout Chunk
+
 gsub("<.*?>", "", text)
 \end_layout
 
