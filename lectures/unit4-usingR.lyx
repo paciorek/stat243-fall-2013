@@ -76,27 +76,22 @@ knitr
 \begin_body
 
 \begin_layout Chunk
-
 <<setup, include=FALSE, cache=TRUE>>= 
 \end_layout
 
 \begin_layout Chunk
-
 library(knitr) 
 \end_layout
 
 \begin_layout Chunk
-
 opts_chunk$set(fig.path = 'figure/listings-') 
 \end_layout
 
 \begin_layout Chunk
-
 options(replace.assign = TRUE, width = 55) 
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -202,32 +197,26 @@ system()
 
 \begin_deeper
 \begin_layout Chunk
-
 <<chunk1>>=
 \end_layout
 
 \begin_layout Chunk
-
 system("ls -al") 
 \end_layout
 
 \begin_layout Chunk
-
 # knitr/Sweave doesn't seem to show the output of system()
 \end_layout
 
 \begin_layout Chunk
-
 files <- system("ls", intern = TRUE)
 \end_layout
 
 \begin_layout Chunk
-
 files[1:5]
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -239,22 +228,18 @@ There are also a bunch of functions that will do specific queries of the
 
 \begin_deeper
 \begin_layout Chunk
-
 <<chunk2, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 file.exists("file.txt")
 \end_layout
 
 \begin_layout Chunk
-
 list.files("~/research")
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -265,17 +250,14 @@ To get some info on the system you're running on:
 
 \begin_deeper
 \begin_layout Chunk
-
 <<chunk3>>=
 \end_layout
 
 \begin_layout Chunk
-
 Sys.info()
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -307,57 +289,46 @@ digits
 
 \begin_deeper
 \begin_layout Chunk
-
 <<chunk4>>=
 \end_layout
 
 \begin_layout Chunk
-
 # options()  # this would print out a long list of options
 \end_layout
 
 \begin_layout Chunk
-
 options()[1:5]
 \end_layout
 
 \begin_layout Chunk
-
 options()[c('width', 'digits')]
 \end_layout
 
 \begin_layout Chunk
-
 # options(width = 120) # often nice to have more characters on screen
 \end_layout
 
 \begin_layout Chunk
-
 options(width = 55)  # for purpose of making the pdf of this document
 \end_layout
 
 \begin_layout Chunk
-
 options(max.print = 5000)
 \end_layout
 
 \begin_layout Chunk
-
 options(digits = 3)
 \end_layout
 
 \begin_layout Chunk
-
 a <- 0.123456; b <- 0.1234561
 \end_layout
 
 \begin_layout Chunk
-
 a; b; a == b
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -406,17 +377,14 @@ Sys.info()
 
 \begin_deeper
 \begin_layout Chunk
-
 <<chunk4a>>=
 \end_layout
 
 \begin_layout Chunk
-
 sessionInfo()
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -494,12 +462,10 @@ If you want to pass arguments into your script, you can do so as long as
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk00, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 args <- commandArgs(TRUE)
 \begin_inset Newline newline
 \end_inset
@@ -512,7 +478,6 @@ args <- commandArgs(TRUE)
 \end_layout
 
 \begin_layout Chunk
-
 # and the second as a character string and the third as a boolean:
 \begin_inset Newline newline
 \end_inset
@@ -597,27 +562,22 @@ library()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk6>>=
 \end_layout
 
 \begin_layout Chunk
-
 library(fields)
 \end_layout
 
 \begin_layout Chunk
-
 library(help = fields)
 \end_layout
 
 \begin_layout Chunk
-
 # library()  # I don't want to run this on SCF because so many are installed
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -641,22 +601,18 @@ library()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk6aa>>=
 \end_layout
 
 \begin_layout Chunk
-
 .libPaths()
 \end_layout
 
 \begin_layout Chunk
-
 searchpaths()
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -674,17 +630,14 @@ If a package is on CRAN but not on your system, you can install it easily
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk6a, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 install.packages('fields', lib = '~/Rlibs') # ~/Rlibs needs to exist!
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -719,32 +672,26 @@ ls()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk7>>=
 \end_layout
 
 \begin_layout Chunk
-
 search()
 \end_layout
 
 \begin_layout Chunk
-
 # ls(pos = 8) # for the stats package
 \end_layout
 
 \begin_layout Chunk
-
 ls(pos = 8)[1:5] # just show the first few
 \end_layout
 
 \begin_layout Chunk
-
 ls("package:stats")[1:5] # equivalent
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -789,32 +736,26 @@ We assign into an object using either '
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk8>>=
 \end_layout
 
 \begin_layout Chunk
-
 out = mean(rnorm(7)) # OK
 \end_layout
 
 \begin_layout Chunk
-
 system.time(out = rnorm(10000)) 
 \end_layout
 
 \begin_layout Chunk
-
 # NOT OK, system.time() expects its argument to be a complete R expression
 \end_layout
 
 \begin_layout Chunk
-
 system.time(out <- rnorm(10000))
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -824,47 +765,38 @@ Let's look at these examples to understand the distinction between '=' and
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk9>>=
 \end_layout
 
 \begin_layout Chunk
-
 mean
 \end_layout
 
 \begin_layout Chunk
-
 x <- 0; y <- 0
 \end_layout
 
 \begin_layout Chunk
-
 out <- mean(x = c(3,7)) # usual way to pass an argument to a function
 \end_layout
 
 \begin_layout Chunk
-
 # what does the following do?
 \end_layout
 
 \begin_layout Chunk
-
 out <- mean(x <- c(3,7)) # this is allowable, though perhaps not useful
 \end_layout
 
 \begin_layout Chunk
-
 out <- mean(y = c(3,7))
 \end_layout
 
 \begin_layout Chunk
-
 out <- mean(y <- c(3,7))
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -882,32 +814,26 @@ One situation in which you want to use '
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk9a>>=
 \end_layout
 
 \begin_layout Chunk
-
 mat <- matrix(c(1, NA, 2, 3), nrow = 2, ncol = 2)
 \end_layout
 
 \begin_layout Chunk
-
 apply(mat, 1, sum.isna <- function(vec) {return(sum(is.na(vec)))})
 \end_layout
 
 \begin_layout Chunk
-
 # What is the side effect of what I have done here?
 \end_layout
 
 \begin_layout Chunk
-
 apply(mat, 1, sum.isna = function(vec) {return(sum(is.na(vec)))}) # NOPE
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -917,47 +843,38 @@ R often treats integers as numerics, but we can force R to store values
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk10>>=
 \end_layout
 
 \begin_layout Chunk
-
 vals <- c(1, 2, 3)
 \end_layout
 
 \begin_layout Chunk
-
 class(vals)
 \end_layout
 
 \begin_layout Chunk
-
 vals <- 1:3
 \end_layout
 
 \begin_layout Chunk
-
 class(vals)
 \end_layout
 
 \begin_layout Chunk
-
 vals <- c(1L, 2L, 3L)
 \end_layout
 
 \begin_layout Chunk
-
 vals
 \end_layout
 
 \begin_layout Chunk
-
 class(vals)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -970,27 +887,22 @@ as()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk11>>=
 \end_layout
 
 \begin_layout Chunk
-
 as.character(c(1,2,3))
 \end_layout
 
 \begin_layout Chunk
-
 as.numeric(c("1", "2.73"))
 \end_layout
 
 \begin_layout Chunk
-
 as.factor(c("a", "b", "c"))
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1010,37 +922,30 @@ read.table()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk13>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- rnorm(5)
 \end_layout
 
 \begin_layout Chunk
-
 x[3] <- 'hat' # What do you think is going to happen?
 \end_layout
 
 \begin_layout Chunk
-
 indices = c(1, 2.73)
 \end_layout
 
 \begin_layout Chunk
-
 myVec = 1:10
 \end_layout
 
 \begin_layout Chunk
-
 myVec[indices]
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1059,47 +964,38 @@ Here's an example we can work through that will help illustrate how type
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk11a>>=
 \end_layout
 
 \begin_layout Chunk
-
 n <- 5
 \end_layout
 
 \begin_layout Chunk
-
 df <- data.frame(rep('a', n), rnorm(n), rnorm(n))
 \end_layout
 
 \begin_layout Chunk
-
 apply(df, 1, function(x) x[2] + x[3])
 \end_layout
 
 \begin_layout Chunk
-
 # why does that not work?
 \end_layout
 
 \begin_layout Chunk
-
 apply(df[ , 2:3], 1, function(x) x[1] + x[2])
 \end_layout
 
 \begin_layout Chunk
-
 df2 <- data.frame(cbind(rep('a', n), rnorm(n), rnorm(5)))
 \end_layout
 
 \begin_layout Chunk
-
 apply(df2[ , 2:3], 1, function(x) x[1] + x[2])
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1127,42 +1023,34 @@ Let's look at Adler's Table 7.1 to see some other types.
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk12>>=
 \end_layout
 
 \begin_layout Chunk
-
 a <- data.frame(x = 1:2)
 \end_layout
 
 \begin_layout Chunk
-
 class(a)
 \end_layout
 
 \begin_layout Chunk
-
 typeof(a)
 \end_layout
 
 \begin_layout Chunk
-
 m <- matrix(1:4, nrow = 2) 
 \end_layout
 
 \begin_layout Chunk
-
 class(m) 
 \end_layout
 
 \begin_layout Chunk
-
 typeof(m)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1196,42 +1084,34 @@ We can create objects with our own defined class.
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk14>>=
 \end_layout
 
 \begin_layout Chunk
-
 me <- list(firstname = 'Chris', surname = 'Paciorek')
 \end_layout
 
 \begin_layout Chunk
-
 class(me) <- 'personClass'  # it turns out R already has a 'person' class
 \end_layout
 
 \begin_layout Chunk
-
 class(me)
 \end_layout
 
 \begin_layout Chunk
-
 is.list(me)
 \end_layout
 
 \begin_layout Chunk
-
 typeof(me)
 \end_layout
 
 \begin_layout Chunk
-
 typeof(me$firstname)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1244,62 +1124,50 @@ Some functions that give information about objects are:
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk15>>=
 \end_layout
 
 \begin_layout Chunk
-
 is(me, 'personClass')
 \end_layout
 
 \begin_layout Chunk
-
 str(me)
 \end_layout
 
 \begin_layout Chunk
-
 attributes(me)
 \end_layout
 
 \begin_layout Chunk
-
 mat <- matrix(1:4, 2)
 \end_layout
 
 \begin_layout Chunk
-
 class(mat)
 \end_layout
 
 \begin_layout Chunk
-
 typeof(mat)
 \end_layout
 
 \begin_layout Chunk
-
 length(mat) 
 \end_layout
 
 \begin_layout Chunk
-
 # recall that a matrix can be thought of as a vector with dimensions
 \end_layout
 
 \begin_layout Chunk
-
 attributes(mat)
 \end_layout
 
 \begin_layout Chunk
-
 dim(mat)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1315,32 +1183,26 @@ Attributes
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk16>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- rnorm(10 * 365)
 \end_layout
 
 \begin_layout Chunk
-
 qs <- quantile(x, c(.025, .975))
 \end_layout
 
 \begin_layout Chunk
-
 qs
 \end_layout
 
 \begin_layout Chunk
-
 qs[1] + 3
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1358,22 +1220,18 @@ names
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk17>>=
 \end_layout
 
 \begin_layout Chunk
-
 names(qs) <- NULL
 \end_layout
 
 \begin_layout Chunk
-
 qs
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1383,47 +1241,38 @@ A common use of attributes is that rows and columns may be named in matrices
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk18>>=
 \end_layout
 
 \begin_layout Chunk
-
 row.names(mtcars)[1:6]
 \end_layout
 
 \begin_layout Chunk
-
 names(mtcars)
 \end_layout
 
 \begin_layout Chunk
-
 mat <- data.frame(x = 1:2, y = 3:4)
 \end_layout
 
 \begin_layout Chunk
-
 row.names(mat) <- c("first", "second")
 \end_layout
 
 \begin_layout Chunk
-
 mat
 \end_layout
 
 \begin_layout Chunk
-
 vec <- c(first = 7, second = 1, third = 5)
 \end_layout
 
 \begin_layout Chunk
-
 vec['first']
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1441,82 +1290,66 @@ Objects exist in a workspace, which in R is called an environment.
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk19>>=
 \end_layout
 
 \begin_layout Chunk
-
 # objects() # what objects are in my workspace
 \end_layout
 
 \begin_layout Chunk
-
 identical(ls(), objects()) # synonymous
 \end_layout
 
 \begin_layout Chunk
-
 dat <- 7; dat2 <- 9; subdat <- 3; obj <- 5; obj2 <- 7
 \end_layout
 
 \begin_layout Chunk
-
 objects(pattern = "^dat") 
 \end_layout
 
 \begin_layout Chunk
-
 rm(dat2, subdat)
 \end_layout
 
 \begin_layout Chunk
-
 rm(list = c("obj", "obj2")) 
 \end_layout
 
 \begin_layout Chunk
-
 # a bit confusing - the 'list' argument should be a character vector
 \end_layout
 
 \begin_layout Chunk
-
 rm(list = ls(pattern = "^dat")) 
 \end_layout
 
 \begin_layout Chunk
-
 exists('dat') # can be helpful when programming
 \end_layout
 
 \begin_layout Chunk
-
 dat <- rnorm(500000)
 \end_layout
 
 \begin_layout Chunk
-
 object.size(dat)
 \end_layout
 
 \begin_layout Chunk
-
 print(object.size(dat), units = "Mb") # this seems pretty clunky!
 \end_layout
 
 \begin_layout Chunk
-
 # but we'll understand why it's clunky when we see S3 classes in detail
 \end_layout
 
 \begin_layout Chunk
-
 rm(list = ls()) # what does this do?
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1540,23 +1373,19 @@ There are also some special objects, which often begin with a period, like
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk20>>=
 \end_layout
 
 \begin_layout Chunk
-
 rnorm(10)
 \end_layout
 
 \begin_layout Chunk
-
 # .Last.value  # this should return the 10 random normals but knitr is messing
  things up, commented out here
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1585,32 +1414,26 @@ xep
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk20a, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- 1e5
 \end_layout
 
 \begin_layout Chunk
-
 log10(x)
 \end_layout
 
 \begin_layout Chunk
-
 y <- 100000
 \end_layout
 
 \begin_layout Chunk
-
 x <- 1e-8
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1687,26 +1510,22 @@ Working with strings and quotes (see
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk20b>>=
 \end_layout
 
 \begin_layout Chunk
-
 ch1 <- "Chris's
 \backslash
 n"
 \end_layout
 
 \begin_layout Chunk
-
 ch2 <- 'He said, "hello."
 \backslash
 n'
 \end_layout
 
 \begin_layout Chunk
-
 ch3 <- "He said, 
 \backslash
 "hello.
@@ -1717,7 +1536,6 @@ n"
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1784,37 +1602,30 @@ You extract from lists with
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk21>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- list(a = 1:2, b = 3:4, sam = rnorm(4))
 \end_layout
 
 \begin_layout Chunk
-
 x[[2]] # extracts the indicated component, which can be anything, 
 \end_layout
 
 \begin_layout Chunk
-
 # in this case just an integer vector
 \end_layout
 
 \begin_layout Chunk
-
 x[c(1, 3)] # extracts subvectors, which since it is a list, 
 \end_layout
 
 \begin_layout Chunk
-
 # will also be a list
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1824,22 +1635,18 @@ When working with lists, it's handy to be able to use the same function
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk22>>=
 \end_layout
 
 \begin_layout Chunk
-
 lapply(x, length)
 \end_layout
 
 \begin_layout Chunk
-
 sapply(x, length) # returns things in a user-friendly way
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1861,22 +1668,18 @@ apply()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk23>>=
 \end_layout
 
 \begin_layout Chunk
-
 apply(CO2, 2, class) # hmmm
 \end_layout
 
 \begin_layout Chunk
-
 sapply(CO2, class)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1895,23 +1698,19 @@ apply()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk24>>=
 \end_layout
 
 \begin_layout Chunk
-
 params <- list( a = list(mn = 7, sd = 3), b = list(mn = 6, sd =1), c = list(mn
  = 2, sd = 1))
 \end_layout
 
 \begin_layout Chunk
-
 sapply(params, '[[', 1)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1924,17 +1723,14 @@ unlist()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk25>>=
 \end_layout
 
 \begin_layout Chunk
-
 unlist(x)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1961,22 +1757,18 @@ apply()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk26>>=
 \end_layout
 
 \begin_layout Chunk
-
 tapply(mtcars$mpg, mtcars$cyl, mean) 
 \end_layout
 
 \begin_layout Chunk
-
 tapply(mtcars$mpg, list(mtcars$cyl, mtcars$gear), mean)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2007,28 +1799,23 @@ by()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk28>>=
 \end_layout
 
 \begin_layout Chunk
-
 aggregate(mtcars, by = list(cyl = mtcars$cyl), mean) 
 \end_layout
 
 \begin_layout Chunk
-
 # this uses the function on each column of mtcars, split by the 'by' argument
 \end_layout
 
 \begin_layout Chunk
-
 by(warpbreaks, warpbreaks$tension, function(x) {lm(breaks ~ wool, data =
  x)})
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2042,17 +1829,14 @@ split()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk29, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 split(mtcars, mtcars$cyl)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2080,38 +1864,31 @@ cut()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk110>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- rnorm(100)
 \end_layout
 
 \begin_layout Chunk
-
 f <-  cut(x, breaks = c(-Inf, -1, 1, Inf), labels = c('low', 'medium', 'high'))
 \end_layout
 
 \begin_layout Chunk
-
 levels(f) # note that f is not explicitly ordered
 \end_layout
 
 \begin_layout Chunk
-
 f <- relevel(f, 'high') # puts high as first level
 \end_layout
 
 \begin_layout Chunk
-
 f <-  cut(x, breaks = c(-Inf, -1, 1, Inf), labels = c('low', 'medium', 'high'),
  ordered_result = TRUE)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2130,37 +1907,30 @@ rbind()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk30>>=
 \end_layout
 
 \begin_layout Chunk
-
 myList <- list(a = 1:3, b = 11:13, c = 21:23)
 \end_layout
 
 \begin_layout Chunk
-
 args(rbind)
 \end_layout
 
 \begin_layout Chunk
-
 rbind(myList$a, myList$b, myList$c)
 \end_layout
 
 \begin_layout Chunk
-
 rbind(myList)
 \end_layout
 
 \begin_layout Chunk
-
 do.call(rbind, myList)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2202,42 +1972,34 @@ Matrices in R are column-major ordered, which means they are stored by column
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk31>>=
 \end_layout
 
 \begin_layout Chunk
-
 mat <- matrix(rnorm(500), nr = 50) 
 \end_layout
 
 \begin_layout Chunk
-
 identical(mat[1:50], mat[ , 1])
 \end_layout
 
 \begin_layout Chunk
-
 identical(mat[1:10], mat[1, ])
 \end_layout
 
 \begin_layout Chunk
-
 vec <- c(mat) 
 \end_layout
 
 \begin_layout Chunk
-
 mat2 <- matrix(vec, nr = 50) 
 \end_layout
 
 \begin_layout Chunk
-
 identical(mat,mat2) 
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2246,17 +2008,14 @@ If you want to fill a matrix row-wise:
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk32>>=
 \end_layout
 
 \begin_layout Chunk
-
 matrix(1:4, 2, byrow = TRUE)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2279,32 +2038,26 @@ which()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk36>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- c(1, 10, 2, 9, 3, 8)
 \end_layout
 
 \begin_layout Chunk
-
 which(x < 3)
 \end_layout
 
 \begin_layout Chunk
-
 x <- matrix(1:6, nrow = 2)
 \end_layout
 
 \begin_layout Chunk
-
 which(x < 3, arr.ind = TRUE)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2333,32 +2086,26 @@ match()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk36aa>>=
 \end_layout
 
 \begin_layout Chunk
-
 set <- c("Mazda RX4", "Merc 240D", "Fiat 128")
 \end_layout
 
 \begin_layout Chunk
-
 row.names(mtcars) %in% set
 \end_layout
 
 \begin_layout Chunk
-
 which(row.names(mtcars) %in% set)
 \end_layout
 
 \begin_layout Chunk
-
 match(row.names(mtcars), set)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2376,112 +2123,90 @@ We can subset vectors, matrices, and rows of data frames by index or by
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk36a>>=
 \end_layout
 
 \begin_layout Chunk
-
 set.seed(0)
 \end_layout
 
 \begin_layout Chunk
-
 vec <- rnorm(8); mat <- matrix(rnorm(9), 3)
 \end_layout
 
 \begin_layout Chunk
-
 vec; mat
 \end_layout
 
 \begin_layout Chunk
-
 vec[vec < 0]
 \end_layout
 
 \begin_layout Chunk
-
 vec[vec < 0] <- 0
 \end_layout
 
 \begin_layout Chunk
-
 vec
 \end_layout
 
 \begin_layout Chunk
-
 mat[mat[ , 1] < 0, ] # similarly for data frames
 \end_layout
 
 \begin_layout Chunk
-
 mat[mat[ , 1] < 0, 2:3]  # similarly for data frames
 \end_layout
 
 \begin_layout Chunk
-
 mat[ , mat[1, ] < 0]
 \end_layout
 
 \begin_layout Chunk
-
 mat[mat[ , 1] < 0, 2:3] <- 0
 \end_layout
 
 \begin_layout Chunk
-
 set.seed(0) # so we get the same vec as we had before
 \end_layout
 
 \begin_layout Chunk
-
 vec <- rnorm(8)
 \end_layout
 
 \begin_layout Chunk
-
 wh <- which(vec < 0)
 \end_layout
 
 \begin_layout Chunk
-
 logicals <- vec < 0
 \end_layout
 
 \begin_layout Chunk
-
 logicals; wh
 \end_layout
 
 \begin_layout Chunk
-
 identical(vec[wh], vec[logicals])
 \end_layout
 
 \begin_layout Chunk
-
 vec <- c(1L, 2L, 1L)
 \end_layout
 
 \begin_layout Chunk
-
 is.integer(vec)
 \end_layout
 
 \begin_layout Chunk
-
 vec[vec == 1L] # in general, not safe with numeric vectors
 \end_layout
 
 \begin_layout Chunk
-
 vec[vec != 3L] # nor this
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2492,27 +2217,22 @@ Finally, we can also subset a matrix with a two-column matrix of {row,column}
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk36b>>=
 \end_layout
 
 \begin_layout Chunk
-
 mat <- matrix(rnorm(25), 5)
 \end_layout
 
 \begin_layout Chunk
-
 rowInd <- c(1, 3, 5); colInd <- c(1, 1, 4)
 \end_layout
 
 \begin_layout Chunk
-
 mat[cbind(rowInd, colInd)]
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2525,38 +2245,31 @@ Be careful of using factors as indices for subsetting:
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk36c>>=
 \end_layout
 
 \begin_layout Chunk
-
 students <- factor(c("basic", "proficient", "advanced", "basic", "advanced",
  "minimal"))
 \end_layout
 
 \begin_layout Chunk
-
 score = c(minimal = 3, basic = 1, advanced = 13, proficient = 7)
 \end_layout
 
 \begin_layout Chunk
-
 score["advanced"]
 \end_layout
 
 \begin_layout Chunk
-
 score[students[3]]
 \end_layout
 
 \begin_layout Chunk
-
 score[as.character(students[3])]
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2578,72 +2291,58 @@ apply()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk37>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- matrix(1:6, nr = 2)
 \end_layout
 
 \begin_layout Chunk
-
 x
 \end_layout
 
 \begin_layout Chunk
-
 apply(x, 1, min) # by row 
 \end_layout
 
 \begin_layout Chunk
-
 apply(x, 2, min) # by column
 \end_layout
 
 \begin_layout Chunk
-
 x <- array(1:24, c(2, 3, 4))
 \end_layout
 
 \begin_layout Chunk
-
 apply(x, 2, min) # for(j in 1:3) print(min(x[ , j, ]))
 \end_layout
 
 \begin_layout Chunk
-
 apply(x, c(2, 3), min) 
 \end_layout
 
 \begin_layout Chunk
-
 #  equivalent to: 
 \end_layout
 
 \begin_layout Chunk
-
 #  for(j in 1:3) {
 \end_layout
 
 \begin_layout Chunk
-
 #   for(k in 1:4) { 
 \end_layout
 
 \begin_layout Chunk
-
 #     print(min(x[ , j, k]))
 \end_layout
 
 \begin_layout Chunk
-
 #   }}
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2695,39 +2394,32 @@ apply()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk38, cache=TRUE>>=
 \end_layout
 
 \begin_layout Chunk
-
 n <- 500000; nr <- 10000; nCalcs <- n/nr
 \end_layout
 
 \begin_layout Chunk
-
 mat <- matrix(rnorm(n), nrow = nr)
 \end_layout
 
 \begin_layout Chunk
-
 times <- 1:nr
 \end_layout
 
 \begin_layout Chunk
-
 system.time(out1 <- apply(mat, 2, function(vec) {mod = lm(vec ~ times); return(mo
 d$coef[2])})) 
 \end_layout
 
 \begin_layout Chunk
-
 system.time({out2 = rep(NA, nCalcs); for(i in 1:nCalcs){out2[i] = lm(mat[
  , i] ~ times)$coef[2]}}) 
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2770,70 +2462,57 @@ is similar but more flexible and it can go in either direction.
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk109a, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 load('../data/prec.RData')
 \end_layout
 
 \begin_layout Chunk
-
 prec <- prec[1:1000, ] # just to make the example code run faster
 \end_layout
 
 \begin_layout Chunk
-
 precVars <- 5:ncol(prec)
 \end_layout
 
 \begin_layout Chunk
-
 precStacked <- stack(prec, select = precVars)
 \end_layout
 
 \begin_layout Chunk
-
 out <- unstack(precStacked)
 \end_layout
 
 \begin_layout Chunk
-
 # to use reshape, we need a unique id for each row since reshape considers
  each row in the wide format as a subject
 \end_layout
 
 \begin_layout Chunk
-
 prec <- cbind(unique = 1:nrow(prec), prec)
 \end_layout
 
 \begin_layout Chunk
-
 precVars <- precVars + 1
 \end_layout
 
 \begin_layout Chunk
-
 precLong <- reshape(prec, varying = names(prec)[precVars], idvar = 'unique',
  direction = 'long', sep = '')
 \end_layout
 
 \begin_layout Chunk
-
 precLong <- precLong[!is.na(precLong$prec), ]
 \end_layout
 
 \begin_layout Chunk
-
 precWide <- reshape(precLong, v.names = 'prec', idvar = 'unique', direction
  = 'wide', sep='')
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2890,27 +2569,22 @@ X
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk39>>=
 \end_layout
 
 \begin_layout Chunk
-
 X <- matrix(rnorm(9), 3)
 \end_layout
 
 \begin_layout Chunk
-
 X
 \end_layout
 
 \begin_layout Chunk
-
 X[col(X) >= row(X)]
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2937,37 +2611,30 @@ diag()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk40>>=
 \end_layout
 
 \begin_layout Chunk
-
 diag(X)
 \end_layout
 
 \begin_layout Chunk
-
 diag(X) <- 1
 \end_layout
 
 \begin_layout Chunk
-
 X
 \end_layout
 
 \begin_layout Chunk
-
 d <- diag(c(rep(1, 2), rep(2, 2)))
 \end_layout
 
 \begin_layout Chunk
-
 d
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2990,47 +2657,38 @@ The basic matrix-vector operations are:
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk41, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 X %*% Y # matrix multiplication
 \end_layout
 
 \begin_layout Chunk
-
 X * Y # direct product
 \end_layout
 
 \begin_layout Chunk
-
 x %o% y # outer product of vectors x, y: x times t(y)
 \end_layout
 
 \begin_layout Chunk
-
 outer(x, y) # same thing
 \end_layout
 
 \begin_layout Chunk
-
 # evaluation of f(x,y) for all pairs of x,y values:
 \end_layout
 
 \begin_layout Chunk
-
 outer(x, y, function(x, y) cos(y)/(1 + x^2)) 
 \end_layout
 
 \begin_layout Chunk
-
 crossprod(X, Y) # same as but faster than t(X) %*% Y!
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3047,22 +2705,18 @@ For inverses (
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk42, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 solve(X) # inverse of X
 \end_layout
 
 \begin_layout Chunk
-
 solve(X, y) # (inverse of X) %*% y
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3142,17 +2796,14 @@ args()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk43>>=
 \end_layout
 
 \begin_layout Chunk
-
 args(lm)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3185,27 +2836,22 @@ plot()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk44>>=
 \end_layout
 
 \begin_layout Chunk
-
 pplot <- function(x, y, pch = 16, cex = 0.4, ...) {
 \end_layout
 
 \begin_layout Chunk
-
 	plot(x, y, pch = pch, cex = cex, ...)
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3251,42 +2897,34 @@ If you want to manipulate what the user passed in as the
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk45>>=
 \end_layout
 
 \begin_layout Chunk
-
 myFun <- function(...){
 \end_layout
 
 \begin_layout Chunk
-
 print(..2) 
 \end_layout
 
 \begin_layout Chunk
-
 args <- list(...)
 \end_layout
 
 \begin_layout Chunk
-
 print(args[[2]])
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 myFun(1,3,5,7)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3319,17 +2957,14 @@ dgamma()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk46>>=
 \end_layout
 
 \begin_layout Chunk
-
 args(dgamma)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3348,32 +2983,26 @@ anonymous function
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk47>>=
 \end_layout
 
 \begin_layout Chunk
-
 mat <- matrix(1:9, 3)
 \end_layout
 
 \begin_layout Chunk
-
 apply(mat, 2, function(vec) vec - vec[1])
 \end_layout
 
 \begin_layout Chunk
-
 apply(mat, 1, function(vec) vec - vec[1]) 
 \end_layout
 
 \begin_layout Chunk
-
 # explain why the result of the last expression is transposed
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3395,32 +3024,26 @@ formals()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk48>>=
 \end_layout
 
 \begin_layout Chunk
-
 f <- function(x, y = 2, z = 3 / y) { x + y + z }
 \end_layout
 
 \begin_layout Chunk
-
 args(f)
 \end_layout
 
 \begin_layout Chunk
-
 formals(f)
 \end_layout
 
 \begin_layout Chunk
-
 class(formals(f))
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3433,22 +3056,18 @@ match.call()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk49>>=
 \end_layout
 
 \begin_layout Chunk
-
 match.call(mean, quote(mean(y, na.rm = TRUE))) 
 \end_layout
 
 \begin_layout Chunk
-
 # what do you think quote does? Why is it needed?
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3494,42 +3113,34 @@ par()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk50, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 f <- function(){
 \end_layout
 
 \begin_layout Chunk
-
 	oldpar <- par()
 \end_layout
 
 \begin_layout Chunk
-
 	par(cex = 2)
 \end_layout
 
 \begin_layout Chunk
-
 	# body of code
 \end_layout
 
 \begin_layout Chunk
-
 	par() <- oldpar
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3570,32 +3181,26 @@ return()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk50a>>=
 \end_layout
 
 \begin_layout Chunk
-
 f <- function(x) { res <- x^2}
 \end_layout
 
 \begin_layout Chunk
-
 f(3)
 \end_layout
 
 \begin_layout Chunk
-
 a <- f(3)
 \end_layout
 
 \begin_layout Chunk
-
 a
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3613,32 +3218,26 @@ x
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk51>>=
 \end_layout
 
 \begin_layout Chunk
-
 f <- function(x){ invisible(x^2) }
 \end_layout
 
 \begin_layout Chunk
-
 f(3)
 \end_layout
 
 \begin_layout Chunk
-
 a <- f(3)
 \end_layout
 
 \begin_layout Chunk
-
 a
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3652,27 +3251,22 @@ lm()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk52>>=
 \end_layout
 
 \begin_layout Chunk
-
 mod <- lm(mpg ~ cyl, data = mtcars)
 \end_layout
 
 \begin_layout Chunk
-
 class(mod)
 \end_layout
 
 \begin_layout Chunk
-
 is.list(mod)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3741,42 +3335,34 @@ Be careful when using variables from the enclosing environment as the value
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk53, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- 3
 \end_layout
 
 \begin_layout Chunk
-
 f <- function() {x <- x^2; print(x)}
 \end_layout
 
 \begin_layout Chunk
-
 f(x)
 \end_layout
 
 \begin_layout Chunk
-
 x # what do you expect?
 \end_layout
 
 \begin_layout Chunk
-
 f <- function() {assign('x', x^2, env = .GlobalEnv)} 
 \end_layout
 
 \begin_layout Chunk
-
 # careful, this could be dangerous as a variable is changed as a side effect
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3785,37 +3371,30 @@ Here are some examples to illustrate scope:
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk54, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- 3
 \end_layout
 
 \begin_layout Chunk
-
 f <- function() { 
 \end_layout
 
 \begin_layout Chunk
-
 f2 <- function() { print(x) }
 \end_layout
 
 \begin_layout Chunk
-
 f2()
 \end_layout
 
 \begin_layout Chunk
-
 } 
 \end_layout
 
 \begin_layout Chunk
-
 f() # what will happen?
 \end_layout
 
@@ -3824,32 +3403,26 @@ f() # what will happen?
 \end_layout
 
 \begin_layout Chunk
-
 f <- function() {
 \end_layout
 
 \begin_layout Chunk
-
 f2 <- function() { print(x) }
 \end_layout
 
 \begin_layout Chunk
-
 x <- 7
 \end_layout
 
 \begin_layout Chunk
-
 f2()
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 f() # what will happen?
 \end_layout
 
@@ -3858,37 +3431,30 @@ f() # what will happen?
 \end_layout
 
 \begin_layout Chunk
-
 f2 <- function() print(x)
 \end_layout
 
 \begin_layout Chunk
-
 f <- function() {
 \end_layout
 
 \begin_layout Chunk
-
 x <- 7
 \end_layout
 
 \begin_layout Chunk
-
 f2()
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 f() # what will happen?
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3897,57 +3463,46 @@ Here's a somewhat tricky example:
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk55>>=
 \end_layout
 
 \begin_layout Chunk
-
 y <- 100
 \end_layout
 
 \begin_layout Chunk
-
 f <- function(){
 \end_layout
 
 \begin_layout Chunk
-
 	y <- 10
 \end_layout
 
 \begin_layout Chunk
-
 	g <- function(x) x + y
 \end_layout
 
 \begin_layout Chunk
-
 	return(g)
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 # you can think of f() as a function constructor
 \end_layout
 
 \begin_layout Chunk
-
 h <- f()
 \end_layout
 
 \begin_layout Chunk
-
 h(3)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -4011,32 +3566,26 @@ User-supplied arguments are evaluated in the calling frame, while default
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk56>>=
 \end_layout
 
 \begin_layout Chunk
-
 z <- 3
 \end_layout
 
 \begin_layout Chunk
-
 x <- 100
 \end_layout
 
 \begin_layout Chunk
-
 f <- function(x, y = x*3) {x+y}
 \end_layout
 
 \begin_layout Chunk
-
 f(z*5)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -4125,22 +3674,18 @@ attach()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk59>>=
 \end_layout
 
 \begin_layout Chunk
-
 search()
 \end_layout
 
 \begin_layout Chunk
-
 searchpaths()
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -4154,42 +3699,34 @@ environmentName()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk60>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- .GlobalEnv
 \end_layout
 
 \begin_layout Chunk
-
 parent.env(x)
 \end_layout
 
 \begin_layout Chunk
-
 while (environmentName(x) != environmentName(emptyenv())) {
 \end_layout
 
 \begin_layout Chunk
-
 	print(environmentName(parent.env(x)))
 \end_layout
 
 \begin_layout Chunk
-
 	x <- parent.env(x)
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -4213,27 +3750,22 @@ We can look at the objects of an environment as follows:
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk61>>=
 \end_layout
 
 \begin_layout Chunk
-
 ls(pos = 7)[1:5] # what does this do?
 \end_layout
 
 \begin_layout Chunk
-
 ls("package:stats")[1:5]
 \end_layout
 
 \begin_layout Chunk
-
 environment(lm)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -4243,42 +3775,34 @@ The enclosing environments for a function from an attached package are a
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk61a>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- environment(lm)
 \end_layout
 
 \begin_layout Chunk
-
 parent.env(x)
 \end_layout
 
 \begin_layout Chunk
-
 while (environmentName(x) != environmentName(emptyenv())) {
 \end_layout
 
 \begin_layout Chunk
-
 	print(environmentName(parent.env(x)))
 \end_layout
 
 \begin_layout Chunk
-
 	x <- parent.env(x)
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -4287,32 +3811,26 @@ We can retrieve and assign objects in a particular environment as follows:
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk62>>=
 \end_layout
 
 \begin_layout Chunk
-
 lm <- function() {return(NULL)} # this seems dangerous but isn't
 \end_layout
 
 \begin_layout Chunk
-
 x <- 1:3; y <- rnorm(3); mod <- lm(y ~ x)
 \end_layout
 
 \begin_layout Chunk
-
 mod <- get('lm', pos = 'package:stats')(y ~ x)
 \end_layout
 
 \begin_layout Chunk
-
 mod <- stats::lm(y ~ x) # an alternative
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -4373,22 +3891,18 @@ knitr
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk57, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 sys.nframe()
 \end_layout
 
 \begin_layout Chunk
-
 f <- function() {
 \end_layout
 
 \begin_layout Chunk
-
 	cat('f: Frame number is ', sys.nframe(), '; parent frame number is ', sys.parent(
 ), '.
 \backslash
@@ -4396,87 +3910,70 @@ n', sep = '')
 \end_layout
 
 \begin_layout Chunk
-
 	cat('f: Frame (i.e., environment) is: ')
 \end_layout
 
 \begin_layout Chunk
-
 	print(sys.frame(sys.nframe()))
 \end_layout
 
 \begin_layout Chunk
-
 	cat('f: Parent is ')
 \end_layout
 
 \begin_layout Chunk
-
 	print(parent.frame())
 \end_layout
 
 \begin_layout Chunk
-
 	cat('f: Two frames up is ')
 \end_layout
 
 \begin_layout Chunk
-
 	print(sys.frame(-2))
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 f()
 \end_layout
 
 \begin_layout Chunk
-
 f2 <- function() {
 \end_layout
 
 \begin_layout Chunk
-
 	cat('f2: Frame (i.e., environment) is: ')
 \end_layout
 
 \begin_layout Chunk
-
 	print(sys.frame(sys.nframe()))
 \end_layout
 
 \begin_layout Chunk
-
 	cat('f2: Parent is ')
 \end_layout
 
 \begin_layout Chunk
-
 	print(parent.frame())	
 \end_layout
 
 \begin_layout Chunk
-
 	f()
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 f2() 
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -4503,68 +4000,55 @@ sys.frames()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk58, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 # exploring functions that give us information the frames in the stack
 \end_layout
 
 \begin_layout Chunk
-
 g <- function(y) {
 \end_layout
 
 \begin_layout Chunk
-
 	gg <- function() {
 \end_layout
 
 \begin_layout Chunk
-
 		# this gives us the information from sys.calls(), sys.parents() and sys.frames()
  as one object
 \end_layout
 
 \begin_layout Chunk
-
 		#print(sys.status()) 
 \end_layout
 
 \begin_layout Chunk
-
 		tmp <- sys.status()
 \end_layout
 
 \begin_layout Chunk
-
 		print(tmp)
 \end_layout
 
 \begin_layout Chunk
-
 	}
 \end_layout
 
 \begin_layout Chunk
-
 	if(y > 0) g(y-1) else gg()
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 g(3)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -4595,27 +4079,22 @@ within()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk63>>=
 \end_layout
 
 \begin_layout Chunk
-
 with(mtcars, cyl*mpg)
 \end_layout
 
 \begin_layout Chunk
-
 new.mtcars <- within(mtcars, crazy <- cyl*mpg)
 \end_layout
 
 \begin_layout Chunk
-
 names(new.mtcars)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -4701,32 +4180,26 @@ OR
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk64>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- rnorm(10)
 \end_layout
 
 \begin_layout Chunk
-
 x[x > 1 | x < -1]
 \end_layout
 
 \begin_layout Chunk
-
 x <- 1:10; y <- c(rep(10, 9), NA)
 \end_layout
 
 \begin_layout Chunk
-
 x > 5 | y > 5 # note that TRUE | NA evaluates to TRUE
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -4760,57 +4233,46 @@ if
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk65>>=
 \end_layout
 
 \begin_layout Chunk
-
 a <- 7; b <- NULL
 \end_layout
 
 \begin_layout Chunk
-
 a < 8 | b > 3
 \end_layout
 
 \begin_layout Chunk
-
 a < 8 || b > 3
 \end_layout
 
 \begin_layout Chunk
-
 a <- c(0, 3); b <- c(4, 2)
 \end_layout
 
 \begin_layout Chunk
-
 if(a < 7 & b < 7) print('this is buggy code')
 \end_layout
 
 \begin_layout Chunk
-
 if(a < 7 && b < 7) 
 \end_layout
 
 \begin_layout Chunk
-
    print('this is buggy code too, but runs w/o warnings')
 \end_layout
 
 \begin_layout Chunk
-
 if(a[1] < 7 && b[1] < 7) 
 \end_layout
 
 \begin_layout Chunk
-
    print('this code is correct and the condition is TRUE')
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -4819,22 +4281,18 @@ You can use ! to indicate negation:
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk66>>=
 \end_layout
 
 \begin_layout Chunk
-
 a <- 7; b <- 5
 \end_layout
 
 \begin_layout Chunk
-
 !(a < 8 & b < 6)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -4854,42 +4312,34 @@ if(condition) statement else other_statement
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk67>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- 5
 \end_layout
 
 \begin_layout Chunk
-
 if(x > 7){
 \end_layout
 
 \begin_layout Chunk
-
 	x <- x + 3
 \end_layout
 
 \begin_layout Chunk
-
 } else{
 \end_layout
 
 \begin_layout Chunk
-
 	x <- x - 3
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -4900,22 +4350,18 @@ When one of the statements is a single statement, you don't need the curly
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk68>>=
 \end_layout
 
 \begin_layout Chunk
-
 if(x > 7) 
 \end_layout
 
 \begin_layout Chunk
-
 x <- x + 3 else x <- x - 3
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -4928,82 +4374,66 @@ if
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk69>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- -3
 \end_layout
 
 \begin_layout Chunk
-
 if (x > 7){
 \end_layout
 
 \begin_layout Chunk
-
 	x <- x + 3
 \end_layout
 
 \begin_layout Chunk
-
 	print(x)
 \end_layout
 
 \begin_layout Chunk
-
 } else if (x > 4){
 \end_layout
 
 \begin_layout Chunk
-
 	x <- x + 1
 \end_layout
 
 \begin_layout Chunk
-
 	print(x)
 \end_layout
 
 \begin_layout Chunk
-
 } else if (x > 0){
 \end_layout
 
 \begin_layout Chunk
-
 	x <- x - 3
 \end_layout
 
 \begin_layout Chunk
-
 	print(x)
 \end_layout
 
 \begin_layout Chunk
-
 } else{
 \end_layout
 
 \begin_layout Chunk
-
 	x <- x - 7
 \end_layout
 
 \begin_layout Chunk
-
 	print(x)
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -5074,27 +4504,22 @@ ifelse()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk71>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- rnorm(6)
 \end_layout
 
 \begin_layout Chunk
-
 truncx <- ifelse(x > 0, x, 0)
 \end_layout
 
 \begin_layout Chunk
-
 truncx
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -5157,47 +4582,38 @@ condition
 
 \begin_deeper
 \begin_layout Chunk
-
 <<chunk72>>=
 \end_layout
 
 \begin_layout Chunk
-
 vals <- c(1, 2, NA); eps <- 1e-9 
 \end_layout
 
 \begin_layout Chunk
-
 # now pretend vals comes from some other chunk of code that we don't control
 \end_layout
 
 \begin_layout Chunk
-
 if(min(vals) > eps) # not good practice
 \end_layout
 
 \begin_layout Chunk
-
    { print(vals) } 
 \end_layout
 
 \begin_layout Chunk
-
 # better practice:
 \end_layout
 
 \begin_layout Chunk
-
 minval <- min(vals) 
 \end_layout
 
 \begin_layout Chunk
-
 if(!is.na(minval) && minval > eps) { print(vals) } 
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -5218,67 +4634,54 @@ switch()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk73>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- 2; y <- 10
 \end_layout
 
 \begin_layout Chunk
-
 switch(x, log(y), sqrt(y), y) 
 \end_layout
 
 \begin_layout Chunk
-
 center <- function(x, type){
 \end_layout
 
 \begin_layout Chunk
-
 	switch(type, 
 \end_layout
 
 \begin_layout Chunk
-
 	mean = mean(x), # make sure to use = and not <-
 \end_layout
 
 \begin_layout Chunk
-
 	median = median(x),
 \end_layout
 
 \begin_layout Chunk
-
 	trimmed = mean(x, trim = .1))
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 x <- rgamma(100, 1)
 \end_layout
 
 \begin_layout Chunk
-
 center(x, 'median')
 \end_layout
 
 \begin_layout Chunk
-
 center(x, 'mean')
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -5326,39 +4729,32 @@ if
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk74>>=
 \end_layout
 
 \begin_layout Chunk
-
 nIts <- 500; means <- rep(NA, nIts)
 \end_layout
 
 \begin_layout Chunk
-
 for(it in 1:nIts){ 
 \end_layout
 
 \begin_layout Chunk
-
 	means[it] <- mean(rnorm(100))
 \end_layout
 
 \begin_layout Chunk
-
 	if(identical(it %% 100, 0)) cat('Iteration', it, date(), '
 \backslash
 n')
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -5372,32 +4768,26 @@ You can also loop over a non-numeric vector of values.
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk75>>=
 \end_layout
 
 \begin_layout Chunk
-
 for(state in c('Ohio', 'Iowa','Georgia')) {
 \end_layout
 
 \begin_layout Chunk
-
 	sub <- row.names(state.x77) == state
 \end_layout
 
 \begin_layout Chunk
-
 	print(state.x77[sub, "Income"])
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -5423,17 +4813,14 @@ if
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk76>>=
 \end_layout
 
 \begin_layout Chunk
-
 for(i in 1:10) i
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -5450,52 +4837,42 @@ next
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk77>>=
 \end_layout
 
 \begin_layout Chunk
-
 for(i in 1:10){
 \end_layout
 
 \begin_layout Chunk
-
 	if(i == 5) break
 \end_layout
 
 \begin_layout Chunk
-
 	print(i)
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 for(i in 1:5){
 \end_layout
 
 \begin_layout Chunk
-
 	if(i == 2) next
 \end_layout
 
 \begin_layout Chunk
-
 	print(i)
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -5521,27 +4898,22 @@ A common cause of bugs in for loops is when the range ends at zero or a
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk78>>=
 \end_layout
 
 \begin_layout Chunk
-
 mat <- matrix(1:4, 2)
 \end_layout
 
 \begin_layout Chunk
-
 submat <- mat[mat[1, ] > 5]
 \end_layout
 
 \begin_layout Chunk
-
 for(i in 1:nrow(submat)) print(i)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -5725,47 +5097,38 @@ We can manipulate formulae as objects, allowing automation.
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk79>>=
 \end_layout
 
 \begin_layout Chunk
-
 resp <- 'y ~'
 \end_layout
 
 \begin_layout Chunk
-
 covTerms <- 'x1'
 \end_layout
 
 \begin_layout Chunk
-
 for(i in 2:5){ covTerms <- paste(covTerms, '+ x', i, sep='')}
 \end_layout
 
 \begin_layout Chunk
-
 form <- as.formula(paste(resp, covTerms, sep = ''))
 \end_layout
 
 \begin_layout Chunk
-
 # lm(form, data = dat)
 \end_layout
 
 \begin_layout Chunk
-
 form
 \end_layout
 
 \begin_layout Chunk
-
 class(form)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -5774,37 +5137,30 @@ The for loop is a bit clunky/inefficient - let's do better:
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk80>>=
 \end_layout
 
 \begin_layout Chunk
-
 resp <- 'y ~'
 \end_layout
 
 \begin_layout Chunk
-
 covTerms <- paste('x', 1:5, sep = '', collapse = ' + ')
 \end_layout
 
 \begin_layout Chunk
-
 form <- as.formula(paste(resp, covTerms))
 \end_layout
 
 \begin_layout Chunk
-
 form
 \end_layout
 
 \begin_layout Chunk
-
 # lm(form, data = dat)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -5921,27 +5277,22 @@ substring()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk85>>=
 \end_layout
 
 \begin_layout Chunk
-
 out <- paste("My", "name", "is", "Chris", ".", sep = " ")
 \end_layout
 
 \begin_layout Chunk
-
 paste(c("My", "name", "is", "Chris", "."), collapse = " ") # equivalent
 \end_layout
 
 \begin_layout Chunk
-
 strsplit(out, split = ' ')
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -6000,42 +5351,34 @@ sub()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk86>>=
 \end_layout
 
 \begin_layout Chunk
-
 vars <- c("P", "HCA24", "SOH02")
 \end_layout
 
 \begin_layout Chunk
-
 substring(vars, 2, 3)
 \end_layout
 
 \begin_layout Chunk
-
 vars <- c("date98", "size98", "x98weights98", "sdfsd")
 \end_layout
 
 \begin_layout Chunk
-
 grep("98", vars)
 \end_layout
 
 \begin_layout Chunk
-
 gregexpr("98", vars)
 \end_layout
 
 \begin_layout Chunk
-
 gsub("98", "04", vars)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -6320,7 +5663,7 @@ ry).
 .
  Or we can make a combined character set such as 
 \family typewriter
-[[:alnum]_]
+[[:alnum:]_]
 \family default
 .
  E.g., the latter would be useful in looking for email addresses.
@@ -6336,22 +5679,18 @@ perl=TRUE
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk87>>=
 \end_layout
 
 \begin_layout Chunk
-
 addresses <- c("john@att.com", "stat243@bspace.berkeley.edu", "john_smith@att.com")
 \end_layout
 
 \begin_layout Chunk
-
 grep("[[:digit:]_]", addresses, perl = TRUE)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -6462,27 +5801,22 @@ To find a pattern at the beginning of the string, we use ^ (note this was
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk88, eval=TRUE>>=
 \end_layout
 
 \begin_layout Chunk
-
 text <- c("john","jennifer pierce","Juan carlos rey")
 \end_layout
 
 \begin_layout Chunk
-
 grep("^[[:upper:]]", text) # finds text starting with upper case letter
 \end_layout
 
 \begin_layout Chunk
-
 grep("[[:digit:]]$", text) # finds text with a number at the end
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -6511,36 +5845,30 @@ gsub()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk89>>=
 \end_layout
 
 \begin_layout Chunk
-
 text <- c("john","jennifer pierce","Juan carlos rey")
 \end_layout
 
 \begin_layout Chunk
-
 grep("[ 
 \backslash
 t]", text)
 \end_layout
 
 \begin_layout Chunk
-
 gregexpr("[ 
 \backslash
 t]", text)
 \end_layout
 
 \begin_layout Chunk
-
 gsub("^j", "J", text)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -6556,27 +5884,22 @@ regmatches()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk89b>>=
 \end_layout
 
 \begin_layout Chunk
-
 text <- c("john","jennifer pierce","Juan carlos rey")
 \end_layout
 
 \begin_layout Chunk
-
 matches <- gregexpr("^[[:upper:]][[:lower:]]+ ", text)
 \end_layout
 
 \begin_layout Chunk
-
 regmatches(text, matches)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -6650,27 +5973,22 @@ So the spam search might become:
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk90>>=
 \end_layout
 
 \begin_layout Chunk
-
 text <- c("hi John", "V1@gra", "here's the problem set")
 \end_layout
 
 \begin_layout Chunk
-
 grep("[[:alpha:]]+[[:digit:][:punct:]]+[[:alpha:]]*", text) 
 \end_layout
 
 \begin_layout Chunk
-
 # ok, so that doesn't quite work...
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -6696,12 +6014,10 @@ We often want to be able to look for multi-character patterns and to be
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk90a, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 grep("([[:digit:]]{1,3}
 \backslash
 
@@ -6710,7 +6026,6 @@ grep("([[:digit:]]{1,3}
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -6746,17 +6061,14 @@ We saw an example of this in the sed syntax I gave you in PS1.
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk91>>=
 \end_layout
 
 \begin_layout Chunk
-
 text <- ('"H4NY07011","ACKERMAN, GARY L.","H","$13,242",,,')
 \end_layout
 
 \begin_layout Chunk
-
 gsub("([^
 \backslash
 ",]),", "
@@ -6767,7 +6079,6 @@ gsub("([^
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -6800,12 +6111,10 @@ We can indicate any one of a set of multi-character sequences as:
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk92>>=
 \end_layout
 
 \begin_layout Chunk
-
 gregexpr("(http|ftp):
 \backslash
 
@@ -6818,7 +6127,6 @@ gregexpr("(http|ftp):
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -6960,27 +6268,22 @@ Suppose we want to strip out html tags as follows:
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk93>>=
 \end_layout
 
 \begin_layout Chunk
-
 text <- "Students may participate in an internship <b> in place
 \end_layout
 
 \begin_layout Chunk
-
    </b> of <b> one </b> of their courses."
 \end_layout
 
 \begin_layout Chunk
-
 gsub("<.*>", "", text)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -6991,17 +6294,14 @@ One solution is to append a ? to the repetition syntax to cause the matching
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk93a>>=
 \end_layout
 
 \begin_layout Chunk
-
 gsub("<.*?>", "", text)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -7063,12 +6363,10 @@ Regular expression can be used in a variety of places.
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk94>>=
 \end_layout
 
 \begin_layout Chunk
-
 line <- "a dog
 \backslash
 tjumped
@@ -7079,22 +6377,18 @@ tthe moon."
 \end_layout
 
 \begin_layout Chunk
-
 cat(line)
 \end_layout
 
 \begin_layout Chunk
-
 strsplit(line, split = "[[:space:]]+")
 \end_layout
 
 \begin_layout Chunk
-
 strsplit(line, split = "[[:blank:]]+")
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
