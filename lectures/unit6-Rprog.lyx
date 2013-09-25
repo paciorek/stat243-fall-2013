@@ -2337,16 +2337,12 @@ x
  will be the address of the first element of the vector.
  We can access the first element as 
 \family typewriter
-\series bold
 x[0]
 \family default
-\series default
  or 
 \family typewriter
-\series bold
 *x
 \family default
-\series default
 .
 \end_layout
 
@@ -2368,6 +2364,17 @@ int myCal(int *ptr){
 \begin_layout Standard
 
 \family typewriter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
 *ptr = *ptr + *ptr;
 \end_layout
 
@@ -2576,7 +2583,8 @@ We can use replacement functions (Section 2.4), which hide the reassignment
 \begin_layout Enumerate
 We can use a closure.
  This involves creating functions within a function call and returning the
- functions as a list.
+ functions as a list (or a single function, as we saw when discussing scoping
+ in Unit 4).
  When one executes the enclosing function, the list is created and one can
  call the functions of that object.
  Those functions then can access objects in the enclosing environment (the
@@ -2602,7 +2610,10 @@ rce=feedburner&utm_medium=email&utm_campaign=Feed%3A+RBloggers+%28R+bloggers%29
 
 \end_layout
 
-\begin_deeper
+\begin_layout Chunk
+
+\end_layout
+
 \begin_layout Chunk
 
 <<chunk15>>=
@@ -2665,7 +2676,12 @@ myFun <- f(x)
 
 \begin_layout Chunk
 
-object.size(myFun)
+object.size(myFun) # hmmm
+\end_layout
+
+\begin_layout Chunk
+
+object.size(environment(myFun)$data)
 \end_layout
 
 \begin_layout Chunk
@@ -2713,7 +2729,7 @@ make_container <- function(n) {
 
 \begin_layout Chunk
 
-	function(value=NULL) {
+	function(value = NULL) {
 \end_layout
 
 \begin_layout Chunk
@@ -2758,6 +2774,7 @@ make_container <- function(n) {
 
 \begin_layout Chunk
 
+nboot <- 100
 \end_layout
 
 \begin_layout Chunk
@@ -2777,7 +2794,12 @@ for (i in 1:nboot)
 
 \begin_layout Chunk
 
-	bootmeans(mean(sample(data, length(data), replace=TRUE)))
+	bootmeans(mean(sample(data, length(data),
+\end_layout
+
+\begin_layout Chunk
+
+      replace=TRUE)))
 \end_layout
 
 \begin_layout Chunk
@@ -2796,7 +2818,6 @@ bootmeans()
 @
 \end_layout
 
-\end_deeper
 \begin_layout Itemize
 A related approach is to wrap data with a function using 
 \emph on
@@ -2817,7 +2838,6 @@ This approach appeared in Problem Set 2.
 
 \end_layout
 
-\begin_deeper
 \begin_layout Chunk
 
 <<chunk16>>=
@@ -2863,7 +2883,15 @@ object.size(myFun2)
 @
 \end_layout
 
-\end_deeper
+\begin_layout Standard
+
+\series bold
+Question
+\series default
+: When would it be useful to have an object carried along with a function
+ as done here?
+\end_layout
+
 \begin_layout Subsection
 Operators
 \end_layout
@@ -3480,6 +3508,11 @@ args <- formals(f4)
 
 \begin_layout Chunk
 
+args
+\end_layout
+
+\begin_layout Chunk
+
 class(args)
 \end_layout
 
@@ -3531,7 +3564,7 @@ promise
 
 \begin_layout Chunk
 
-f <- function(a, b=c) {
+f <- function(a, b = c) {
 \end_layout
 
 \begin_layout Chunk
@@ -3560,7 +3593,7 @@ f(7)
 \end_layout
 
 \begin_layout Standard
-What's strange about this? 
+What's strange about that? 
 \end_layout
 
 \begin_layout Standard
@@ -3602,33 +3635,9 @@ Evaluating memory use
 \end_layout
 
 \begin_layout Standard
-[[[We've seen the use of
-\emph on
- gc()
-\emph default
- to assess total memory use and 
-\emph on
-object.size()
-\emph default
- to see how much memory objects are using.
- The main things to remember when thinking about memory use are (1) numeric
- vectors take 8 bytes per element and (2) to keep track of when large objects
- are created, including in the frames of functions.
-\end_layout
-
-\begin_layout Standard
-Note that 
-\emph on
-rm()
-\emph default
- does not immediately free up memory; it merely disassociates the symbol/name
- pointing to the memory location from that memory, though this should happen
- fairly soon after an object is removed.
- You can call 
-\emph on
-gc()
-\emph default
- to force the garbage collection to occur.]]]
+The main things to remember when thinking about memory use are: (1) numeric
+ vectors take 8 bytes per element and (2) we need to keep track of when
+ large objects are created, including in the frames of functions.
 \end_layout
 
 \begin_layout Subsection
@@ -3760,6 +3769,11 @@ x <- rnorm(1e8) # should use about 800 Mb
 
 \begin_layout Chunk
 
+object.size(x)
+\end_layout
+
+\begin_layout Chunk
+
 gc()
 \end_layout
 
@@ -3796,11 +3810,7 @@ object.size()
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-The demo code file has a function, 
+Here is a useful function, 
 \emph on
 ls.sizes()
 \emph default
@@ -3812,8 +3822,90 @@ object.size()
 \begin_inset Formula $n$
 \end_inset
 
- objects in a given environment.
+ objects in a given environment:
 \end_layout
+
+\begin_layout Chunk
+
+<<chunk, ls.sizes>>=
+\end_layout
+
+\begin_layout Chunk
+ls.sizes <- function(howMany = 10, minSize = 1){
+\end_layout
+
+\begin_layout Chunk
+	pf <- parent.frame()
+\end_layout
+
+\begin_layout Chunk
+	obj <- ls(pf) # or ls(sys.frame(-1)) 
+\end_layout
+
+\begin_layout Chunk
+	objSizes <- sapply(obj, function(x) {
+\end_layout
+
+\begin_layout Chunk
+	object.size(get(x, pf))})
+\end_layout
+
+\begin_layout Chunk
+	# or sys.frame(-4) to get out of FUN, lapply(), sapply() and sizes()
+\end_layout
+
+\begin_layout Chunk
+	objNames <- names(objSizes)
+\end_layout
+
+\begin_layout Chunk
+	howmany <- min(howMany, length(objSizes))
+\end_layout
+
+\begin_layout Chunk
+	ord <- order(objSizes, decreasing = TRUE)
+\end_layout
+
+\begin_layout Chunk
+	objSizes <- objSizes[ord][1:howMany]
+\end_layout
+
+\begin_layout Chunk
+	objSizes <- objSizes[objSizes > minSize]
+\end_layout
+
+\begin_layout Chunk
+	objSizes <- matrix(objSizes, ncol = 1)
+\end_layout
+
+\begin_layout Chunk
+	rownames(objSizes) <- objNames[ord][1:length(objSizes)]
+\end_layout
+
+\begin_layout Chunk
+	colnames(objSizes) <- "bytes"
+\end_layout
+
+\begin_layout Chunk
+	cat('object')
+\end_layout
+
+\begin_layout Chunk
+	print(format(objSizes, justify = "right", width = 11), quote = FALSE)
+\end_layout
+
+\begin_layout Chunk
+}
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
 
 \begin_layout Plain Layout
 [not needed for Fall2012 as it was a PS2 problem]
@@ -3856,16 +3948,19 @@ Error: vector memory exhausted (limit reached?)
 \end_inset
 
 .
- So this approach may be a nice way to avoid paging by setting the maximum
- in relation to the physical memory of the machine.
+ So this approach may be a nice way to avoid paging/swapping by setting
+ the maximum in relation to the physical memory of the machine.
  It might also help in debugging memory leaks because the program would
  fail at the point that memory use was increasing.
  I haven't played around with this much, so offer this with a note of caution.
 \end_layout
 
 \begin_layout Standard
-We can use an internal function called inspect() to see where in memory
- an object is stored.
+We can use an internal function called 
+\emph on
+inspect()
+\emph default
+ to see where in memory an object is stored.
  We'll see that this can be a handy tool for seeing where copies are made
  and where they are not.
 \end_layout
@@ -3896,9 +3991,9 @@ Hidden uses of memory
 
 \begin_layout Itemize
 Replacement functions can hide the use of additional memory.
+ How much memory is used here?
 \end_layout
 
-\begin_deeper
 \begin_layout Chunk
 
 <<chunk32, eval=FALSE>>=
@@ -3934,20 +4029,14 @@ gc()
 @
 \end_layout
 
-\end_deeper
-\begin_layout Standard
-How much memory was used?
-\end_layout
-
 \begin_layout Itemize
 Not all replacement functions actually involve creating a new object and
  replacing the original object.
 \end_layout
 
-\begin_deeper
 \begin_layout Chunk
 
-<<chunk33, eval=FALSE>>=
+<<chunk33, eval=TRUE>>=
 \end_layout
 
 \begin_layout Chunk
@@ -3984,12 +4073,10 @@ gc()
 
 \end_layout
 
-\end_deeper
 \begin_layout Itemize
 Indexing large subsets can involve a lot of memory use.
 \end_layout
 
-\begin_deeper
 \begin_layout Chunk
 
 <<chunk34, eval=FALSE>>=
@@ -4020,7 +4107,6 @@ gc()
 @
 \end_layout
 
-\end_deeper
 \begin_layout Standard
 Why was more memory used than just for 
 \emph on
@@ -4030,9 +4116,13 @@ x
 \emph on
 y
 \emph default
-? Note that this is a limitation of R, which relates to it being a scripting
- language.
- Note that R could be designed to avoid this problem.
+? Note that this is a limitation of R.
+ Note that R could be designed to avoid this problem (see our discussion
+ of 
+\emph on
+pqR
+\emph default
+ earlier in this Unit).
 \end_layout
 
 \begin_layout Subsection
@@ -4194,10 +4284,14 @@ f(as.integer(x))
 \end_layout
 
 \begin_layout Standard
-Here we'll see that C calls do involve a copy, even though it looks like
+Next we'll see that C calls do involve a copy, even though it looks like
  we are just using the same object allocated by R.
- We'll use the inline package to work directly with C code in R and the
- .C functionality for interfacing with C.
+ We'll use the 
+\emph on
+inline
+\emph default
+ package to work directly with C code in R and the .C functionality for interfaci
+ng with C.
 \end_layout
 
 \begin_layout Chunk
@@ -4247,7 +4341,17 @@ sillyExp <- cfunction(signature(n = "integer", x = "numeric"),
 
 \begin_layout Chunk
 
-len <- as.integer(100)
+# sillyExp <- cfunction(signature(n = "integer", x = "numeric"),
+\end_layout
+
+\begin_layout Chunk
+
+#    src, convenctin = ".C")
+\end_layout
+
+\begin_layout Chunk
+
+len <- as.integer(100)  # or 100L
 \end_layout
 
 \begin_layout Chunk
@@ -4281,7 +4385,7 @@ out1 <- sillyExp(n = len, x = vals)
 \end_layout
 
 \begin_layout Subsection
-Lazy evaluation, delayed copying (copy-on-change) and memory use
+Delayed copying (copy-on-change) 
 \begin_inset CommandInset label
 LatexCommand label
 name "sub:Lazy-evaluation,-delayed"
@@ -4292,20 +4396,32 @@ name "sub:Lazy-evaluation,-delayed"
 \end_layout
 
 \begin_layout Standard
-Now let's consider how lazy evaluation affects memory use.
- We'll also see that something like lazy evaluation occurs outside of functions
- as well with some functionality called delayed copying or copy-on-change.
+Next we'll see that something like lazy evaluation occurs outside of functions
+ as well with some functionality called 
+\emph on
+delayed copying
+\emph default
+ or 
+\emph on
+copy-on-change
+\emph default
+.
 \end_layout
 
 \begin_layout Standard
 Let's see what goes on within a function in terms of memory use in different
  situations.
- 
+ Ignore the 
+\emph on
+gc()
+\emph default
+ results in the pdf, as we'll start R fresh to get a clean view of memory
+ use during the class demo.
 \end_layout
 
 \begin_layout Chunk
 
-<<chunk36, eval=FALSE>>=
+<<chunk36, eval=TRUE>>=
 \end_layout
 
 \begin_layout Chunk
@@ -4315,22 +4431,22 @@ f <- function(x){
 
 \begin_layout Chunk
 
-print(gc())
+	print(gc())
 \end_layout
 
 \begin_layout Chunk
 
-z <- x[1]
+	z <- x[1]
 \end_layout
 
 \begin_layout Chunk
 
-.Internal(inspect(x))
+	.Internal(inspect(x))
 \end_layout
 
 \begin_layout Chunk
 
-return(x)
+	return(x)
 \end_layout
 
 \begin_layout Chunk
@@ -4378,7 +4494,7 @@ In fact, this occurs outside function calls as well.
 
 \begin_layout Chunk
 
-<<chunk37, eval=FALSE>>=
+<<chunk37, eval=TRUE>>=
 \end_layout
 
 \begin_layout Chunk
@@ -4469,6 +4585,8 @@ y[1] <- 5
 \begin_layout Standard
 As discussed by Radford Neal, who is working to improve the efficiency of
  R in a project called pqR, 
+\emph on
+
 \begin_inset Quotes eld
 \end_inset
 
@@ -4479,6 +4597,8 @@ So R doesn’t copy all the time.
  Unfortunately, however, this scheme works rather poorly.
  Many unnecessary copies are still made, while many bugs have arisen in
  which copies aren’t made when necessary.
+\emph default
+
 \begin_inset Quotes erd
 \end_inset
 
@@ -4508,32 +4628,37 @@ X in frist case points to Y
 
 \begin_layout Chunk
 
-f <- function (X) sum(X^2)
+rm(x, y)
 \end_layout
 
 \begin_layout Chunk
 
-Y <- matrix(1.1,100,100)
+f <- function(x) sum(x^2)
 \end_layout
 
 \begin_layout Chunk
 
-f(Y)
+y <- rnorm(10)
 \end_layout
 
 \begin_layout Chunk
 
-.Internal(inspect(Y))
+f(y)
 \end_layout
 
 \begin_layout Chunk
 
-Y[1,1] <- 2
+.Internal(inspect(y))
 \end_layout
 
 \begin_layout Chunk
 
-.Internal(inspect(Y))
+y[3] <- 2
+\end_layout
+
+\begin_layout Chunk
+
+.Internal(inspect(y))
 \end_layout
 
 \begin_layout Chunk
@@ -4702,10 +4827,6 @@ y[2] <- 4
 \end_layout
 
 \begin_layout Standard
-[[Ok to do eval=TREU here?]]
-\end_layout
-
-\begin_layout Standard
 
 \series bold
 Challenge
@@ -4764,7 +4885,12 @@ How about here? What is going on?
 
 \begin_layout Chunk
 
-x <- c(NA, x) 
+x <- rnorm(1e7)
+\end_layout
+
+\begin_layout Chunk
+
+x[1] <- NA
 \end_layout
 
 \begin_layout Chunk
@@ -4780,6 +4906,11 @@ myfun <- function(y){
 \begin_layout Chunk
 
 }
+\end_layout
+
+\begin_layout Chunk
+
+myfun(x)
 \end_layout
 
 \begin_layout Chunk
@@ -5392,7 +5523,11 @@ summary
 print
 \emph default
  already exist) but for illustration, I wanted to show how we would write
- both the generic and the specific method.
+ both the generic and the specific method, so I'll write a 
+\emph on
+summarize
+\emph default
+ method.
 \end_layout
 
 \begin_layout Chunk
@@ -5738,12 +5873,12 @@ Final thoughts
 \end_layout
 
 \begin_layout Standard
-Recall the 
+Consider the 
 \emph on
 Date
 \emph default
- class we discussed in Unit 4.
- This is an example of an S3 class, with methods such as 
+ class discussed in the R bootcamp.
+ This is another example of an S3 class, with methods such as 
 \emph on
 julian()
 \emph default
@@ -5830,11 +5965,11 @@ prototype
 setClass()
 \emph default
  to set default values for the slots.
- The default constructor (the function is 
+ There is a default constructor (the method is actually called 
 \emph on
 initialize()
 \emph default
-), but you can modify.
+), but you can modify it.
  One can create methods for operators and for replacement functions too.
  For S4 classes, there is a default method invoked when 
 \emph on
@@ -5880,7 +6015,15 @@ setClass("indiv",
 
 \begin_layout Chunk
 
+\end_layout
+
+\begin_layout Chunk
+
 		age = "numeric",
+\end_layout
+
+\begin_layout Chunk
+
 \end_layout
 
 \begin_layout Chunk
