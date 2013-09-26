@@ -2269,10 +2269,6 @@ Have them look at Duncan's random walk example.
 Advanced topics in working with functions
 \end_layout
 
-\begin_layout Standard
-MATERIAL PAST THIS POINT IS STILL IN FLUX AND BEING MODIFIED BY CHRIS (9/24/13)
-\end_layout
-
 \begin_layout Subsection
 Pointers
 \end_layout
@@ -4346,7 +4342,7 @@ sillyExp <- cfunction(signature(n = "integer", x = "numeric"),
 
 \begin_layout Chunk
 
-#    src, convenctin = ".C")
+#    src, convention = ".C")
 \end_layout
 
 \begin_layout Chunk
@@ -6212,7 +6208,7 @@ Here's how we create generic and class-specific methods.
 
 \begin_layout Chunk
 
-setGeneric("voter", function(object, ...) { standardGeneric("voter") })
+setGeneric("isVoter", function(object, ...) { standardGeneric("isVoter") })
 \end_layout
 
 \begin_layout Chunk
@@ -6222,7 +6218,7 @@ setGeneric("voter", function(object, ...) { standardGeneric("voter") })
 
 \begin_layout Chunk
 
-voter.indiv = function(object){
+isVoter.indiv <- function(object){
 \end_layout
 
 \begin_layout Chunk
@@ -6251,12 +6247,12 @@ n")
 
 \begin_layout Chunk
 
-setMethod(voter, signature = c("indiv"), definition = voter.indiv)
+setMethod(isVoter, signature = c("indiv"), definition = isVoter.indiv)
 \end_layout
 
 \begin_layout Chunk
 
-voter(me)
+isVoter(me)
 \end_layout
 
 \begin_layout Chunk
@@ -6353,6 +6349,10 @@ setClass("BerkeleyIndiv",
 
 \begin_layout Chunk
 
+\end_layout
+
+\begin_layout Chunk
+
 	contains = "indiv"
 \end_layout
 
@@ -6363,13 +6363,17 @@ setClass("BerkeleyIndiv",
 
 \begin_layout Chunk
 
-me <- new("BerkeleyIndiv", name = "Chris", age = 20, birthday = as.Date('91-08-03
-'), CalID = "01349542")
+me <- new("BerkeleyIndiv", name = "Chris", age = 20, 
 \end_layout
 
 \begin_layout Chunk
 
-voter(me)
+   birthday = as.Date('91-08-03'), CalID = "01349542")
+\end_layout
+
+\begin_layout Chunk
+
+isVoter(me)
 \end_layout
 
 \begin_layout Chunk
@@ -6473,7 +6477,7 @@ named lifeform
 \end_layout
 
 \begin_layout Subsection
-Reference Classes
+Reference classes
 \end_layout
 
 \begin_layout Standard
@@ -6508,37 +6512,41 @@ tsSimClass <- setRefClass("tsSimClass",
 
 \begin_layout Chunk
 
-		n = "numeric", 
+		   n = "numeric", 
 \end_layout
 
 \begin_layout Chunk
 
-		times = "numeric",
+		   times = "numeric",
 \end_layout
 
 \begin_layout Chunk
 
-		corMat = "matrix",
+		   corMat = "matrix",
 \end_layout
 
 \begin_layout Chunk
 
-		lagMat = "matrix",
+		   lagMat = "matrix",
 \end_layout
 
 \begin_layout Chunk
 
-		corParam = "numeric",
+		   corParam = "numeric",
 \end_layout
 
 \begin_layout Chunk
 
-		U = "matrix",
+		   U = "matrix",
 \end_layout
 
 \begin_layout Chunk
 
-		currentU = "logical"),
+		   currentU = "logical"),
+\end_layout
+
+\begin_layout Chunk
+
 \end_layout
 
 \begin_layout Chunk
@@ -6553,47 +6561,52 @@ tsSimClass <- setRefClass("tsSimClass",
 
 \begin_layout Chunk
 
-			# we seem to need default values for the copy() method to function properly
+			   # we seem to need default values for the copy() method to function
+ properly
 \end_layout
 
 \begin_layout Chunk
 
-			require(fields)
+			   require(fields)
 \end_layout
 
 \begin_layout Chunk
 
-			times <<- times # field assignment requires using <<-
+			   times <<- times # field assignment requires using <<-
 \end_layout
 
 \begin_layout Chunk
 
-			n <<- length(times)
+			   n <<- length(times)
 \end_layout
 
 \begin_layout Chunk
 
-			corParam <<- corParam
+			   corParam <<- corParam
 \end_layout
 
 \begin_layout Chunk
 
-			currentU <<- FALSE
+			   currentU <<- FALSE
 \end_layout
 
 \begin_layout Chunk
 
-			calcMats()
+			   calcMats()
 \end_layout
 
 \begin_layout Chunk
 
-			callSuper(...) # calls initializer of base class (envRefClass)
+			   callSuper(...) # calls initializer of base class (envRefClass)
 \end_layout
 
 \begin_layout Chunk
 
 		},
+\end_layout
+
+\begin_layout Chunk
+
 \end_layout
 
 \begin_layout Chunk
@@ -6603,44 +6616,48 @@ tsSimClass <- setRefClass("tsSimClass",
 
 \begin_layout Chunk
 
-			# Python-style doc string
+			   # Python-style doc string
 \end_layout
 
 \begin_layout Chunk
 
-			' calculates correlation matrix and Cholesky factor ' 
+			   ' calculates correlation matrix and Cholesky factor ' 
 \end_layout
 
 \begin_layout Chunk
 
-			lagMat <- rdist(times) # local variable
+			   lagMat <- rdist(times) # local variable
 \end_layout
 
 \begin_layout Chunk
 
-			corMat <<- exp(-lagMat / corParam) # field assignment
+			   corMat <<- exp(-lagMat / corParam) # field assignment
 \end_layout
 
 \begin_layout Chunk
 
-			U <<- chol(corMat) # field assignment
+			   U <<- chol(corMat) # field assignment
 \end_layout
 
 \begin_layout Chunk
 
-			cat("Done updating correlation matrix and Cholesky factor
+			   cat("Done updating correlation matrix and Cholesky factor
 \backslash
 n")
 \end_layout
 
 \begin_layout Chunk
 
-			currentU <<- TRUE
+			   currentU <<- TRUE
 \end_layout
 
 \begin_layout Chunk
 
 		},
+\end_layout
+
+\begin_layout Chunk
+
 \end_layout
 
 \begin_layout Chunk
@@ -6650,12 +6667,12 @@ n")
 
 \begin_layout Chunk
 
-			times <<- newTimes
+		   times <<- newTimes
 \end_layout
 
 \begin_layout Chunk
 
-			calcMats()
+		   calcMats()
 \end_layout
 
 \begin_layout Chunk
@@ -6665,12 +6682,16 @@ n")
 
 \begin_layout Chunk
 
+\end_layout
+
+\begin_layout Chunk
+
 		show = function(){ # 'print' method
 \end_layout
 
 \begin_layout Chunk
 
-			cat("Object of class 'tsSimClass' with ", n, " time points.
+		   cat("Object of class 'tsSimClass' with ", n, " time points.
 \backslash
 n", sep = '')
 \end_layout
@@ -6711,27 +6732,31 @@ tsSimClass$methods(list(
 
 \begin_layout Chunk
 
+\end_layout
+
+\begin_layout Chunk
+
 	simulate = function(){
 \end_layout
 
 \begin_layout Chunk
 
-		' simulates random processes from the model ' 
+		  ' simulates random processes from the model ' 
 \end_layout
 
 \begin_layout Chunk
 
-		if(!currentU)
+		   if(!currentU)
 \end_layout
 
 \begin_layout Chunk
 
-			calcMats()
+		  	 calcMats()
 \end_layout
 
 \begin_layout Chunk
 
-		return(crossprod(U, rnorm(n)))
+		   return(crossprod(U, rnorm(n)))
 \end_layout
 
 \begin_layout Chunk
@@ -6952,7 +6977,7 @@ e <- new.env()
 
 \begin_layout Chunk
 
-assign('x', 3, envir = e) # same as e$x = 3
+assign('x', 3, envir = e) # same as e$x <- 3
 \end_layout
 
 \begin_layout Chunk
@@ -7013,8 +7038,8 @@ myWalk <- new.env(); myWalk$pos = 0
 
 \begin_layout Chunk
 
-nextStep <- function(walk) walk$pos = walk$pos + sample(c(-1, 1), size =
- 1)
+nextStep <- function(walk) walk$pos <- walk$pos + sample(c(-1, 1), size
+ = 1)
 \end_layout
 
 \begin_layout Chunk
@@ -7075,6 +7100,14 @@ evalq(pos <- pos + sample(c(-1, 1), 1), envir = myWalk)
 
 \begin_layout Section
 Computing on the language
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+UNDER CONSTRUCTION: This section will be modified before being presented
+ in class.
+ - Chris (9/26/13)
 \end_layout
 
 \begin_layout Subsection
