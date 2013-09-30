@@ -138,6 +138,17 @@ target "http://arxiv.org/abs/1210.0530"
  
 \end_layout
 
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "Gentzkow and Shapiro tutorial for social scientists"
+target "http://faculty.chicagobooth.edu/jesse.shapiro/research/CodeAndData.pdf"
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
 \begin_inset Note Note
 status open
@@ -223,12 +234,10 @@ Don't hard code numbers - use variables (e.g., number of iterations, parameter
 
 \begin_deeper
 \begin_layout Chunk
-
 <<chunk0, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 speedOfLight <- 3e8
 \begin_inset Newline newline
 \end_inset
@@ -237,7 +246,6 @@ nIts <- 1000
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -444,32 +452,26 @@ R (usually helpfully) drops matrix and array dimensions that are extraneous;
 
 \begin_deeper
 \begin_layout Chunk
-
 <<chunk1>>=
 \end_layout
 
 \begin_layout Chunk
-
 mat <- matrix(1:4, 2, 2)[1, ]
 \end_layout
 
 \begin_layout Chunk
-
 dim(mat); print(mat)
 \end_layout
 
 \begin_layout Chunk
-
 colSums(mat)
 \end_layout
 
 \begin_layout Chunk
-
 mat <- matrix(1:4, 2, 2)[1, , drop = FALSE]
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -547,37 +549,30 @@ findGlobals()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk2>>=
 \end_layout
 
 \begin_layout Chunk
-
 options(width = 55)
 \end_layout
 
 \begin_layout Chunk
-
 library(codetools)
 \end_layout
 
 \begin_layout Chunk
-
 findGlobals(lm)[1:25]
 \end_layout
 
 \begin_layout Chunk
-
 f <- function() {y <- 3; print(x + y)}
 \end_layout
 
 \begin_layout Chunk
-
 findGlobals(f)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1642,112 +1637,90 @@ warning()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk3>>=
 \end_layout
 
 \begin_layout Chunk
-
 mysqrt <- function(x) {
 \end_layout
 
 \begin_layout Chunk
-
 	if (is.list(x)) {
 \end_layout
 
 \begin_layout Chunk
-
 		warning("x is a list; converting to a vector")
 \end_layout
 
 \begin_layout Chunk
-
 		x <- unlist(x)
 \end_layout
 
 \begin_layout Chunk
-
 	}
 \end_layout
 
 \begin_layout Chunk
-
 	if (!is.numeric(x)) {
 \end_layout
 
 \begin_layout Chunk
-
 		stop("What is the square root of 'bob'?")
 \end_layout
 
 \begin_layout Chunk
-
 	} else {
 \end_layout
 
 \begin_layout Chunk
-
 		if (any(x < 0)) {
 \end_layout
 
 \begin_layout Chunk
-
 			warning("mysqrt: found negative values; proceeding anyway")
 \end_layout
 
 \begin_layout Chunk
-
 			x[x >= 0] <- (x[x >= 0])^(1/2)
 \end_layout
 
 \begin_layout Chunk
-
 			x[x < 0] <- NaN
 \end_layout
 
 \begin_layout Chunk
-
 			return(x)
 \end_layout
 
 \begin_layout Chunk
-
 		} else return(x^(1/2))
 \end_layout
 
 \begin_layout Chunk
-
 	}
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 mysqrt(c(1, 2, 3))
 \end_layout
 
 \begin_layout Chunk
-
 mysqrt(c(5, -7))
 \end_layout
 
 \begin_layout Chunk
-
 mysqrt(c("asdf", "sdf"))
 \end_layout
 
 \begin_layout Chunk
-
 mysqrt(list(5, 3, "ab"))
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1781,77 +1754,62 @@ tryCatch()
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk4>>=
 \end_layout
 
 \begin_layout Chunk
-
 library(ismev)
 \end_layout
 
 \begin_layout Chunk
-
 library(methods)
 \end_layout
 
 \begin_layout Chunk
-
 n <- 100; nDays <- 365
 \end_layout
 
 \begin_layout Chunk
-
 x <- matrix(rnorm(nDays * n), nr = nDays)
 \end_layout
 
 \begin_layout Chunk
-
 x <- apply(x, 2, max)
 \end_layout
 
 \begin_layout Chunk
-
 x <- cbind(rep(0, 100), x)
 \end_layout
 
 \begin_layout Chunk
-
 params <- matrix(NA, nr = ncol(x), nc = 3)
 \end_layout
 
 \begin_layout Chunk
-
 for(i in 1:ncol(x)){
 \end_layout
 
 \begin_layout Chunk
-
 	fit <- try(gev.fit(x[ ,i], show = FALSE))
 \end_layout
 
 \begin_layout Chunk
-
 	if(!is(fit, "try-error")) 
 \end_layout
 
 \begin_layout Chunk
-
 		params[i, ] = fit$mle
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 params
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
