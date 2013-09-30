@@ -122,47 +122,4 @@ initialize.krigingProblem <- function(problemName = 'myProblem', P = 2, numNodes
 }
 
 
-  iend <- min(istart + problem$subN-1,problem$N)
-  if(is.vector(obj)){
-    if(length(obj) != problem$N){
-      stop('Number of rows of object to be transferred is not equal to size of problem covariance matrix')
-    }
-  }
-  if(!is.vector(obj)){
-    if(nrow(obj) != problem$N){
-      stop('Number of rows of object to be transferred is not equal to size of problem covariance matrix')
-    }
-  }
-  if(is.vector(obj)){
-    nc <- 1
-  } else{
-    nc <- ncol(obj)
-  }
-  #mpi.bcast.cmd(S2 <- mpi.recv.Robj(0, tag))
-  mpi.remote.exec(localPull, envName, objname, tag, ret = FALSE)
-  for(i in 1:problem$P){
-    if(is.vector(obj)){
-      subobj <- as.matrix(obj[istart:iend], nc = 1)
-    } else{
-      subobj <- as.matrix(obj[istart:iend,])
-    }
-    if(breakByRow){
-      for (j in 1:i){
-        dest <- ProcRank(i, j, problem$P)
-        mpi.send.Robj(subobj, dest, tag)  
-      }
-    } else{
-      for(j in i:problem$P){
-        dest <- ProcRank(j, i, problem$P)
-        mpi.send.Robj(subobj, dest, tag)  
-      }
-    }
-    istart <- istart + problem$subN
-    iend <- min(iend + problem$subN, problem$N)
-  }
-#  mpi.remote.exec(localPull,envName,objname,tag,ret = FALSE)
-}
-
-
-
 
