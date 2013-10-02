@@ -860,13 +860,12 @@ evalq(pos <- pos + sample(c(-1, 1), 1), envir = myWalk)
 # 6: Computing on the language
 #################################################
 
-
-# THIS LAST SECTION OF CODE IS UNDER CONSTRUCTION - Chris 9/26/13
+### 6.1 The R interpreter
 
 plot.xy
 print(`%*%`)
 
-
+### 6.2 Parsing code and understanding language objects
 
 obj <- quote(if (x > 1) "orange" else "apple")
 as.list(obj)
@@ -894,6 +893,19 @@ b[[1]]
 class(b[[1]])
 identical(a, b[[1]])
 
+# here's what I did to gather the information for the table in the notes
+obj1 = quote(x)
+obj2 = expression(x <- 3)
+obj3 = quote(f())
+obj4 = quote(if(x < 3) y = 5)
+obj5 = quote(x <- 3)
+class(obj1); typeof(obj1)
+class(obj2); typeof(obj2)
+class(obj3); typeof(obj3)
+class(obj4); typeof(obj4)
+class(obj5); typeof(obj5)
+is.call(obj5)
+is.language(obj1)
 
 
 e0 <- quote(3)
@@ -921,11 +933,12 @@ eval(e2)
 e1mlist <- as.list(e1m)
 e2list <- as.list(e2)
 eval(as.call(e2list)) 
-# here's how to do it if the language object is actually a list
+# here's how to do it if the language object is actually an
+# expression (a set of statements)
 eval(as.expression(e1mlist))
 
 
-
+# delving into the list-like structure of language objects
 e1 = expression(x <- 3) 
 # e1 is one-element list with the element an object of class '<-' 
 print(c(class(e1), typeof(e1)))
@@ -944,7 +957,7 @@ e3 = quote(mean(c(12,13,15)))
 as.list(e3)
 as.list(e3[[2]])
 
-
+### 6.3 Manipulating the parse tree
 
 out <- quote(y <- 3)
 out[[3]] <- 4
@@ -976,12 +989,12 @@ i <- 3
 as.name(paste('x', i, sep=''))
 eval(as.name(paste('x', i, sep='')))
 
-
+### 6.4 Parsing replacement expressions
 
 animals = c('cat', 'dog', 'rat','mouse')
 out1 = quote(animals[4] <- 'rat') 
-out2 = quote(`<-`(animals[4], 'rat')) 
-out3 = quote('[<-'(animals,4,'rat')) 
+out2 = quote(`<-`(animals[4], 'rat'))  # same as out1
+out3 = quote('[<-'(animals,4,'rat'))  # same as out2 when evaluated (see below),
 as.list(out1)
 as.list(out2)
 identical(out1, out2)
@@ -990,6 +1003,14 @@ identical(out1, out3)
 typeof(out1[[2]]) # language
 class(out1[[2]]) # call
 
+# but parse tree is different (so parsing is not completely invertible)
+as.list(out1)
+as.list(out2)
+identical(out1, out2)
+as.list(out3)
+identical(out1, out3)
+typeof(out1[[2]])  # language
+class(out1[[2]])   # call
 
 
 eval(out1)
@@ -999,20 +1020,21 @@ eval(out3)
 animals # both do the same thing
 
 
+# here's another example of a parsed replacement expression 
+x = diag(rep(1, 3))
+obj = quote(diag(x) <- 3)
+as.list(obj)
+class(obj[[2]])
+
+### 6.5 substitute()
 
 identical(quote(z <- x^2), substitute(z <- x^2))
-
-
 
 e <- new.env(); e$x <- 3
 substitute(z <- x^2, e)
 
-
-
 e$z <- 5
 substitute(z <- x^2, e)
-
-
 
 f <- function(obj){
 objName <- deparse(substitute(obj))
@@ -1020,16 +1042,10 @@ print(objName)
 }
 f(y)
 
-
-
 substitute(a + b, list(a = 1, b = quote(x)))
-
-
 
 e1 <- quote(x + y)
 e2 <- substitute(e1, list(x = 3))
-
-
 
 e2 <- substitute(substitute(e, list(x = 3)), list(e = e1))
 substitute(substitute(e, list(x = 3)), list(e = e1)) 
