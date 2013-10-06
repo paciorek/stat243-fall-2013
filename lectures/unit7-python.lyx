@@ -1,0 +1,2378 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage[unicode=true]{hyperref}
+\usepackage{/accounts/gen/vis/paciorek/latex/paciorek-asa,times,graphics}
+\input{/accounts/gen/vis/paciorek/latex/paciorekMacros}
+%\renewcommand{\baselinestretch}{1.5}
+\hypersetup{unicode=true, pdfusetitle,bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true,}
+\end_preamble
+\use_default_options false
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing onehalf
+\use_hyperref false
+\papersize letterpaper
+\use_geometry true
+\use_amsmath 1
+\use_esint 0
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<setup, include=FALSE, cache=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+## I use = but I can replace it with <-; set code/output width to be 68
+\end_layout
+
+\begin_layout Plain Layout
+
+options(replace.assign=TRUE, width=68)
+\end_layout
+
+\begin_layout Plain Layout
+
+opts_chunk$set(engine = 'python')
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+Contrasting Python and R
+\end_layout
+
+\begin_layout Standard
+References: 
+\end_layout
+
+\begin_layout Standard
+Berkeley Python bootcamp (
+\begin_inset CommandInset href
+LatexCommand href
+name "2010 version"
+target "https://sites.google.com/site/pythonbootcamp2010/lectures"
+
+\end_inset
+
+), organized by Josh Bloom
+\end_layout
+
+\begin_layout Section
+Programming concepts
+\end_layout
+
+\begin_layout Standard
+We've covered a lot of topics in R.
+ Part of the purpose was to learn a single language really well.
+ But by learning a language we've also seen a lot of the core concepts that
+ come up in other programming languages.
+ Here are some of the topics that we've discussed:
+\end_layout
+
+\begin_layout Itemize
+variable types 
+\end_layout
+
+\begin_layout Itemize
+passing by reference and by value
+\end_layout
+
+\begin_layout Itemize
+variable scope
+\end_layout
+
+\begin_layout Itemize
+the call stack
+\end_layout
+
+\begin_layout Itemize
+flow control
+\end_layout
+
+\begin_layout Itemize
+object-oriented programming
+\end_layout
+
+\begin_layout Itemize
+matrix storage concepts
+\end_layout
+
+\begin_layout Itemize
+parsing
+\end_layout
+
+\begin_layout Standard
+The goals of this unit are two-fold: (1) give you a basic introduction to
+ Python, which some of you will be using intensively in the Statistics Master's
+ capstone course in the spring and (2) further develop understanding of
+ programming concepts by seeing the concepts we've encountered with R in
+ a different context.
+ 
+\end_layout
+
+\begin_layout Standard
+I will note here that I am by no means a Python expert.
+ I've picked up a bit here and there but am still learning.
+ So, as is always the case, please do contribute your own knowledge in class,
+ on the course Wiki on Github, and on Piazza.
+\end_layout
+
+\begin_layout Standard
+Also a note on the formatting of this document.
+ 
+\emph on
+knitr
+\emph default
+ doesn't do what I want in terms of showing the Python output (or indentation
+ of the original code), so you'll just see the Python syntax here and we'll
+ see the results in class.
+\end_layout
+
+\begin_layout Section
+Introduction to Python
+\end_layout
+
+\begin_layout Standard
+Python is an interpreted language that often serves as a glue to tie together
+ different types of code/operations in a project.
+ It's particularly good at string manipulation and interacting with the
+ operating system.
+ Like R, you can run Python in a variety of ways: interactively from the
+ command line, as a script, as a background job, and using a GUI (the 
+\emph on
+iPython notebook
+\emph default
+).
+ In the demos in class, we'll use the 
+\emph on
+iPython
+\emph default
+ interface, which has nice functionality including tab completion, command
+ recall, and enhanced help information.
+\end_layout
+
+\begin_layout Standard
+Like R, Python is an interpreted language and in some ways the syntax is
+ similar.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+print("Hi there")
+\end_layout
+
+\begin_layout Plain Layout
+
+print(2 + 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+2.1 * 5  # type casting/coercion
+\end_layout
+
+\begin_layout Plain Layout
+
+# indentation matters
+\end_layout
+
+\begin_layout Plain Layout
+
+  2.1 * 5
+\end_layout
+
+\begin_layout Plain Layout
+
+dist = 7
+\end_layout
+
+\begin_layout Plain Layout
+
+dist < 6
+\end_layout
+
+\begin_layout Plain Layout
+
+type(2)
+\end_layout
+
+\begin_layout Plain Layout
+
+type(2.0)
+\end_layout
+
+\begin_layout Plain Layout
+
+type(2*5.0)
+\end_layout
+
+\begin_layout Plain Layout
+
+isinstance(dist, int)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Python is particularly good at string operations.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+intro = "My name is"
+\end_layout
+
+\begin_layout Plain Layout
+
+name = "sam"
+\end_layout
+
+\begin_layout Plain Layout
+
+endLine = ".
+\backslash
+n"
+\end_layout
+
+\begin_layout Plain Layout
+
+intro + name.capitalize() + endLine
+\end_layout
+
+\begin_layout Plain Layout
+
+intro.split(' ')
+\end_layout
+
+\begin_layout Plain Layout
+
+'abcdefghijkl'[0:10:2] # Python indexing starts with 0
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+name.capitalize()
+\emph default
+ business involves object oriented programming, which is more elegant in
+ Python than in R.
+\end_layout
+
+\begin_layout Standard
+We can do flow control in Python in similar fashion to R.
+ Here's an 
+\emph on
+if-else
+\emph default
+ block.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+hi = 7
+\end_layout
+
+\begin_layout Plain Layout
+
+if name == "samuel":
+\end_layout
+
+\begin_layout Plain Layout
+
+    print(intro + name.capitalize() + endLine)
+\end_layout
+
+\begin_layout Plain Layout
+
+elif name == "sam":
+\end_layout
+
+\begin_layout Plain Layout
+
+    print("My nickname is" + name.capitalize() + endLine)
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+    print("My name is something else.
+\backslash
+n")
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And here's a 
+\emph on
+for
+\emph default
+ loop.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+x = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+for i in range(10):
+\end_layout
+
+\begin_layout Plain Layout
+
+    x += i
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# on the command line, we need the blank line above to end the loop
+\end_layout
+
+\begin_layout Plain Layout
+
+print("x is " + str(x))
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph*
+Getting help in Python
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+help(sum)
+\end_layout
+
+\begin_layout Plain Layout
+
+# in ipython, we can do tab completion and 
+\end_layout
+
+\begin_layout Plain Layout
+
+#    we'll see all the methods for a given object
+\end_layout
+
+\begin_layout Plain Layout
+
+str = "my text"
+\end_layout
+
+\begin_layout Plain Layout
+
+# now type "str." and hit tab - you'll see all the 
+\end_layout
+
+\begin_layout Plain Layout
+
+#    various string class methods.
+ Very helpful!
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Packages
+\end_layout
+
+\begin_layout Standard
+Like R, Python has a multitude of add-on packages.
+ For a statistician, some of the most useful are 
+\emph on
+numpy
+\emph default
+ and 
+\emph on
+scipy
+\emph default
+ for scientific computing (linear algebra, optimization, integration, statistica
+l functions, signal processing, etc.),
+\emph on
+ pandas
+\emph default
+ for Python's version of data frames, 
+\emph on
+random
+\emph default
+ for random number stuff, and 
+\emph on
+matplotlib
+\emph default
+ for plotting.
+ There is alse 
+\emph on
+re
+\emph default
+ for regular expressions and 
+\emph on
+string
+\emph default
+ for more string operations.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+import os  # load the os package
+\end_layout
+
+\begin_layout Plain Layout
+
+print(os.environ['HOME']) # use 'environ' function in the package
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np  # import and assign a new name
+\end_layout
+
+\begin_layout Plain Layout
+
+vec = np.random.normal(size = 1000)
+\end_layout
+
+\begin_layout Plain Layout
+
+vec.mean()
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As with help on an object in iPython, we type something like 
+\family typewriter
+numpy.
+
+\family default
+ and hit tab and see the 
+\emph on
+numpy
+\emph default
+ functions.
+\end_layout
+
+\begin_layout Section
+Programming concepts in Python from the R user's perspective
+\end_layout
+
+\begin_layout Subsection
+Variables and indexing
+\end_layout
+
+\begin_layout Standard
+As in R, you do not need to declare variables before using them; i.e., Python
+ is a dynamically typed langauge.
+\end_layout
+
+\begin_layout Standard
+Python's types are different than R's but share some similarities.
+\end_layout
+
+\begin_layout Paragraph
+List (like R lists)
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+data = 7
+\end_layout
+
+\begin_layout Plain Layout
+
+data = 'blue' # no problem!
+\end_layout
+
+\begin_layout Plain Layout
+
+data = [1, True, "same", [5, 7, 'blue']]
+\end_layout
+
+\begin_layout Plain Layout
+
+data[0]
+\end_layout
+
+\begin_layout Plain Layout
+
+data[3][0]
+\end_layout
+
+\begin_layout Plain Layout
+
+origData = data
+\end_layout
+
+\begin_layout Plain Layout
+
+data[2] = [True, False, True]
+\end_layout
+
+\begin_layout Plain Layout
+
+origData.extend(data)
+\end_layout
+
+\begin_layout Plain Layout
+
+data.sort()
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lists are 
+\emph on
+mutable
+\emph default
+, meaning you can change the elements of a list.
+ This is the case for all R objects, but not for all Python types.
+ Lists are objects that have methods (note the 
+\emph on
+extend()
+\emph default
+ method in the example).
+\end_layout
+
+\begin_layout Standard
+An aside on indexing.
+ Indexing in Python is based on 0 as the start of the index.
+ The indexing operators operate bit differently than R.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+data = range(50)
+\end_layout
+
+\begin_layout Plain Layout
+
+data[0:3]
+\end_layout
+
+\begin_layout Plain Layout
+
+data[10:]
+\end_layout
+
+\begin_layout Plain Layout
+
+data[:5]
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Tuple (like R lists, but immutable)
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+data = (12, True, "hi there", [5, 'sam'], (3, 11, 'Yang'))
+\end_layout
+
+\begin_layout Plain Layout
+
+data[0]
+\end_layout
+
+\begin_layout Plain Layout
+
+data[0] = 5
+\end_layout
+
+\begin_layout Plain Layout
+
+data[3][1] = 'sam I am'
+\end_layout
+
+\begin_layout Plain Layout
+
+data[4][1] = -13
+\end_layout
+
+\begin_layout Plain Layout
+
+data
+\end_layout
+
+\begin_layout Plain Layout
+
+type(data)
+\end_layout
+
+\begin_layout Plain Layout
+
+type(data[3])
+\end_layout
+
+\begin_layout Plain Layout
+
+type(data[3][0])
+\end_layout
+
+\begin_layout Plain Layout
+
+type(data[4])
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Dictionary (key-value pairs - like named vectors/environments/lists in R)
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+zoo = {"lion": "Simba", "panda": None, "whale": "Moby", "numAnimals": 3}
+\end_layout
+
+\begin_layout Plain Layout
+
+zoo
+\end_layout
+
+\begin_layout Plain Layout
+
+zoo['lion']
+\end_layout
+
+\begin_layout Plain Layout
+
+zoo['elephants']
+\end_layout
+
+\begin_layout Plain Layout
+
+zoo['elephants'] = ['dumbo', 'mumbo']
+\end_layout
+
+\begin_layout Plain Layout
+
+zoo.keys()
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For numerical work you'll rely heavily on the types in the 
+\emph on
+numpy
+\emph default
+ package, while for data analysis, you'll likely rely heavily on the types
+ in the 
+\emph on
+pandas
+\emph default
+ package.
+\end_layout
+
+\begin_layout Subsection
+Copying in Python
+\end_layout
+
+\begin_layout Standard
+Python copies are actually just references to the original object.
+ To make an actual copy you need to work harder.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+data = [1, 3, 5, 7]
+\end_layout
+
+\begin_layout Plain Layout
+
+myCopy = data
+\end_layout
+
+\begin_layout Plain Layout
+
+data[0] = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+myCopy
+\end_layout
+
+\begin_layout Plain Layout
+
+id(data)
+\end_layout
+
+\begin_layout Plain Layout
+
+id(myCopy)
+\end_layout
+
+\begin_layout Plain Layout
+
+# how to copy?
+\end_layout
+
+\begin_layout Plain Layout
+
+myStaticCopy= list(data)
+\end_layout
+
+\begin_layout Plain Layout
+
+data[0] = Inf
+\end_layout
+
+\begin_layout Plain Layout
+
+myStaticCopy[0]
+\end_layout
+
+\begin_layout Plain Layout
+
+id(myStaticCopy)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Functions in Python
+\end_layout
+
+\begin_layout Standard
+Python functions assign the names of the functions argument to the objects
+ that are passed into the function.
+ Thus we have names that are local to the function.
+ The result is that if you pass in a mutable object and change it you affect
+ the caller (i.e., the variable in where it was called from).
+ However, if you overwrite a variable, that has no effect outside the function,
+ since you're just working with the local variable.
+ So Python acts in some ways like pass-by-value and in some ways like pass-by-re
+ference.
+ Here are some examples.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+def myFun(x, y, z):
+\end_layout
+
+\begin_layout Plain Layout
+
+    ''' This doc string shows how to write help info for a function.
+\end_layout
+
+\begin_layout Plain Layout
+
+    This is my test function.
+\end_layout
+
+\begin_layout Plain Layout
+
+    It helps me understand how Python passes arguments.
+ '''
+\end_layout
+
+\begin_layout Plain Layout
+
+    print id(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+    print id(y)
+\end_layout
+
+\begin_layout Plain Layout
+
+    print id(z)
+\end_layout
+
+\begin_layout Plain Layout
+
+    x[0] = 7
+\end_layout
+
+\begin_layout Plain Layout
+
+    y = 5
+\end_layout
+
+\begin_layout Plain Layout
+
+    z = [3, 5]
+\end_layout
+
+\begin_layout Plain Layout
+
+    print id(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+    print id(y)
+\end_layout
+
+\begin_layout Plain Layout
+
+    print id(z)
+\end_layout
+
+\begin_layout Plain Layout
+
+    return(y)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+x = [0, 7, 5]
+\end_layout
+
+\begin_layout Plain Layout
+
+y = 3
+\end_layout
+
+\begin_layout Plain Layout
+
+z = [0, 1, 2]
+\end_layout
+
+\begin_layout Plain Layout
+
+id(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+id(y)
+\end_layout
+
+\begin_layout Plain Layout
+
+id(z)
+\end_layout
+
+\begin_layout Plain Layout
+
+myFun(x, y, z)
+\end_layout
+
+\begin_layout Plain Layout
+
+x
+\end_layout
+
+\begin_layout Plain Layout
+
+y
+\end_layout
+
+\begin_layout Plain Layout
+
+z
+\end_layout
+
+\begin_layout Plain Layout
+
+help(myFun)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let's see how Python handles scoping.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+a = 3
+\end_layout
+
+\begin_layout Plain Layout
+
+def myFun(x):
+\end_layout
+
+\begin_layout Plain Layout
+
+    return(x*a)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+myFun(7)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+a = 3
+\end_layout
+
+\begin_layout Plain Layout
+
+def myInnerFun(x):
+\end_layout
+
+\begin_layout Plain Layout
+
+    return(x*a)
+\end_layout
+
+\begin_layout Plain Layout
+
+def myFun(x):
+\end_layout
+
+\begin_layout Plain Layout
+
+    a = 7
+\end_layout
+
+\begin_layout Plain Layout
+
+    return(myInnerFun(x))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+myFun(7)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+a = 3
+\end_layout
+
+\begin_layout Plain Layout
+
+def myFun(x):
+\end_layout
+
+\begin_layout Plain Layout
+
+    def myInnerFun(x):
+\end_layout
+
+\begin_layout Plain Layout
+
+        return(x*a)
+\end_layout
+
+\begin_layout Plain Layout
+
+    a = 7
+\end_layout
+
+\begin_layout Plain Layout
+
+    return(myInnerFun(x))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+myFun(7)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Question: So does Python behave like R in terms of scoping, based on these
+ examples?
+\end_layout
+
+\begin_layout Standard
+Python allows arguments to be passed by name or by position, but has some
+ more restrictive rules than R.
+ Named arguments must be specified after positional ones in the function
+ definition.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+def myMult(x, y = 3, z = 5):
+\end_layout
+
+\begin_layout Plain Layout
+
+    return(x*y, z)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+myMult(5)
+\end_layout
+
+\begin_layout Plain Layout
+
+myMult(5, 7)
+\end_layout
+
+\begin_layout Plain Layout
+
+myMult(5, 7, 11)
+\end_layout
+
+\begin_layout Plain Layout
+
+myMult(5, z = 4)
+\end_layout
+
+\begin_layout Plain Layout
+
+myMult(x = 3, z = 5, y = 7)
+\end_layout
+
+\begin_layout Plain Layout
+
+myMult(y = 5, x = 3, 7)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+out1, out2 = myMult(5)
+\end_layout
+
+\begin_layout Plain Layout
+
+out3 = myMult(5)
+\end_layout
+
+\begin_layout Plain Layout
+
+out1
+\end_layout
+
+\begin_layout Plain Layout
+
+out2
+\end_layout
+
+\begin_layout Plain Layout
+
+out3
+\end_layout
+
+\begin_layout Plain Layout
+
+type(out3)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Summary: Python can handle arguments passed by position or by name (key
+ word), but it cannot have arguments passed by position after named arguments.
+ Unlike R, you can return multiple outputs, which is handy (they're actually
+ packed up as a tuple, but as you see in the example, you can unpack it
+ seamlessly).
+\end_layout
+
+\begin_layout Subsection
+Calculations and efficiency
+\end_layout
+
+\begin_layout Standard
+Python has a useful functionality called 
+\emph on
+list comprehension
+\emph default
+, which acts a bit like 
+\emph on
+lapply()
+\emph default
+ in R.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+data = range(100)
+\end_layout
+
+\begin_layout Plain Layout
+
+notDiv2or3 = [num for num in data if (num % 2 != 0) and (num % 3 != 0)]
+\end_layout
+
+\begin_layout Plain Layout
+
+# stealing from Josh Bloom's python bootcamp (Josh is an astronomer)
+\end_layout
+
+\begin_layout Plain Layout
+
+particles = [{"name":" pi +" ,"mass": 139.57018}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name":" pi 0" ,"mass": 134.9766}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name":" eta 5" ,"mass": 47.853}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name":" eta prime (958)","mass": 957.78}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name":" eta c(1S)", "mass": 2980.5}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name": " eta b(1S)","mass": 9388.9}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name":"K+", "mass": 493.677}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name":"K0" ,"mass": 497.614}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name":"K0S" ,"mass": 497.614}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name":"K0L" ,"mass": 497.614}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name":"D+" ,"mass": 1869.62}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name":"qD0" ,"mass": 1864.84}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name":"D+s" ,"mass": 1968.49}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name":"B+" ,"mass": 5279.15}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name":"B0" ,"mass": 5279.5}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name":"B0s" ,"mass": 5366.3}, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   {"name":"B+c" ,"mass": 6277}]
+\end_layout
+
+\begin_layout Plain Layout
+
+type(particles[0])
+\end_layout
+
+\begin_layout Plain Layout
+
+my_mesons = [ (x['name'],x['mass']) 
+\end_layout
+
+\begin_layout Plain Layout
+
+  for x in particles if x['mass'] <= 1000.0 and x['mass'] >= 100.0]
+\end_layout
+
+\begin_layout Plain Layout
+
+type(my_mesons)
+\end_layout
+
+\begin_layout Plain Layout
+
+type(my_mesons[0])
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Standard
+You can do vectorized operations in Python ...
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+data = range(10)
+\end_layout
+
+\begin_layout Plain Layout
+
+data + data
+\end_layout
+
+\begin_layout Plain Layout
+
+data * 3
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+but you need to use data structures from the 
+\emph on
+numPy
+\emph default
+ module.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+import pandas
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+vec1 = np.array([1, 2, 3])
+\end_layout
+
+\begin_layout Plain Layout
+
+vec2 = np.random.normal(size = 3)
+\end_layout
+
+\begin_layout Plain Layout
+
+vec1 + vec2
+\end_layout
+
+\begin_layout Plain Layout
+
+vec1 * 8
+\end_layout
+
+\begin_layout Plain Layout
+
+mymat = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+\end_layout
+
+\begin_layout Plain Layout
+
+mymat.transpose()
+\end_layout
+
+\begin_layout Plain Layout
+
+mymat[0:2, :]
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There is of course a lot more to explore here, as we did for R.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+import timeit
+\end_layout
+
+\begin_layout Plain Layout
+
+expr = '''
+\end_layout
+
+\begin_layout Plain Layout
+
+n = 10000
+\end_layout
+
+\begin_layout Plain Layout
+
+x = [0]
+\end_layout
+
+\begin_layout Plain Layout
+
+for i in range(n):
+\end_layout
+
+\begin_layout Plain Layout
+
+    x = x + [i]
+\end_layout
+
+\begin_layout Plain Layout
+
+'''
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+timeit.timeit(expr, number = 10)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+expr = '''
+\end_layout
+
+\begin_layout Plain Layout
+
+n = 10000
+\end_layout
+
+\begin_layout Plain Layout
+
+x2 = [0]*n
+\end_layout
+
+\begin_layout Plain Layout
+
+for i in range(n):
+\end_layout
+
+\begin_layout Plain Layout
+
+    x2[i] = i
+\end_layout
+
+\begin_layout Plain Layout
+
+'''
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+timeit.timeit(expr, number = 10)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here's a little bit of code that uses pandas for Python's version of a data
+ frame.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+import pandas as pd
+\end_layout
+
+\begin_layout Plain Layout
+
+df = pd.read_table('../data/hivSequ.csv', sep = ',')
+\end_layout
+
+\begin_layout Plain Layout
+
+df.head()
+\end_layout
+
+\begin_layout Plain Layout
+
+df[0:3]
+\end_layout
+
+\begin_layout Plain Layout
+
+df['CD4-t0'][0:20]
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Object-oriented programming
+\end_layout
+
+\begin_layout Standard
+We've already seen that a lot of Python's basic functionality is built around
+ objects and methods, e.g., the lengthening of a list, manipulation of strings,
+ etc.
+\end_layout
+
+\begin_layout Standard
+As we've discussed an object is a structure that groups together variables
+ (aka attributes) and functions (aka methods) that operate on the variables
+ in a tidy unit.
+ The blueprint for an object is a class.
+ Each object is an instance/instantiation/realization of a class.
+\end_layout
+
+\begin_layout Standard
+Let's see how one creates a class and objects in Python.
+\end_layout
+
+\begin_layout Standard
+Here's the generic syntax for a class:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+class ClassName[(BaseClasses)]:  # can inherit from other classes
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    '''[Documentation String]'''
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    [Statement1] # Executed when a new instance is defined
+\end_layout
+
+\begin_layout Plain Layout
+
+    [Statement2]
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+    [Variable1] # 'Global' class variables can be defined here
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    def Method1(self, args, kwargs={}):
+\end_layout
+
+\begin_layout Plain Layout
+
+        # Performs task 1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    def Method2(self, args, kwargs={}):
+\end_layout
+
+\begin_layout Plain Layout
+
+        # Performs task 2
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here's an example of creating a class.
+ The 
+\emph on
+__init__
+\emph default
+ is the constructor function.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+class indiv:
+\end_layout
+
+\begin_layout Plain Layout
+
+    '''The indiv class holds information about people.'''	
+\end_layout
+
+\begin_layout Plain Layout
+
+    print("indiv class is defined.")
+\end_layout
+
+\begin_layout Plain Layout
+
+    def __init__(self, name, age):
+\end_layout
+
+\begin_layout Plain Layout
+
+        self.name = name
+\end_layout
+
+\begin_layout Plain Layout
+
+        self.age = age
+\end_layout
+
+\begin_layout Plain Layout
+
+    def getInfo(self):
+\end_layout
+
+\begin_layout Plain Layout
+
+        print("Object of class 'indiv'.
+ " + self.name + " is " + str(self.age) + " years old.")
+\end_layout
+
+\begin_layout Plain Layout
+
+    def makeOlder(self):
+\end_layout
+
+\begin_layout Plain Layout
+
+        self.age += 1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+pres = indiv("Obama", 50)
+\end_layout
+
+\begin_layout Plain Layout
+
+pres = indiv("Obama")
+\end_layout
+
+\begin_layout Plain Layout
+
+indiv
+\end_layout
+
+\begin_layout Plain Layout
+
+pres
+\end_layout
+
+\begin_layout Plain Layout
+
+pres.age
+\end_layout
+
+\begin_layout Plain Layout
+
+pres.makeOlder()
+\end_layout
+
+\begin_layout Plain Layout
+
+pres.getInfo()
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that 
+\emph on
+self
+\emph default
+ needs to be an argument of every method in the class.
+\end_layout
+
+\begin_layout Standard
+Copying an object is like with a list - you create a new reference but don't
+ actually get a separate copy.
+ To make a complete copy, do
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+import copy
+\end_layout
+
+\begin_layout Plain Layout
+
+newPres = copy.deepcopy(pres)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You can define operators for a class.
+ E.g., if you define a 
+\emph on
+__add__
+\emph default
+ method, that would get used when '+' is called on an object in the class.
+\end_layout
+
+\begin_layout Standard
+Python classes have the ability to hold information about all the objects
+ in the class.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+class indiv:
+\end_layout
+
+\begin_layout Plain Layout
+
+    '''The indiv class holds information about people.'''	
+\end_layout
+
+\begin_layout Plain Layout
+
+    population = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+    print("indiv class is defined.")
+\end_layout
+
+\begin_layout Plain Layout
+
+    def __init__(self, name, age):
+\end_layout
+
+\begin_layout Plain Layout
+
+        self.name = name
+\end_layout
+
+\begin_layout Plain Layout
+
+        self.age = age
+\end_layout
+
+\begin_layout Plain Layout
+
+        indiv.population += 1
+\end_layout
+
+\begin_layout Plain Layout
+
+    def getInfo(self):
+\end_layout
+
+\begin_layout Plain Layout
+
+        print("Object of class 'indiv'.
+ " + self.name + " is " + str(self.age) + " years old.
+ " + self.name + " is one of " + str(indiv.population) + " individuals.")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+pres = indiv("Obama", 50)
+\end_layout
+
+\begin_layout Plain Layout
+
+friend = indiv("Fang", 40)
+\end_layout
+
+\begin_layout Plain Layout
+
+indiv
+\end_layout
+
+\begin_layout Plain Layout
+
+pres
+\end_layout
+
+\begin_layout Plain Layout
+
+pres.getInfo()
+\end_layout
+
+\begin_layout Plain Layout
+
+indiv.getInfo(pres)  # alternative
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+more on pandas, numpy?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
