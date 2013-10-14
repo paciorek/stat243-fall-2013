@@ -228,7 +228,6 @@ Like R, Python is an interpreted language and in some ways the syntax is
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -601,7 +600,6 @@ string
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -684,7 +682,6 @@ List (like R lists)
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -820,7 +817,6 @@ Tuple (like R lists, but immutable)
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -898,7 +894,6 @@ Dictionary (key-value pairs - like named vectors/environments/lists in R)
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -974,7 +969,6 @@ Python copies are actually just references to the original object.
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -1071,7 +1065,6 @@ ference.
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -1229,7 +1222,6 @@ Let's see how Python handles scoping.
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -1375,7 +1367,6 @@ Python allows arguments to be passed by name or by position, but has some
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -1501,7 +1492,6 @@ lapply()
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -1658,7 +1648,6 @@ You can do vectorized operations in Python ...
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -1705,7 +1694,6 @@ numPy
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -1778,7 +1766,6 @@ There is of course a lot more to explore here, as we did for R.
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -1894,7 +1881,6 @@ Here's a little bit of code that uses pandas for Python's version of a data
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -2072,7 +2058,6 @@ __init__
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -2194,13 +2179,55 @@ self
 \end_layout
 
 \begin_layout Standard
+While Python's OOP is more structured than R's S3 classes, you can still
+ do things like the following, adding an attribute on the fly:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+pres.vicePres = Biden
+\end_layout
+
+\begin_layout Plain Layout
+
+pres.vicePres
+\end_layout
+
+\begin_layout Plain Layout
+
+pres.secState
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 Copying an object is like with a list - you create a new reference but don't
  actually get a separate copy.
  To make a complete copy, do
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 
@@ -2248,7 +2275,6 @@ Python classes have the ability to hold information about all the objects
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status open
 

@@ -285,7 +285,10 @@ pres.age
 pres.makeOlder()
 pres.getInfo()
 
-
+# we can add an attribute on the fly
+pres.vicePres = Biden
+pres.vicePres
+pres.secState
 
 import copy
 newPres = copy.deepcopy(pres)
