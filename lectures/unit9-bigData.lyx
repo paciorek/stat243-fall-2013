@@ -108,22 +108,32 @@ Databases and Big Data
 \end_layout
 
 \begin_layout Chunk
+
 <<read-chunk, echo=FALSE, include=FALSE>>= 
 \end_layout
 
 \begin_layout Chunk
+
 read_chunk('unit9-bigData.R') 
 \end_layout
 
 \begin_layout Chunk
+
 library(ff)
 \end_layout
 
 \begin_layout Chunk
+
 library(ffbase)
 \end_layout
 
 \begin_layout Chunk
+
+library(spam)
+\end_layout
+
+\begin_layout Chunk
+
 @
 \end_layout
 
@@ -382,10 +392,12 @@ schema
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk1>>=
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -427,10 +439,12 @@ company in ('IBM', 'Apple', 'Dell')
 \end_layout
 
 \begin_layout Chunk
-<<chunk2>>=
+
+<<chunk2, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -461,10 +475,12 @@ inner join
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk3>>=
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -478,10 +494,12 @@ view
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk4>>=
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -1143,10 +1161,12 @@ read.table.ffdf()
 \end_layout
 
 \begin_layout Chunk
-<<ff, eval=FALSE>>=
+
+<<ff, eval=FALSE, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -1201,10 +1221,12 @@ Next let's do a bit of exploration of the dataset.
 \end_layout
 
 \begin_layout Chunk
+
 <<tableInfo, cache=TRUE, eval=FALSE, fig.width=4>>=
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -1254,11 +1276,6 @@ Fitting models to big datasets: biglm
 \end_layout
 
 \begin_layout Standard
-[test stat features on subsample of data if possible - residuals, linearity,
- etc.]
-\end_layout
-
-\begin_layout Standard
 The 
 \emph on
 biglm
@@ -1281,10 +1298,12 @@ biglm
 \end_layout
 
 \begin_layout Chunk
-<<airline-model, eval=FALSE>>=
+
+<<airline-model, eval=FALSE, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -1494,18 +1513,22 @@ Now let's consider the fact that very small substantive effects can be highly
 \end_layout
 
 \begin_layout Chunk
-<<significance-prep, eval=FALSE>>=
+
+<<significance-prep, eval=FALSE, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
 \begin_layout Chunk
-<<significance-model, eval=FALSE>>=
+
+<<significance-model, eval=FALSE, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -1638,10 +1661,12 @@ R, Matlab and Python all have functionality for storing and computing with
 \end_layout
 
 \begin_layout Chunk
-<<spam>>=
+
+<<spam, cache=TRUE>>=
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -1720,11 +1745,408 @@ There are standard estimators (e.g., from the literature on imputation for
 \end_layout
 
 \begin_layout Section
-Hadoop (map-reduce / split-apply-combine)
+Hadoop and MapReduce
+\end_layout
+
+\begin_layout Subsection
+Overview
 \end_layout
 
 \begin_layout Standard
-UNDER CONSTRUCTION (10/15/13)
+A basic paradigm for working with big datasets is the 
+\emph on
+MapReduce
+\emph default
+ paradigm.
+ The basic idea is to store the data in a distributed fashion across multiple
+ nodes and try to do the computation in pieces on the data on each node.
+ Results can also be stored in a distributed fashion.
+\end_layout
+
+\begin_layout Standard
+The basic steps of 
+\emph on
+MapReduce
+\emph default
+ are as follows:
+\end_layout
+
+\begin_layout Itemize
+read individual data objects (e.g., records/lines from CSVs or individual
+ data files)
+\end_layout
+
+\begin_layout Itemize
+map: create key-value pairs using the inputs (more formally, the map step
+ takes a key-value pair and returns a new key-value pair)
+\end_layout
+
+\begin_layout Itemize
+reduce - for each key, do an operation on the associated values and create
+ a result - i.e., aggregate within the values assigned to each key
+\end_layout
+
+\begin_layout Itemize
+write out the {key,result} pair
+\end_layout
+
+\begin_layout Standard
+A similar paradigm that is being implemented in some R packages by Hadley
+ Wickham is the split-apply-combine strategy (
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.jstatsoft.org/v40/i01/paper"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Hadoop
+\emph default
+ is an infrastructure for enabling MapReduce across a network of machines.
+ The basic idea is to hide the complexity of distributing the calculations
+ and collecting results.
+ Hadoop includes a file system for distributed storage (HDFS), where each
+ piece of information is stored redundantly (on multiple machines).
+ Calculations can then be done in a parallel fashion, often on data in place
+ on each machine thereby limiting the amount of communication that has to
+ be done over the network.
+ Hadoop also monitors completion of tasks and if a node fails, it will redo
+ the relevant tasks on another node.
+ Hadoop is based on Java but there are projects that allow R to interact
+ with Hadoop, in particular 
+\emph on
+RHadoop
+\emph default
+ and 
+\emph on
+RHipe
+\emph default
+.
+ Rhadoop provides the 
+\emph on
+rmr
+\emph default
+, 
+\emph on
+rhdfs
+\emph default
+, and 
+\emph on
+rhbase
+\emph default
+ packages.
+ For more details on RHadoop see Adler and 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://blog.revolutionanalytics.com/2011/09/mapreduce-hadoop-r.html"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Setting up a Hadoop cluster can be tricky.
+ We have a basic test setup on the SCF (
+\begin_inset CommandInset href
+LatexCommand href
+target "statistics.berkeley.edu/computing/hadoop"
+
+\end_inset
+
+), but it's not meant for serious calculations.
+ Hopefully if you're in a position to need to use Hadoop, it will be set
+ up for you and you will be interacting with it as a user/data analyst.
+\end_layout
+
+\begin_layout Subsection
+MapReduce and RHadoop
+\end_layout
+
+\begin_layout Standard
+Let's see some examples of the MapReduce approach using R syntax of the
+ sort one would use with 
+\emph on
+RHadoop
+\emph default
+.
+ While we'll use R syntax in some cases, but the basic idea of what the
+ map and reduce functions are is not specific to R.
+ Note that using Hadoop with R may be rather slower than actually writing
+ Java code for Hadoop.
+\end_layout
+
+\begin_layout Standard
+First, let's consider a basic word-counting example.
+ Suppose we have many, many individual text documents distributed as individual
+ files in the HDFS.
+ Here's pseudo code from Wikipedia.
+ Here in the map function, the input {key,value} pair is the name of a document
+ and the words in the document and the output {key, value} pairs are each
+ word and the value 1.
+ Then the reduce function takes each key (i.e., each word) and counts up the
+ number of ones.
+ The output {key, value} pair from the reduce step is the word and the count
+ for that word.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+function map(String name, String document):
+\end_layout
+
+\begin_layout Plain Layout
+
+// name (key): document name
+\end_layout
+
+\begin_layout Plain Layout
+
+// document (value): document contents
+\end_layout
+
+\begin_layout Plain Layout
+
+   for each word w in document:
+\end_layout
+
+\begin_layout Plain Layout
+
+      return (w, 1) 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+function reduce(String word, Iterator partialCounts):
+\end_layout
+
+\begin_layout Plain Layout
+
+// word (key): a word
+\end_layout
+
+\begin_layout Plain Layout
+
+// partialCounts (values): a list of aggregated partial counts
+\end_layout
+
+\begin_layout Plain Layout
+
+sum = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+for each pc in partialCounts:
+\end_layout
+
+\begin_layout Plain Layout
+
+   sum += pc
+\end_layout
+
+\begin_layout Plain Layout
+
+return (word, sum)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now let's consider an example where we calculate mean and standard deviation
+ for the income of individuals in each state.
+ Assume we have a large collection of CSVs, with each row containing information
+ on an individual.
+ 
+\emph on
+mapreduce()
+\emph default
+ and 
+\emph on
+keyval()
+\emph default
+ are functions in the RHadoop package.
+ I'll assume we've written a separate helper function, 
+\emph on
+my_readline()
+\emph default
+, that manipulates individual lines from the CSVs.
+\end_layout
+
+\begin_layout Chunk
+
+<<mr-example, eval=FALSE, tidy=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+
+library(rmr)
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Chunk
+
+map <- function(k, v) {
+\end_layout
+
+\begin_layout Chunk
+
+   record <- my_readline(v)
+\end_layout
+
+\begin_layout Chunk
+
+   key <- record[['state']]
+\end_layout
+
+\begin_layout Chunk
+
+   value <- record[['income']]
+\end_layout
+
+\begin_layout Chunk
+
+   keyval(key, value)
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Chunk
+
+reduce <- function(k, v){
+\end_layout
+
+\begin_layout Chunk
+
+   keyval(k, c(length(v), mean(v), sd(v)))
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Chunk
+
+incomeResults <- mapreduce(
+\end_layout
+
+\begin_layout Chunk
+
+   input = "incomeData",
+\end_layout
+
+\begin_layout Chunk
+
+   map = mymap,
+\end_layout
+
+\begin_layout Chunk
+
+   reduce = myreduce,
+\end_layout
+
+\begin_layout Chunk
+
+   combine = NULL,
+\end_layout
+
+\begin_layout Chunk
+
+   input.format = 'csv',
+\end_layout
+
+\begin_layout Chunk
+
+   output.format = 'csv')
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Chunk
+
+from.dfs(incomeResults, format = 'csv', structured = TRUE)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+A few additional comments.
+ In our map function, we could exclude values or transform them in some
+ way, including producing multiple records from a single record.
+ And in our reduce function, we can do more complicated analysis.
+ So one can actually do fairly sophisticated things within what may seem
+ like a restrictive paradigm.
+ But we are constrained such that in the map step, each record needs to
+ be treated independently and in the reduce step each key needs to be treated
+ independently.
+ This allows for the parallelization.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+stratified analysis
+\end_layout
+
+\begin_layout Plain Layout
+bag little bootstraps - assign each obs to bootstrap sample or not to any
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body

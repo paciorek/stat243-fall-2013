@@ -130,10 +130,11 @@ head -n 10000 AirlineDataAll.csv > test.csv
 
 ## @knitr ff
 
-library(ff)
-library(ffbase)
+require(ff)
+require(ffbase)
 
-# I put the data file on local disk on the machine I am using (/tmp on arwen)
+# I put the data file on local disk on the machine I am using
+# (/tmp on arwen)
 fileName <- 'test.csv'
 dat <- read.csv.ffdf(file = fileName, header = TRUE,
      colClasses = c('integer', rep('factor', 3),
@@ -144,10 +145,9 @@ dat <- read.csv.ffdf(file = fileName, header = TRUE,
 
 fileName <- 'AirlineDataAll.csv'
 system.time(  dat <- read.csv.ffdf(file = fileName, header = TRUE,
-                     colClasses = c('integer', rep('factor', 3),
-                       rep('integer', 4), 'factor', 'integer', 'factor',
-                       rep('integer', 5), 'factor','factor', rep('integer', 4),
-                       'factor', rep('integer', 6))) )
+    colClasses = c('integer', rep('factor', 3), rep('integer', 4),
+    'factor', 'integer', 'factor', rep('integer', 5), 'factor',
+    'factor', rep('integer', 4), 'factor', rep('integer', 6))) )
 # takes about 40 minutes
 
 system.time(ffsave(dat, file = '/tmp/AirlineDataAll'))
@@ -214,9 +214,8 @@ max.ff(dat$DepDelay, na.rm = TRUE)
 require(ffbase)
 require(biglm)
 
-datUse <- subset(dat, dat$DepDelay < 60*12 &
-   dat$DepDelay > (-30) & !is.na(dat$DepDelay))
-# dat$DepDelay < 60*12 & dat$DepDelay > (-30) & !is.na(dat$DepDelay)
+datUse <- subset(dat, dat$DepDelay < 60*12 & dat$DepDelay > (-30) &
+                 !is.na(dat$DepDelay))
 
 # any concern about my models?
 system.time(mod <- bigglm(DepDelay ~ Year, data = datUse))
@@ -266,8 +265,9 @@ summary(mod)
 # R^2 on a subset (why can it be negative?)
 coefs <- summary(mod)$mat[,1]
 wh <- 1:1000000
-1 - sum((dat$y[wh] - coefs[1] + coefs[2]*dat$x1[wh] + coefs[3]*dat$x2[wh] +
-         coefs[4]*dat$x3[wh])^2) /  sum((dat$y[wh] - mean(dat$y[wh]))^2)
+1 - sum((dat$y[wh] - coefs[1] + coefs[2]*dat$x1[wh] +
+  coefs[3]*dat$x2[wh] + coefs[4]*dat$x3[wh])^2) /
+  sum((dat$y[wh] - mean(dat$y[wh]))^2)
 
 ## @knitr endchunk
 
@@ -277,9 +277,13 @@ wh <- 1:1000000
 
 
 ## @knitr spam
-library(spam)
+require(spam)
 mat = matrix(rnorm(1e8), 1e4)
 mat[mat > (-2)] <- 0
 sMat <- as.spam(mat)
 print(object.size(mat), units = 'Mb')
 print(object.size(sMat), units = 'Mb')
+
+vec <- rnorm(1e4)
+system.time(mat %*% vec)
+system.time(sMat %*% vec)
