@@ -1,5 +1,5 @@
 ############################################################
-### Demo code for Unit 8 of Stat243, "Databases and Big Data"
+### Demo code for Unit 9 of Stat243, "Databases and Big Data"
 ### Chris Paciorek, October 2013
 ############################################################
 
