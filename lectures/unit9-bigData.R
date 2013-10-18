@@ -219,9 +219,12 @@ datUse <- subset(dat, dat$DepDelay < 60*12 & dat$DepDelay > (-30) &
 
 # any concern about my models?
 system.time(mod <- bigglm(DepDelay ~ Year, data = datUse))
+# 834.008   1.044 838.902
+summary(mod)
 
 system.time(mod <- bigglm(DepDelay ~ Year + Month + DayOfWeek, data = dat))
-
+# 1990.676   4.837   1995.974
+summary(mod)
 
 ## @knitr significance-prep
 
