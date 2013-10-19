@@ -1421,10 +1421,6 @@ nCores <- 4
 \end_layout
 
 \begin_layout Chunk
-cl <- makeCluster(nCores) 
-\end_layout
-
-\begin_layout Chunk
 library(fields)
 \end_layout
 

@@ -81,7 +81,6 @@ system.time(
 
 require(parallel)
 nCores <- 4
-cl <- makeCluster(nCores) 
 library(fields)
 ds <- runif(6000000, .1, 10)
 system.time(

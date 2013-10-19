@@ -108,32 +108,26 @@ Databases and Big Data
 \end_layout
 
 \begin_layout Chunk
-
 <<read-chunk, echo=FALSE, include=FALSE>>= 
 \end_layout
 
 \begin_layout Chunk
-
 read_chunk('unit9-bigData.R') 
 \end_layout
 
 \begin_layout Chunk
-
 library(ff)
 \end_layout
 
 \begin_layout Chunk
-
 library(ffbase)
 \end_layout
 
 \begin_layout Chunk
-
 library(spam)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -392,12 +386,10 @@ schema
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk1>>=
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -439,12 +431,10 @@ company in ('IBM', 'Apple', 'Dell')
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk2, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -475,12 +465,10 @@ inner join
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk3>>=
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -494,12 +482,10 @@ view
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk4>>=
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1161,12 +1147,10 @@ read.table.ffdf()
 \end_layout
 
 \begin_layout Chunk
-
 <<ff, eval=FALSE, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1207,6 +1191,20 @@ m, making sure in this case that
 \end_layout
 
 \begin_layout Standard
+Let's look at the ff and ffbase packages to see what functions are available
+ using 
+\family typewriter
+library(help=ff)
+\family default
+.
+ Notice that there is an 
+\emph on
+merge.ff()
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
 Note that a copy of an 
 \emph on
 ff
@@ -1221,12 +1219,10 @@ Next let's do a bit of exploration of the dataset.
 \end_layout
 
 \begin_layout Chunk
-
 <<tableInfo, cache=TRUE, eval=FALSE, fig.width=4>>=
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1298,12 +1294,10 @@ biglm
 \end_layout
 
 \begin_layout Chunk
-
 <<airline-model, eval=FALSE, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1513,22 +1507,18 @@ Now let's consider the fact that very small substantive effects can be highly
 \end_layout
 
 \begin_layout Chunk
-
 <<significance-prep, eval=FALSE, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
 \begin_layout Chunk
-
 <<significance-model, eval=FALSE, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1661,12 +1651,10 @@ R, Matlab and Python all have functionality for storing and computing with
 \end_layout
 
 \begin_layout Chunk
-
 <<spam, cache=TRUE>>=
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2004,12 +1992,10 @@ my_readline()
 \end_layout
 
 \begin_layout Chunk
-
 <<mr-example, eval=FALSE, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 library(rmr)
 \end_layout
 
@@ -2018,32 +2004,26 @@ library(rmr)
 \end_layout
 
 \begin_layout Chunk
-
 map <- function(k, v) {
 \end_layout
 
 \begin_layout Chunk
-
    record <- my_readline(v)
 \end_layout
 
 \begin_layout Chunk
-
    key <- record[['state']]
 \end_layout
 
 \begin_layout Chunk
-
    value <- record[['income']]
 \end_layout
 
 \begin_layout Chunk
-
    keyval(key, value)
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
@@ -2052,17 +2032,14 @@ map <- function(k, v) {
 \end_layout
 
 \begin_layout Chunk
-
 reduce <- function(k, v){
 \end_layout
 
 \begin_layout Chunk
-
    keyval(k, c(length(v), mean(v), sd(v)))
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
@@ -2071,37 +2048,30 @@ reduce <- function(k, v){
 \end_layout
 
 \begin_layout Chunk
-
 incomeResults <- mapreduce(
 \end_layout
 
 \begin_layout Chunk
-
    input = "incomeData",
 \end_layout
 
 \begin_layout Chunk
-
    map = mymap,
 \end_layout
 
 \begin_layout Chunk
-
    reduce = myreduce,
 \end_layout
 
 \begin_layout Chunk
-
    combine = NULL,
 \end_layout
 
 \begin_layout Chunk
-
    input.format = 'csv',
 \end_layout
 
 \begin_layout Chunk
-
    output.format = 'csv')
 \end_layout
 
@@ -2110,12 +2080,10 @@ incomeResults <- mapreduce(
 \end_layout
 
 \begin_layout Chunk
-
 from.dfs(incomeResults, format = 'csv', structured = TRUE)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
