@@ -1,0 +1,240 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{url}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+% \lstset{breaklines=true}
+
+\title{Testing line breaks and other formatting in Sweave}
+
+\begin{document}
+% \SweaveOpts{concordance=TRUE}
+
+<<setup, include=FALSE, cache=FALSE>>=
+## I use = but I can replace it with <-; set code/output width to be 68
+options(replace.assign=TRUE, width=80)
+# render_listings()
+@
+
+<<read-chunk, echo=FALSE>>= 
+require(knitr)
+read_chunk('testRnw.R') 
+@
+
+Compile this document within R as:
+<<howto, eval=FALSE>>=
+library(knitr)
+knit('testRnw.Rnw')
+system('pdflatex testRnw')
+@ 
+
+\section{R}
+
+
+Testing a long string:
+
+<<chunk1>>=
+b = "asdl lkjsdf jklsdf kladfj jksfd alkfd klasdf klad kla lakjsdf aljdkfad kljafda kaljdf afdlkja lkajdfsa lajdfa adlfjaf jkladf afdl"
+@ 
+
+In my test, the line overflowed the page.
+
+A work-around for long strings:
+
+<<chunk1a>>=
+b = "asdl lkjsdf jklsdf kladfj jksfd alkfd klasdf klad kla lakjsdf "
+tmp = "aljdkfad kljafda kaljdf afdlkja lkajdfsa lajdfa adlfjaf jkladf afdl"
+b = paste0(b, tmp)
+@ 
+
+Testing long comments:
+
+<<chunk1b>>=
+# asdl lkjsdf jklsdf kladfj jksfd alkfd klasdf klad kla lakjsdf aljdkfad kljafda kaljdf afdlkja lkajdfsa lajdfa adlfjaf jkladf afdl"
+@ 
+
+That worked.
+
+Testing whether blank lines are preserved in the R code:
+
+<<chunk1c>>=
+tmp1 = 7
+# there should be a blank line after this
+
+tmp3 = 9
+tmp4 = 11
+# a work around if you can't insert a blank line easily
+# is just to put an empty comment line instead
+# there should be two lines with just comment characters next:
+#
+#
+# that creates some space, but in my Sweave+knitr test, it removed one of the fake blank lines
+# while in RStudio, it kept both lines.
+@ 
+
+<<chunk1d, tidy=FALSE>>=
+tmp1 = 7
+# there should be a blank line after this
+
+tmp3 = 9
+tmp4 = 11
+# there should be two 'blank' lines next
+#
+#
+# now both lines are 'blank' when I use tidy=FALSE 
+@ 
+
+Testing long code lines:
+
+<<chunk2>>=
+vecLongName = rnorm(100)
+a = length(mean(5 * vecLongName + vecLongName - exp(vecLongName) + vecLongName, na.rm = TRUE))
+a = length(mean(5 * vecLongName + vecLongName)) # this is a comment that goes over the line by a good long ways
+a = length(mean(5 * vecLongName + vecLongName - exp(vecLongName) + vecLongName, na.rm = TRUE)) # this is a comment that goes over the line by a good long ways long long long long long long long
+@ 
+
+In my Sweave+knitr test, the code line was broken at a reasonable place, but the lines with comments and code ran over the page.
+In RStudio, the code line was not broken and ran over the page.
+
+Instead, breaking a code line manually with tidy=FALSE works:
+
+<<chunk2a, tidy=FALSE>>=
+vecLongName = rnorm(100)
+a = length(mean(5 * vecLongName + vecLongName
+  - exp(vecLongName) + vecLongName, na.rm = TRUE))
+a = length(mean(5 * vecLongName + vecLongName - exp(vecLongName) + vecLongName +
+  exp(vecLongName), na.rm = TRUE)) # this is a comment that goes over the 
+  # line by a good long ways long long long long long long long
+
+@
+
+
+
+Testing long output:
+
+<<chunk3>>=
+print(b)
+cat(b, fill=TRUE, width =50)
+cat(b, fill = 50)
+
+# a kludgey work-around
+printShort <- function(str, width = 80) {
+  con <- textConnection(str)
+  tmp <- read.fwf(con, rep(width, ceiling(nchar(str)/width)))
+  tmp <- as.matrix(tmp)
+  dimnames(tmp) = NULL
+  tmp[1, ]
+}
+printShort(b)
+
+rnorm(100)
+@ 
+
+In my test, long strings run off the page, but numerical output does not.
+
+
+Testing whether there are extra lines inserted when a chunk is indented in an enumerate/list and not read in from a .R file:
+
+\begin{enumerate}
+  
+\item An item
+    
+  <<chunk4>>=
+  a = 5
+  b = 7  
+  c = 9
+  @
+    
+\item Second item
+  
+\end{enumerate}  
+  
+That works fine in straight Sweave+knitr, but when I did it within Lyx, extra blank lines were inserted between all code lines when the chunk was within an enumeration. RStudio had trouble with the chunks.
+
+Having the chunk get its code from an R file (in Sweave+knitr or Lyx+knitr) worked fine though:
+
+\begin{enumerate}
+  
+\item An item
+    
+  <<chunk5>>=
+  @
+    
+\item Second item
+ 
+
+\end{enumerate}
+
+\subsection*{Using the Latex listings package}
+
+
+A note on listings. If we have the \begin{verbatim} \lstset \end{verbatim} command in the preamble uncommented and we put \begin{verbatim} render_listings() \end{verbatim} in the setup chunk, then long text strings will break appropriately. However I'm not a big fan of the colors and fonts and assignments get converted to arrows that one cannot cut and paste into R. But as Matt points out on Piazza you can monkey with the fonts in the Sweavel.sty file that is created after you knit the document for the first time.  This link includes a list of some of the settings that you can change: \url{http://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings#Using_the_listings_package}.
+
+
+\section{bash}
+
+Now in bash, we have similar problems with line endings but bash allows us to use a backslash to break lines of code. The one thing that doesn't help us with is long lines of output. Also, we need to break long comments ourselves. And note that all results are printed at the end of a code chunk instead of interspersed immediately after the command generating the output.
+
+<<bash1, engine='bash'>>=
+echo "my long line blah blah blah blah more blah more blah more blah blah blah blash blah blah blah of stuff" > tmp.txt
+  
+echo "contents of tmp.txt blah blah blah blah \
+more blah more blah more blah \
+blah blah blash blah blah blah \
+more more more more more more \
+more more more more" > tmp.txt
+
+echo "my long line"\
+> tmp2.txt
+
+cat tmp.txt
+
+# the following long comment line is not broken in my test:
+# asdl lkjsdf jklsdf kladfj jksfd alkfd klasdf klad kla lakjsdf aljdkfad kljafda kaljdf afdlkja lkajdfsa lajdfa adlfjaf jkladf afdl
+
+# instead manually break it:
+# asdl lkjsdf jklsdf kladfj jksfd alkfd klasdf klad kla 
+# lakjsdf aljdkfad kljafda kaljdf afdlkja lkajdfsa lajdfa 
+# adlfjaf jkladf afdl
+
+@
+
+None of the bash code worked in RStudio.
+
+\section{Python}
+
+In my Sweave+knitr test it only shows Python code evaluation results when you use an explicit print statement. Line breaks are still an issue but manual breaking of long code lines seems to work. As with bash, all output is printed at the end of the chunk.
+
+
+<<py1, engine='python'>>=
+2 + 2
+print(2 + 2)
+type(2.0)
+
+endLine = "."
+name = "sam"
+if name == 'samuel':
+  print(intro + name.capitalize() + endLine)
+elif name == "sam":
+  print("My nickname is " + name.capitalize() + endLine)
+else:
+  print("My name is something else.\n")
+
+# this overflows the page
+b = "asdl lkjsdf jklsdf kladfj jksfd alkfd klasdf klad kla lakjsdf aljdkfad kljafda kaljdf afdlkja lkajdfsa lajdfa adlfjaf jkladf afdl"
+print(b)
+
+# this code overflows the page
+zoo = {"lion": "Simba", "panda": None, "whale": "Moby", "numAnimals": 3, "bear": "Yogi", "killer whale": "shamu", "bunny:": "bugs"}
+print(zoo)
+
+# instead manually break the code
+zoo = {"lion": "Simba", "panda": None, "whale": "Moby", 
+       "numAnimals": 3, "bear": "Yogi", "killer whale": "shamu", 
+       "bunny:": "bugs"}
+print(zoo)
+@ 
+
+
+None of the Python code worked in RStudio.
+
+\end{document}
