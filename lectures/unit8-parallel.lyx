@@ -472,43 +472,53 @@ VecLib
 \end_layout
 
 \begin_layout Chunk
+
 <<RlinAlg, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 X <- matrix(rnorm(8000^2), 8000)
 \end_layout
 
 \begin_layout Chunk
+
 system.time({
 \end_layout
 
 \begin_layout Chunk
+
 X <- crossprod(X) # X^t X produces pos.def.
  matrix
 \end_layout
 
 \begin_layout Chunk
+
 U <- chol(x)})  # U^t U = X 
 \end_layout
 
 \begin_layout Chunk
+
 # exit R, execute: "export OMP_NUM_THREADS=1", and restart R
 \end_layout
 
 \begin_layout Chunk
+
 system.time({
 \end_layout
 
 \begin_layout Chunk
+
 X <- crossprod(X)
 \end_layout
 
 \begin_layout Chunk
+
 U <- chol(X)})
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -1028,30 +1038,37 @@ top
 \end_layout
 
 \begin_layout Chunk
+
 <<foreach, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 require(parallel) # one of the core R packages
 \end_layout
 
 \begin_layout Chunk
+
 require(doParallel)
 \end_layout
 
 \begin_layout Chunk
+
 # require(multicore); require(doMC) # alternative to parallel/doParallel
 \end_layout
 
 \begin_layout Chunk
+
 # require(Rmpi); require(doMPI) # when Rmpi is available as the back-end
 \end_layout
 
 \begin_layout Chunk
+
 library(foreach)
 \end_layout
 
 \begin_layout Chunk
+
 library(iterators)
 \end_layout
 
@@ -1060,71 +1077,87 @@ library(iterators)
 \end_layout
 
 \begin_layout Chunk
+
 taskFun <- function(){
 \end_layout
 
 \begin_layout Chunk
+
 	mn <- mean(rnorm(10000000))
 \end_layout
 
 \begin_layout Chunk
+
 	return(mn)
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 nCores <- 4  # set based on the machine to be used
 \end_layout
 
 \begin_layout Chunk
+
 registerDoParallel(nCores) 
 \end_layout
 
 \begin_layout Chunk
+
 # registerDoMC(nCores) # alternative to registerDoParallel
 \end_layout
 
 \begin_layout Chunk
+
 #
 \end_layout
 
 \begin_layout Chunk
+
 # cl <- startMPIcluster(nCores); registerDoMPI(cl) # when using Rmpi as
  the back-end
 \end_layout
 
 \begin_layout Chunk
+
 out <- foreach(i = 1:100, .combine = c) %dopar% {
 \end_layout
 
 \begin_layout Chunk
+
 	cat('Starting ', i, 'th job.
 \backslash
 n', sep = '')
 \end_layout
 
 \begin_layout Chunk
+
 	outSub <- taskFun()
 \end_layout
 
 \begin_layout Chunk
+
 	cat('Finishing ', i, 'th job.
 \backslash
 n', sep = '')
 \end_layout
 
 \begin_layout Chunk
+
 	outSub # this will become part of the out object
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -1269,90 +1302,112 @@ apply()
 \end_layout
 
 \begin_layout Chunk
+
 <<parallelApply, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 require(parallel)
 \end_layout
 
 \begin_layout Chunk
+
 nCores <- 4  
 \end_layout
 
 \begin_layout Chunk
+
 ### using sockets
 \end_layout
 
 \begin_layout Chunk
+
 #
 \end_layout
 
 \begin_layout Chunk
+
 # ?clusterApply
 \end_layout
 
 \begin_layout Chunk
+
 cl <- makeCluster(nCores) # by default this uses sockets
 \end_layout
 
 \begin_layout Chunk
+
 nSims <- 60
 \end_layout
 
 \begin_layout Chunk
+
 testFun <- function(i){
 \end_layout
 
 \begin_layout Chunk
+
 	mn <- mean(rnorm(1000000))
 \end_layout
 
 \begin_layout Chunk
+
 	return(mn)
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 # if the processes need objects (x and y, here) from the master's workspace:
 \end_layout
 
 \begin_layout Chunk
+
 # clusterExport(cl, c('x', 'y')) 
 \end_layout
 
 \begin_layout Chunk
+
 system.time(
 \end_layout
 
 \begin_layout Chunk
+
 	res <- parSapply(cl, 1:nSims, testFun)
 \end_layout
 
 \begin_layout Chunk
+
 )
 \end_layout
 
 \begin_layout Chunk
+
 system.time(
 \end_layout
 
 \begin_layout Chunk
+
 	res2 <- sapply(1:nSims, testFun)
 \end_layout
 
 \begin_layout Chunk
+
 )
 \end_layout
 
 \begin_layout Chunk
+
 myList <- as.list(1:nSims)
 \end_layout
 
 \begin_layout Chunk
+
 res <- parLapply(cl, myList, testFun)
 \end_layout
 
@@ -1361,22 +1416,27 @@ res <- parLapply(cl, myList, testFun)
 \end_layout
 
 \begin_layout Chunk
+
 ### using forking
 \end_layout
 
 \begin_layout Chunk
+
 system.time(
 \end_layout
 
 \begin_layout Chunk
+
 	res <- mclapply(seq_len(nSims), testFun, mc.cores = nCores) 
 \end_layout
 
 \begin_layout Chunk
+
 )
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -1406,53 +1466,83 @@ par{L,S}applyLB()
 
 \begin_layout Standard
 Now let's consider parallel evaluation of a vectorized function.
+ exp() is not a great example, because it's quite fast anyway, so I also
+ show an example with 
+\emph on
+Matern()
+\emph default
+, which calculates correlation as a function of distance (and two additional
+ parameters) in a vectorized fashion.
+ 
 \end_layout
 
 \begin_layout Chunk
+
 <<pvec, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 require(parallel)
 \end_layout
 
 \begin_layout Chunk
+
 nCores <- 4
 \end_layout
 
 \begin_layout Chunk
+
+x <- rnorm(1e7)
+\end_layout
+
+\begin_layout Chunk
+
+expx <- pvec(x, exp, mc.cores = nCores)
+\end_layout
+
+\begin_layout Chunk
+
 library(fields)
 \end_layout
 
 \begin_layout Chunk
+
 ds <- runif(6000000, .1, 10)
 \end_layout
 
 \begin_layout Chunk
+
 system.time(
 \end_layout
 
 \begin_layout Chunk
+
 	corVals <- pvec(ds, Matern, .1, 2, mc.cores = nCores)
 \end_layout
 
 \begin_layout Chunk
+
 )
 \end_layout
 
 \begin_layout Chunk
+
 system.time(
 \end_layout
 
 \begin_layout Chunk
+
 	corVals <- Matern(ds, .1, 2)
 \end_layout
 
 \begin_layout Chunk
+
 )
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -1497,54 +1587,67 @@ parallel
 \end_layout
 
 \begin_layout Chunk
+
 <<mcparallel, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 library(parallel)
 \end_layout
 
 \begin_layout Chunk
+
 n <- 10000000
 \end_layout
 
 \begin_layout Chunk
+
 system.time({
 \end_layout
 
 \begin_layout Chunk
+
 	p <- mcparallel(mean(rnorm(n)))
 \end_layout
 
 \begin_layout Chunk
+
 	q <- mcparallel(mean(rgamma(n, shape = 1)))
 \end_layout
 
 \begin_layout Chunk
+
 	res <- mccollect(list(p,q))
 \end_layout
 
 \begin_layout Chunk
+
 })
 \end_layout
 
 \begin_layout Chunk
+
 system.time({
 \end_layout
 
 \begin_layout Chunk
+
 	p <- mean(rnorm(n))
 \end_layout
 
 \begin_layout Chunk
+
 	q <- mean(rgamma(n, shape = 1))
 \end_layout
 
 \begin_layout Chunk
+
 })
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -1601,116 +1704,142 @@ fork()
 \end_layout
 
 \begin_layout Chunk
+
 <<fork, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 library(fork)
 \end_layout
 
 \begin_layout Chunk
+
 # mode 1 of how to use fork()
 \end_layout
 
 \begin_layout Chunk
+
 pid <- fork(slave = myfun)
 \end_layout
 
 \begin_layout Chunk
+
 # mode 2 of how to use fork()
 \end_layout
 
 \begin_layout Chunk
+
 { # this set of braces is REQUIRED when you don't pass a function 
 \end_layout
 
 \begin_layout Chunk
+
   # to the slave argument of fork()
 \end_layout
 
 \begin_layout Chunk
+
 	pid <- fork(slave = NULL) 
 \end_layout
 
 \begin_layout Chunk
+
 	if(pid==0) {
 \end_layout
 
 \begin_layout Chunk
+
 		cat("Starting child process execution.
 \backslash
 n") 
 \end_layout
 
 \begin_layout Chunk
+
 		tmpChild <- mean(rnorm(10000000))
 \end_layout
 
 \begin_layout Chunk
+
 		cat("Result is ", tmpChild, "
 \backslash
 n", sep = "")
 \end_layout
 
 \begin_layout Chunk
+
 		save(tmpChild, file = 'child.RData') # clunky
 \end_layout
 
 \begin_layout Chunk
+
 		cat("Finishing child process execution.
 \backslash
 n")
 \end_layout
 
 \begin_layout Chunk
+
 		exit() 
 \end_layout
 
 \begin_layout Chunk
+
 	} else {
 \end_layout
 
 \begin_layout Chunk
+
 		cat("Starting parent process execution.
 \backslash
 n")
 \end_layout
 
 \begin_layout Chunk
+
 		tmpParent <- mean(rnorm(10000000))
 \end_layout
 
 \begin_layout Chunk
+
 		cat("Finishing parent process execution.
 \backslash
 n")
 \end_layout
 
 \begin_layout Chunk
+
 		wait(pid)  # wait til child is finished so can read
 \end_layout
 
 \begin_layout Chunk
+
                    # in updated child.RData below
 \end_layout
 
 \begin_layout Chunk
+
 	} 
 \end_layout
 
 \begin_layout Chunk
+
 } 
 \end_layout
 
 \begin_layout Chunk
+
 load('child.RData') # clunky
 \end_layout
 
 \begin_layout Chunk
+
 print(c(tmpParent, tmpChild))
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
