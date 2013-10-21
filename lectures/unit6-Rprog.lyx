@@ -4583,7 +4583,7 @@ fastcount <- function(xvar,yvar) {
 \end_layout
 
 \begin_layout Chunk
-	tabley <- numeric(max(xvar)+1)
+	tabley <- numeric(max(yvar)+1)
 \end_layout
 
 \begin_layout Chunk

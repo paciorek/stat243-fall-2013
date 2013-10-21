@@ -119,8 +119,8 @@ python AirlineFormatter.py
 
 
 # try to determine types and values of fields...
-cut -d',' -f11 | sort | uniq | less
-cut -d',' -f29 | sort | uniq | less
+cut -d',' -f11 AirlineDataAll.csv | sort | uniq | less
+cut -d',' -f29 AirlineDataAll.csv | sort | uniq | less
 
 cp /scratch/users/paciorek/AirlineDataAll.csv /tmp/.
 

@@ -2004,7 +2004,7 @@ library(rmr)
 \end_layout
 
 \begin_layout Chunk
-map <- function(k, v) {
+mymap <- function(k, v) {
 \end_layout
 
 \begin_layout Chunk
@@ -2032,7 +2032,7 @@ map <- function(k, v) {
 \end_layout
 
 \begin_layout Chunk
-reduce <- function(k, v){
+myreduce <- function(k, v){
 \end_layout
 
 \begin_layout Chunk
