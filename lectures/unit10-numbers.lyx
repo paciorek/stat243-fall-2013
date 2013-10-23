@@ -123,17 +123,14 @@ A second note is that the concepts developed here apply outside of R, but
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk_setup, include=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 require(fields)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -220,22 +217,18 @@ We can think about how we'd store an integer in terms of bytes.
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk1>>=
 \end_layout
 
 \begin_layout Chunk
-
 a <- as.integer(3423333)
 \end_layout
 
 \begin_layout Chunk
-
 a * a
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -278,42 +271,34 @@ Let's see how this plays out in terms of memory use in R.
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk2>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- rnorm(100000)
 \end_layout
 
 \begin_layout Chunk
-
 y <- 1:100000
 \end_layout
 
 \begin_layout Chunk
-
 z <- rep('a', 100000)
 \end_layout
 
 \begin_layout Chunk
-
 object.size(x)
 \end_layout
 
 \begin_layout Chunk
-
 object.size(y) # so how many bytes per integer in R?
 \end_layout
 
 \begin_layout Chunk
-
 object.size(z) # any thoughts?
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -389,62 +374,50 @@ on, albeit a very precise approximation.
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk3>>=
 \end_layout
 
 \begin_layout Chunk
-
 0.3 - 0.2 == 0.1
 \end_layout
 
 \begin_layout Chunk
-
 0.3
 \end_layout
 
 \begin_layout Chunk
-
 0.2
 \end_layout
 
 \begin_layout Chunk
-
 0.1 # Hmmm...
 \end_layout
 
 \begin_layout Chunk
-
 options(digits=22)
 \end_layout
 
 \begin_layout Chunk
-
 a <- 0.3
 \end_layout
 
 \begin_layout Chunk
-
 b <- 0.2
 \end_layout
 
 \begin_layout Chunk
-
 a - b 
 \end_layout
 
 \begin_layout Chunk
-
 0.1
 \end_layout
 
 \begin_layout Chunk
-
 1/3
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -471,32 +444,26 @@ Machine epsilon
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk4>>=
 \end_layout
 
 \begin_layout Chunk
-
 1e-16 + 1
 \end_layout
 
 \begin_layout Chunk
-
 1e-15 + 1
 \end_layout
 
 \begin_layout Chunk
-
 2e-16 + 1
 \end_layout
 
 \begin_layout Chunk
-
 .Machine$double.eps
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -661,42 +628,34 @@ First, let's do this on my Linux machine:
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk5>>=
 \end_layout
 
 \begin_layout Chunk
-
 .1
 \end_layout
 
 \begin_layout Chunk
-
 .5
 \end_layout
 
 \begin_layout Chunk
-
 .25
 \end_layout
 
 \begin_layout Chunk
-
 .26
 \end_layout
 
 \begin_layout Chunk
-
 1/32
 \end_layout
 
 \begin_layout Chunk
-
 1/33
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -802,23 +761,19 @@ we can represent 2048 numbers, but this includes zero, and it turns out
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk6>>=
 \end_layout
 
 \begin_layout Chunk
-
 log10(2^1024) # whoops ...
  we've actually just barely overflowed
 \end_layout
 
 \begin_layout Chunk
-
 log10(2^1023)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -847,7 +802,7 @@ We could have been smarter about that calculation:
 .Machine.double.xmin
 \emph default
 .
- Producing something larger of smaller in magnitude than these values is
+ Producing something larger or smaller in magnitude than these values is
  called overflow and underflow respectively.
  When we overflow, R gives back an Inf or -Inf (and in other cases we might
  get an error message).
@@ -877,57 +832,46 @@ Should
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk7, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- 2^45
 \end_layout
 
 \begin_layout Chunk
-
 z <- 25
 \end_layout
 
 \begin_layout Chunk
-
 class(x)
 \end_layout
 
 \begin_layout Chunk
-
 class(z)
 \end_layout
 
 \begin_layout Chunk
-
 as.integer(x)
 \end_layout
 
 \begin_layout Chunk
-
 as.integer(z)
 \end_layout
 
 \begin_layout Chunk
-
 1e308
 \end_layout
 
 \begin_layout Chunk
-
 as.integer(1e308)
 \end_layout
 
 \begin_layout Chunk
-
 1e309
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -991,27 +935,22 @@ L
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk8>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- 3; typeof(x)
 \end_layout
 
 \begin_layout Chunk
-
 x <- as.integer(3); typeof(x)
 \end_layout
 
 \begin_layout Chunk
-
 x <- 3L; typeof(x)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1075,42 +1014,34 @@ nd one, or in terms of base 10, the 16th digit.
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk9, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 options(digits = 22)
 \end_layout
 
 \begin_layout Chunk
-
 .1234123412341234 
 \end_layout
 
 \begin_layout Chunk
-
 1234.1234123412341234 # not accurate to 16 places 
 \end_layout
 
 \begin_layout Chunk
-
 123412341234.123412341234 # only accurate to 4 places 
 \end_layout
 
 \begin_layout Chunk
-
 1234123412341234.123412341234 # no places! 
 \end_layout
 
 \begin_layout Chunk
-
 12341234123412341234 # fewer than no places! 
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1119,47 +1050,42 @@ We can see the implications of this in the context of calculations:
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk10, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 1234567812345678 - 1234567812345677
 \end_layout
 
 \begin_layout Chunk
-
 12345678123456788888 - 12345678123456788887
 \end_layout
 
 \begin_layout Chunk
+12345678123456780000 - 12345678123456770000
+\end_layout
 
+\begin_layout Chunk
 .1234567812345678 - .1234567812345677
 \end_layout
 
 \begin_layout Chunk
-
 .12345678123456788888 - .12345678123456788887
 \end_layout
 
 \begin_layout Chunk
-
 .00001234567812345678 - .00001234567812345677 
 \end_layout
 
 \begin_layout Chunk
-
 # the above is not as close as we'd expect, should be 1e-20
 \end_layout
 
 \begin_layout Chunk
-
 .000012345678123456788888 - .000012345678123456788887
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1260,17 +1186,14 @@ since the next largest number from
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk11>>=
 \end_layout
 
 \begin_layout Chunk
-
 1000000.1
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1281,52 +1204,42 @@ Let's see what arithmetic we can do exactly with integers stored as doubles
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk12>>=
 \end_layout
 
 \begin_layout Chunk
-
 2^52
 \end_layout
 
 \begin_layout Chunk
-
 2^52+1
 \end_layout
 
 \begin_layout Chunk
-
 2^53
 \end_layout
 
 \begin_layout Chunk
-
 2^53+1
 \end_layout
 
 \begin_layout Chunk
-
 2^53+2
 \end_layout
 
 \begin_layout Chunk
-
 2^54
 \end_layout
 
 \begin_layout Chunk
-
 2^54+2
 \end_layout
 
 \begin_layout Chunk
-
 2^54+4
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1359,45 +1272,38 @@ With a bit more work (e.g., using Mathematica), one can demonstrate that doubles
  around 1.
  The numbers R reports are spaced in increments of individual bits in the
  base 2 representation.
+ [Note that compilation from Sweave is messing the
 \end_layout
 
 \begin_layout Chunk
-
-<<chunk12a>>=
+<<chunk12a, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 options(digits = 22)
 \end_layout
 
 \begin_layout Chunk
-
 0.1234567812345678
 \end_layout
 
 \begin_layout Chunk
-
 0.12345678123456781
 \end_layout
 
 \begin_layout Chunk
-
 0.12345678123456782
 \end_layout
 
 \begin_layout Chunk
-
 0.12345678123456783
 \end_layout
 
 \begin_layout Chunk
-
 0.12345678123456784
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1416,48 +1322,39 @@ Rmpfr
 \end_layout
 
 \begin_layout Chunk
-
 <<higher, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 require(Rmpfr)
 \end_layout
 
 \begin_layout Chunk
-
 piLong <- Const("pi", prec = 260) # pi "computed" to correct 260-bit precision
  
 \end_layout
 
 \begin_layout Chunk
-
 piLong # nicely prints 80 digits 
 \end_layout
 
 \begin_layout Chunk
-
 mpfr(".1234567812345678", 40)
 \end_layout
 
 \begin_layout Chunk
-
 mpfr(".1234567812345678", 80)
 \end_layout
 
 \begin_layout Chunk
-
 mpfr(".1234567812345678", 600)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
 \begin_layout Standard
-
 In contrast to R, Python has arbitrary precision integers.
  So, e.g., 
 \family typewriter
@@ -1520,42 +1417,34 @@ c does not obey the associative and distribute laws, i.e.,
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk13>>=
 \end_layout
 
 \begin_layout Chunk
-
 val1 <- 1/10; val2 <- 0.31; val3 <- 0.57
 \end_layout
 
 \begin_layout Chunk
-
 res1 <- val1*val2*val3
 \end_layout
 
 \begin_layout Chunk
-
 res2 <- val3*val2*val1
 \end_layout
 
 \begin_layout Chunk
-
 identical(res1, res2)
 \end_layout
 
 \begin_layout Chunk
-
 res1
 \end_layout
 
 \begin_layout Chunk
-
 res2
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1651,9 +1540,9 @@ a==0
  And be careful of greater than/less than comparisons.
  For example, be careful of 
 \family typewriter
-x[ x < 0 ] <- N
+x[ x < 0 ] <- NA
 \family default
-A if what you are looking for is values that might be 
+ if what you are looking for is values that might be 
 \emph on
 mathematically
 \emph default
@@ -1663,6 +1552,22 @@ numerically
 \emph default
  less than zero.
  
+\end_layout
+
+\begin_layout Chunk
+<<chunk13c>>=
+\end_layout
+
+\begin_layout Chunk
+4 - 3 == 1
+\end_layout
+
+\begin_layout Chunk
+4.1 - 3.1 == 1
+\end_layout
+
+\begin_layout Chunk
+@
 \end_layout
 
 \begin_layout Standard
@@ -1747,17 +1652,14 @@ Subtracting large numbers that are nearly equal (or adding negative and
 
 \begin_deeper
 \begin_layout Chunk
-
 <<chunk14, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 123456781234.56 - 123456781234.00
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1788,27 +1690,22 @@ Here's catastrophic cancellation with small numbers.
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk14a, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 a = .000000000000123412341234 
 \end_layout
 
 \begin_layout Chunk
-
 b = .000000000000123412340000 
 \end_layout
 
 \begin_layout Chunk
-
 a - b
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1842,32 +1739,26 @@ s^{2}=\sum x_{i}^{2}-n\bar{x}^{2}
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk15, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 x <- c(-1, 0, 1) + 1e8
 \end_layout
 
 \begin_layout Chunk
-
 n <- length(x)
 \end_layout
 
 \begin_layout Chunk
-
 sum(x^2)-n*mean(x)^2 # that's not good!
 \end_layout
 
 \begin_layout Chunk
-
 sum((x - mean(x))^2)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1894,17 +1785,14 @@ Adding or subtracting numbers that are very different in magnitude.
 
 \begin_deeper
 \begin_layout Chunk
-
 <<chunk16>>=
 \end_layout
 
 \begin_layout Chunk
-
 123456781234 - 0.000001
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2028,37 +1916,30 @@ mathematically
 \end_layout
 
 \begin_layout Chunk
-
 <<chunk17>>=
 \end_layout
 
 \begin_layout Chunk
-
 require(fields)
 \end_layout
 
 \begin_layout Chunk
-
 xs <- 1:100
 \end_layout
 
 \begin_layout Chunk
-
 dists <- rdist(xs)
 \end_layout
 
 \begin_layout Chunk
-
 corMat <- exp(- (dists/10)^2)
 \end_layout
 
 \begin_layout Chunk
-
 eigen(corMat)$values[80:100]
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
