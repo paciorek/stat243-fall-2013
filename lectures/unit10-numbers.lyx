@@ -596,6 +596,21 @@ hidden bit
 \end_layout
 
 \begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+e represented as d_10 ...
+ d_1...d_0 so 0 thrugh 2047 so e-1023 = -1023 thru 1024 (but why no -1023 in
+ R?)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 
 \series bold
 Question
