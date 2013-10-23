@@ -883,7 +883,8 @@ Trace and determinant of square matrices
 \end_layout
 
 \begin_layout Standard
-For square matrices, 
+The trace of a matrix is the sum of the diagonal elements.
+ For square matrices, 
 \begin_inset Formula $\mbox{tr}(A+B)=\mbox{tr}(A)+\mbox{tr}(B)$
 \end_inset
 
@@ -961,14 +962,10 @@ Other matrix multiplications
 The Hadamard or direct product is simply multiplication of the correspoding
  elements of two matrices by each other.
  In R this is simply
-\end_layout
-
-\begin_layout Standard
-
 \family typewriter
-A * B
+ A * B
 \family default
-
+.
 \begin_inset Newline newline
 \end_inset
 
