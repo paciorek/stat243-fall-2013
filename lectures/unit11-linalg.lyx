@@ -2731,6 +2731,15 @@ th column).
 \end_layout
 
 \begin_layout Standard
+In class, we'll work out the computational complexity of the LU and see
+ that it is 
+\begin_inset Formula $O(n^{3})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
 If we look at 
 \emph on
 solve.default()
@@ -2746,9 +2755,18 @@ dgesv
 \end_layout
 
 \begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
 For a problem set problem, you'll compute the computational order of the
  LU decomposition and compare it to explicitly finding the inverse and multiplyi
 ng the inverse by one or more vectors.
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -3112,11 +3130,27 @@ tion are very stable.
 \end_layout
 
 \begin_layout Chunk
+<<chunk8a, include=FALSE>>=
+\end_layout
+
+\begin_layout Chunk
+require(fields)
+\end_layout
+
+\begin_layout Chunk
+@
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Chunk
 <<chunk8>>=
 \end_layout
 
 \begin_layout Chunk
-library(fields)
+# require(fields)
 \end_layout
 
 \begin_layout Chunk
