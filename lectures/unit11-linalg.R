@@ -53,7 +53,7 @@ e$values
 e$vectors[ , 5]
 # generate a realization
 e$values[1:4] <- 1 / e$values[1:4]
-y <- e$vec %*% (e$values * rnorm(5))
+y <- e$vec %*% (sqrt(e$values) * rnorm(5))
 sum(y)
 
 ###########################

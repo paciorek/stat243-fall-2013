@@ -1185,7 +1185,7 @@ Consider a regression context.
  we have multiple possible solutions and the system is ill-determined (under-det
 ermined).
  Of course we usually have 
-\begin_inset Formula $n>p$
+\begin_inset Formula $n>q$
 \end_inset
 
 , so the system is overdetermined - there is no exact solution, but regression
