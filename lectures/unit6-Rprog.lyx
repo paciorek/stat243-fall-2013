@@ -3497,6 +3497,14 @@ gc() # note the "max used" column
 \end_layout
 
 \begin_layout Standard
+You can reset the value given for max used, with 
+\family typewriter
+gc(reset = TRUE)
+\family default
+.
+\end_layout
+
+\begin_layout Standard
 In Windows only, 
 \emph on
 memory.size()
