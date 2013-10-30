@@ -1,0 +1,269 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{/accounts/gen/vis/paciorek/latex/paciorek-asa,times,graphics}
+\input{/accounts/gen/vis/paciorek/latex/paciorekMacros}
+
+
+%\renewcommand{\baselinestretch}{1.5}
+\end_preamble
+\use_default_options false
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 11
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 0
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Stat243: Final group project, Due Friday Dec.
+ 13, 1 pm
+\end_layout
+
+\begin_layout Standard
+The project will be done in groups of 3-4, with students assigned randomly
+ but balanced between statistics and non-statistics students.
+\end_layout
+
+\begin_layout Standard
+A few comments.
+ First, the project, when split amongst the group members, is not intended
+ to be a huge undertaking.
+ The goals of the project are to give you experience in working collaboratively
+ and developing a well-designed, well-tested piece of software.
+\end_layout
+
+\begin_layout Standard
+The project will be graded as a letter grade and will count for about as
+ much as a problem set in your final grade.
+\end_layout
+
+\begin_layout Section*
+Formatting requirements
+\end_layout
+
+\begin_layout Standard
+Your solution to the problem should have two parts: 
+\end_layout
+
+\begin_layout Enumerate
+The code of your solution, including (a) a primary function that carries
+ out the simulation, (b) function that carries out the formal tests you
+ applied to your function, and (c) auxiliary functions used by the primary
+ function and testing function.
+ All code should be submitted to bSpace as a single text file with comments
+ clearly delineating different pieces of the code.
+\end_layout
+
+\begin_layout Enumerate
+A paper document describing your solution, prepared in LaTeX or R Markdown.
+ The description does not need to be more than a couple pages, but should
+ describe the approach you took in terms of functions/modularity/object-oriented
+ programming, and the testing that you carried out.
+ It must include a paragraph describing the specific contributions of each
+ team member and which person/people were responsible for each component
+ of the work.
+\end_layout
+
+\begin_layout Standard
+For a given subtask of the problem, if you find good code available, you
+ may use it as a modular component of your code provided it does not constitute
+ too large a part of your solution and provided you test the code.
+ Consult me with questions on this matter.
+\end_layout
+
+\begin_layout Standard
+You should use Git to manage your collaboration.
+ You could use Github or another resource online or see statistics.berkeley.edu/co
+mputing/git for how to do this on the SCF.
+\end_layout
+
+\begin_layout Standard
+You should start the process by mapping out the modular components you need
+ to write and how they will fit together, as well as what the primary function
+ will do.
+ After one person writes a component, another person on the team should
+ test it and, with the original coder, improve it.
+ You might also consider an approach called pair programming (see the Wikipedia
+ entry) where two people write code side by side.
+\end_layout
+
+\begin_layout Section*
+Problem
+\end_layout
+
+\begin_layout Standard
+Your task is to implement an adaptive-rejection sampler, described in class
+ in Unit 12 and with details in Gilks et al.
+ (1992) - the PDF is in the project directory on github.
+ I'd suggest you implement the tangent approach rather than the secant approach,
+ but the latter is fine too.
+ Your work should include the following components:
+\end_layout
+
+\begin_layout Enumerate
+Your solution should allow the user to provide reasonable inputs, including
+ the number of points to sample, and should check the inputs for validity.
+ The primary input should be an R function that calculates the (possibly
+ unnormalized) density of the distribution of interest in a vectorized fashion
+ (e.g., many of the 
+\begin_inset Quotes eld
+\end_inset
+
+d
+\begin_inset Quotes erd
+\end_inset
+
+ functions in R, such as 
+\begin_inset Quotes eld
+\end_inset
+
+dnorm
+\begin_inset Quotes erd
+\end_inset
+
+ are legitimate inputs).
+ Your code should include numerical checks that catch cases of non-log-concave
+ densities as the calculations proceed.
+ (I.e., you do not need to come up with an overall test of the input density,
+ but you should be able to do some checks that will catch cases where the
+ upper and lower bounds are not actually bounding the density.)
+\end_layout
+
+\begin_layout Enumerate
+Formal testing is required (see the previous section), with a set of tests
+ where results are compared to some known truth.
+ You should have tests for the overall function, and for any modules that
+ do anything complicated.
+ Given the output is stochastic, how to do this will require some thought.
+ The output of your testing function should be clear and interpretable.
+ I.e., when I run your test function, it should print informative messages
+ of what it is doing and whether the test was passed or failed.
+\end_layout
+
+\begin_layout Enumerate
+Your solution should involve modular code, with functions or OOP methods
+ that implement discrete tasks.
+ You should have an overall design and style that is consistent across the
+ components, in terms of functions vs.
+ OOP methods, naming of objects, etc.
+ 
+\end_layout
+
+\begin_layout Enumerate
+In terms of efficiency, the algorithm is inherently sequential.
+ However, you should try to vectorize as much as possible.
+ One possibility in terms of the overall calculation is that you could generate
+ a vector of samples based on the upper envelope.
+ Then determine where the points that require evaluation of 
+\begin_inset Formula $f(x)$
+\end_inset
+
+.
+ All points up to the first of those points can be generated before changing
+ the envelope, at which point you would throw away the remaining points.
+ How many points you generate at once might vary depending on how far along
+ you are in generating the number of points requested by the user.
+ Or you may think of other tricks.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Your solution should include help/manual information as follows: (a) basic
+ doc strings for any function you create (i.e., include comments at the beginning
+ of the function), as well as commenting of code as appropriate.
+ (b) An overall help page for the primary function.
+ This could be in the form of comments in the R code in the form used in
+ the 
+\emph on
+roxygen2
+\emph default
+ package (see 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://adv-r.had.co.nz/Documenting-functions.html"
+
+\end_inset
+
+ for an example) or simply a PDF (e.g., see the help info on, say, p.
+ 29 of 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.cran.r-project.org/web/packages/spam/spam.pdf"
+
+\end_inset
+
+ for help on the 
+\emph on
+chol()
+\emph default
+ function in the 
+\emph on
+spam
+\emph default
+ package).
+ I'd prefer the first (and that is likely to be easier), but the latter
+ is fine too.
+\end_layout
+
+\end_body
+\end_document
