@@ -859,18 +859,22 @@ In R, recall the syntax is
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk0, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 A + B
 \end_layout
 
 \begin_layout Chunk
+
 A %*% B
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -1636,46 +1640,57 @@ If we look at the eigendecomposition of such matrices, we see that in the
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk1, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 precMat <- matrix(c(1,-1,0,0,0,-1,2,-1,0,0,0,-1,2,-1,
 \end_layout
 
 \begin_layout Chunk
+
     0,0,0,-1,2,-1,0,0,0,-1,1), 5)
 \end_layout
 
 \begin_layout Chunk
+
 e <- eigen(precMat)
 \end_layout
 
 \begin_layout Chunk
+
 e$values
 \end_layout
 
 \begin_layout Chunk
+
 e$vectors[ , 5]
 \end_layout
 
 \begin_layout Chunk
+
 # generate a realization
 \end_layout
 
 \begin_layout Chunk
+
 e$values[1:4] <- 1 / e$values[1:4]
 \end_layout
 
 \begin_layout Chunk
+
 y <- e$vec %*% (e$values * rnorm(5))
 \end_layout
 
 \begin_layout Chunk
+
 sum(y)
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2104,54 +2119,67 @@ The solution of
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk1a>>=
 \end_layout
 
 \begin_layout Chunk
+
 norm2 <- function(x) sqrt(sum(x^2))
 \end_layout
 
 \begin_layout Chunk
+
 A <- matrix(c(10,7,8,7,7,5,6,5,8,6,10,9,7,5,9,10),4)
 \end_layout
 
 \begin_layout Chunk
+
 e <- eigen(A)
 \end_layout
 
 \begin_layout Chunk
+
 b <- c(32, 23, 33, 31)
 \end_layout
 
 \begin_layout Chunk
+
 bPerturb <- c(32.1, 22.9, 33.1, 30.9)
 \end_layout
 
 \begin_layout Chunk
+
 x <- solve(A, b)
 \end_layout
 
 \begin_layout Chunk
+
 xPerturb <- solve(A, bPerturb)
 \end_layout
 
 \begin_layout Chunk
+
 norm2(x - xPerturb)
 \end_layout
 
 \begin_layout Chunk
+
 norm2(b - bPerturb)
 \end_layout
 
 \begin_layout Chunk
+
 norm2(x - xPerturb)/norm2(x)
 \end_layout
 
 \begin_layout Chunk
+
 (e$val[1]/e$val[4])*norm2(b - bPerturb)/norm2(b)
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2323,58 +2351,72 @@ A general comment on improving conditioning is that we want to avoid large
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk2>>=
 \end_layout
 
 \begin_layout Chunk
+
 x1 <- 1990:2010
 \end_layout
 
 \begin_layout Chunk
+
 x2 <- x1 - 2000 # centered
 \end_layout
 
 \begin_layout Chunk
+
 x3 <- x2/10 # centered and scaled
 \end_layout
 
 \begin_layout Chunk
+
 X1 <- cbind(rep(1, 21), x1, x1^2)
 \end_layout
 
 \begin_layout Chunk
+
 X2 <- cbind(rep(1, 21), x2, x2^2)
 \end_layout
 
 \begin_layout Chunk
+
 X3 <- cbind(rep(1, 21), x3, x3^2)
 \end_layout
 
 \begin_layout Chunk
+
 e1 <- eigen(crossprod(X1))
 \end_layout
 
 \begin_layout Chunk
+
 e1$values
 \end_layout
 
 \begin_layout Chunk
+
 e2 <- eigen(crossprod(X2))
 \end_layout
 
 \begin_layout Chunk
+
 e2$values
 \end_layout
 
 \begin_layout Chunk
+
 e3 <- eigen(crossprod(X3))
 \end_layout
 
 \begin_layout Chunk
+
 e3$values
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2537,46 +2579,57 @@ forwardsolve()
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk3>>=
 \end_layout
 
 \begin_layout Chunk
+
 n <- 20
 \end_layout
 
 \begin_layout Chunk
+
 X <- crossprod(matrix(rnorm(n^2), n))
 \end_layout
 
 \begin_layout Chunk
+
 b <- rnorm(n)
 \end_layout
 
 \begin_layout Chunk
+
 U <- chol(crossprod(X)) # U is upper-triangular
 \end_layout
 
 \begin_layout Chunk
+
 L <- t(U) # L is lower-triangular
 \end_layout
 
 \begin_layout Chunk
+
 out1 <- backsolve(U, b) 
 \end_layout
 
 \begin_layout Chunk
+
 out2 <- forwardsolve(L, b) 
 \end_layout
 
 \begin_layout Chunk
+
 all.equal(out1, c(solve(U) %*% b)) 
 \end_layout
 
 \begin_layout Chunk
+
 all.equal(out2, c(solve(L) %*% b)) 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2593,18 +2646,22 @@ We can also solve
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk4, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 backsolve(U, b, transpose = TRUE) 
 \end_layout
 
 \begin_layout Chunk
+
 forwardsolve(L, b, transpose = TRUE)
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2975,22 +3032,26 @@ We can then solve a system of equations as:
 \begin_inset Formula $U^{-1}(U^{\top-1}b)$
 \end_inset
 
-, which in R is done as follows:
+, which in R can be done in either of the following ways:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk5, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 backsolve(U, backsolve(U, b, transpose = TRUE))
 \end_layout
 
 \begin_layout Chunk
+
 backsolve(U, forwardsolve(t(U), b)) # equivalent but less efficient
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3047,18 +3108,22 @@ The standard algorithm for generating
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk6, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 U <- chol(A)
 \end_layout
 
 \begin_layout Chunk
+
 y <- crossprod(U, rnorm(n)) # i.e., t(U)%*%rnorm(n), but much faster
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3117,7 +3182,8 @@ Numerical issues with eigendecompositions and Cholesky decompositions for
 \begin_layout Standard
 Monahan comments that in general Gaussian elimination and the Cholesky decomposi
 tion are very stable.
- However if the matrix is very ill-conditioned we can get 
+ However, in the Cholesky case, if the matrix is very ill-conditioned we
+ can get 
 \begin_inset Formula $A_{ii}-\sum_{k}U_{ki}^{2}$
 \end_inset
 
@@ -3127,17 +3193,21 @@ tion are very stable.
  it exists mathematically.
  It's not all that hard to produce such a matrix, particularly when working
  with high-dimensional covariance matrices with large correlations.
+ 
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk8a, include=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 require(fields)
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3146,50 +3216,62 @@ require(fields)
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk8>>=
 \end_layout
 
 \begin_layout Chunk
+
 # require(fields)
 \end_layout
 
 \begin_layout Chunk
+
 locs <- runif(100)
 \end_layout
 
 \begin_layout Chunk
+
 rho <- .1
 \end_layout
 
 \begin_layout Chunk
+
 C <- exp(-rdist(locs)^2/rho^2)
 \end_layout
 
 \begin_layout Chunk
+
 e <- eigen(C)
 \end_layout
 
 \begin_layout Chunk
+
 e$values[96:100]
 \end_layout
 
 \begin_layout Chunk
+
 U <- chol(C)
 \end_layout
 
 \begin_layout Chunk
+
 vals <- abs(e$values)
 \end_layout
 
 \begin_layout Chunk
+
 max(vals)/min(vals)
 \end_layout
 
 \begin_layout Chunk
+
 U <- chol(C, pivot = TRUE)
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3330,7 +3412,15 @@ A strategy when working with mathematically but not numerically positive
 \end_inset
 
  that are numerically linearly dependent.
- 
+ See the 
+\emph on
+pivot
+\emph default
+ argument to R's 
+\emph on
+chol()
+\emph default
+.
 \end_layout
 
 \begin_layout Subsection
@@ -3628,7 +3718,7 @@ Why use the QR instead of the Cholesky on
 \end_inset
 
 ? The condition number of 
-\begin_inset Formula $A$
+\begin_inset Formula $X$
 \end_inset
 
  is the square root of that of 
@@ -3730,7 +3820,11 @@ qr()
 \begin_inset Formula $X$
 \end_inset
 
-.
+ (the space orthogonal to the column space of 
+\begin_inset Formula $X$
+\end_inset
+
+).
  The analogy in regression is that we get the basis vectors for the regression,
  while adding the remaining columns gives us the full 
 \begin_inset Formula $n$
@@ -3800,22 +3894,27 @@ qr.qty()
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk11>>=
 \end_layout
 
 \begin_layout Chunk
+
 X.qr = qr(X)
 \end_layout
 
 \begin_layout Chunk
+
 Q = qr.Q(X.qr)
 \end_layout
 
 \begin_layout Chunk
+
 R = qr.R(X.qr) 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -4094,7 +4193,7 @@ In the regression context, as we work through the individual transformations,
 
 .
  To find 
-\begin_inset Formula $\mbox{Cov}(\hat{\beta})=(X^{\top}X)^{-1}=(R^{\top}R)^{-1}=R^{-1}R^{-\top}$
+\begin_inset Formula $\mbox{Cov}(\hat{\beta})\propto(X^{\top}X)^{-1}=(R^{\top}R)^{-1}=R^{-1}R^{-\top}$
 \end_inset
 
  we do need to invert 
@@ -4382,7 +4481,7 @@ Another way to think about this is that
 \begin_inset Formula $Q,$
 \end_inset
 
- 
+ since 
 \begin_inset Formula $(Q^{\top}Q)^{-1}Q^{\top}X=Q^{\top}X$
 \end_inset
 
@@ -4408,6 +4507,178 @@ Another way to think about this is that
 \end_inset
 
  being upper triangular makes sense.
+\end_layout
+
+\begin_layout Subsubsection
+The 
+\begin_inset Quotes eld
+\end_inset
+
+tall-skinny
+\begin_inset Quotes erd
+\end_inset
+
+ QR
+\end_layout
+
+\begin_layout Standard
+Suppose you have a very large regression problem, with 
+\begin_inset Formula $n$
+\end_inset
+
+ very large, and 
+\begin_inset Formula $n\gg p$
+\end_inset
+
+.
+ There is a variant of the QR, called the tall-skinny QR (see 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://arxiv.org/pdf/0808.2664v1.pdf"
+
+\end_inset
+
+ for details) that allows us to find the decomposition in a parallel fashion.
+ The basic idea is to do a nested set of QR decompositions on blocks of
+ rows of 
+\begin_inset Formula $X$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+X & = & \left(\begin{array}{c}
+X_{0}\\
+X_{1}\\
+X_{2}\\
+X_{3}
+\end{array}\right)=\left(\begin{array}{c}
+Q_{0}R_{0}\\
+Q_{1}R_{1}\\
+Q_{2}R_{2}\\
+Q_{3}R_{3}
+\end{array}\right),
+\end{eqnarray*}
+
+\end_inset
+
+followed by 'reduction' steps (this can be done in a map-reduce context)
+ that do the 
+\begin_inset Formula $QR$
+\end_inset
+
+ of pairs of the 
+\begin_inset Formula $R$
+\end_inset
+
+ factors:
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+R_{0}\\
+R_{1}\\
+R_{2}\\
+R_{3}
+\end{array}\right)=\left(\begin{array}{c}
+\left(\begin{array}{c}
+R_{0}\\
+R_{1}
+\end{array}\right)\\
+\left(\begin{array}{c}
+R_{2}\\
+R_{3}
+\end{array}\right)
+\end{array}\right)=\left(\begin{array}{c}
+Q_{01}R_{01}\\
+Q_{23}R_{23}
+\end{array}\right)
+\]
+
+\end_inset
+
+and 
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+R_{01}\\
+R_{23}
+\end{array}\right)=Q_{0123}R_{0123}.
+\]
+
+\end_inset
+
+The full decomposition is then 
+\begin_inset Formula 
+\[
+X=\left(\begin{array}{cccc}
+Q_{0} & 0 & 0 & 0\\
+0 & Q_{1} & 0 & 0\\
+0 & 0 & Q_{2} & 0\\
+0 & 0 & 0 & Q_{3}
+\end{array}\right)\left(\begin{array}{cc}
+Q_{01} & 0\\
+0 & Q_{23}
+\end{array}\right)Q_{0123}R_{0123}=QR.
+\]
+
+\end_inset
+
+The computation can be done in parallel (in particular it can be done with
+ map-reduce) and the 
+\begin_inset Formula $Q$
+\end_inset
+
+ matrix for big problems would generally not be computed explicitly but
+ would be stored in its constituent pieces.
+\end_layout
+
+\begin_layout Standard
+Alternatively, there is a variant on the algorithm that processes the row-blocks
+ of 
+\begin_inset Formula $X$
+\end_inset
+
+ serially, allowing you to do QR on a large tall-skinny matrix that you
+ can't fit in memory (or possibly even on disk).
+ First you do 
+\begin_inset Formula $QR$
+\end_inset
+
+ on 
+\begin_inset Formula $X_{0}$
+\end_inset
+
+ to get 
+\begin_inset Formula $Q_{0}R_{0}$
+\end_inset
+
+.
+ Then you stack 
+\begin_inset Formula $R_{0}$
+\end_inset
+
+ on top of 
+\begin_inset Formula $X_{1}$
+\end_inset
+
+ and do QR to get 
+\begin_inset Formula $R_{01}$
+\end_inset
+
+.
+ Then stack 
+\begin_inset Formula $R_{01}$
+\end_inset
+
+ on top of 
+\begin_inset Formula $X_{2}$
+\end_inset
+
+ to get 
+\begin_inset Formula $R_{012}$
+\end_inset
+
+, etc.
 \end_layout
 
 \begin_layout Subsection
@@ -4449,22 +4720,27 @@ $qr
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk12, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 myqr = qr(A)
 \end_layout
 
 \begin_layout Chunk
+
 magn = sum(log(abs(diag(myqr$qr)))) 
 \end_layout
 
 \begin_layout Chunk
+
 sign = prod(sign(diag(myqr$qr)))
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -4828,11 +5104,11 @@ Let's consider an
 \begin_inset Formula $n$
 \end_inset
 
- words and 
+ documents and 
 \begin_inset Formula $m$
 \end_inset
 
- documents, or 
+ words, or 
 \begin_inset Formula $n$
 \end_inset
 
@@ -5133,24 +5409,50 @@ th row.
  
 \end_layout
 
+\begin_layout Paragraph
+Computation for large tall-skinny matrices
+\end_layout
+
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-The SVD can also be generated from a QR decomposition: QUSigmaV where I
- do an SVD on the R matrix.
- Note this is helpful for SVDs of tall skinny matrices.
- Can do if HDFS/mapreduce do A_i^TA_i for row blocks of input matrix.
-\end_layout
-
-\begin_layout Plain Layout
-[do show this and go over the map and reduce steps]
-\end_layout
-
+The SVD can also be generated from a QR decomposition.
+ Take 
+\begin_inset Formula $X=QR$
 \end_inset
 
+ and then do an SVD on the 
+\begin_inset Formula $R$
+\end_inset
 
+ matrix to get 
+\begin_inset Formula $R=QUDV^{T}=U^{*}DV$
+\end_inset
+
+.
+ This is particularly helpful for the case when 
+\begin_inset Formula $X$
+\end_inset
+
+ is tall and skinny (suppose 
+\begin_inset Formula $X$
+\end_inset
+
+ is 
+\begin_inset Formula $n\times p$
+\end_inset
+
+ with 
+\begin_inset Formula $n\gg p$
+\end_inset
+
+), because we can do the tall-skinny QR, and the resulting SVD on 
+\begin_inset Formula $R$
+\end_inset
+
+ is easy computationally if 
+\begin_inset Formula $p$
+\end_inset
+
+ is manageable.
 \end_layout
 
 \begin_layout Section
