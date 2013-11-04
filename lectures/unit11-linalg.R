@@ -220,8 +220,7 @@ Q2[ ,4] = nlz(orth(Q2[, 4], Q2[ ,3]))
 ### 3.5 Determinants
 
 myqr = qr(A)
-magn = sum(log(abs(diag(myqr$qr)))) 
-sign = prod(sign(diag(myqr$qr)))
+magn = sum(log(abs(diag(myqr$qr)))) # magnitude on log scale
 
 
 ### 4.1 Eigendecomposition
