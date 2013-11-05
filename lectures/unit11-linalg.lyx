@@ -4198,7 +4198,7 @@ We can use a series of Givens rotations to do the QR but unless it is done
  
 \begin_inset Formula 
 \begin{eqnarray*}
-R & = & Q_{pn}\cdots Q_{22}Q_{1n}\cdots Q_{13}Q_{12}X\\
+R & = & Q_{pn}\cdots Q_{23}Q_{1n}\cdots Q_{13}Q_{12}X\\
 Q & = & (Q_{pn}\cdots Q_{12})^{\top}
 \end{eqnarray*}
 
