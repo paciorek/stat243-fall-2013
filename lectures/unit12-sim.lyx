@@ -3053,7 +3053,7 @@ same
 
 \begin_layout Chunk
 
-<<fig.width=3.5, fig.height=3>>=
+<<tvsnormal, fig.width=3.5, fig.height=3>>=
 \end_layout
 
 \begin_layout Chunk

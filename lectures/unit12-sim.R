@@ -107,6 +107,46 @@ res2 <- mclapply(seq_len(nSims), testFun,
 	mc.cores = nSlots, mc.set.seed = TRUE) 
 identical(res,res2)
 
+# with foreach
+
+nslaves <- 4
+library(doMPI, quietly = TRUE)
+cl <- startMPIcluster(nslaves)
+registerDoMPI(cl) 
+result <- foreach(i = 1:20, .options.mpi = list(seed = 0)) %dopar% { 
+	out <- mean(rnorm(1000)) 
+}
+result2 <- foreach(i = 1:20, .options.mpi = list(seed = 0)) %dopar% { 
+	out <- mean(rnorm(1000)) 
+}
+identical(result, result2)
+
+rm(result, result2)
+nCores <- 4
+library(doRNG, quietly = TRUE)
+library(doParallel)
+registerDoParallel(nCores) 
+result <- foreach(i = 1:20, .options.RNG = 0) %dorng% { 
+	out <- mean(rnorm(1000)) 
+}
+result2 <- foreach(i = 1:20, .options.RNG = 0) %dorng% { 
+	out <- mean(rnorm(1000)) 
+}
+identical(result, result2)
+
+rm(result, result2)
+library(doRNG, quietly = TRUE)
+library(doParallel)
+registerDoParallel(nCores)
+registerDoRNG(seed = 0) 
+result <- foreach(i = 1:20) %dopar% { 
+	out <- mean(rnorm(1000)) 
+}
+registerDoRNG(seed = 0) 
+result2 <- foreach(i = 1:20) %dopar% { 
+	out <- mean(rnorm(1000)) 
+}
+identical(result,result2)
 
 ###################################
 # 3: Generating random variables
