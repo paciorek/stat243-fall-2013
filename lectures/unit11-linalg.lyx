@@ -4708,7 +4708,11 @@ determinant()
 \emph on
 det()
 \emph default
- just wraps determinant, but I can't seem to pass the 
+ just wraps 
+\emph on
+determinant()
+\emph default
+, but I can't seem to pass the 
 \emph on
 logarithm
 \emph default
@@ -5234,20 +5238,22 @@ Computation
 \end_layout
 
 \begin_layout Standard
-The basic algorithm is similar to the QR method for the eigendecomposition.
+The basic algorithm (Golub-Reinsch) is similar to the QR method for the
+ eigendecomposition.
  We use a series of Householder transformations on the left and right to
  reduce 
 \begin_inset Formula $A$
 \end_inset
 
- to a bidiagonal matrix, 
+ to an upper bidiagonal matrix, 
 \begin_inset Formula $A^{(0)}$
 \end_inset
 
 .
- The post-multiplications generate the zeros in the upper triangle.
- (A bidiagonal matrix is one with non-zeroes only on the diagonal and first
- subdiagonal above the diagonal).
+ The post-multiplications (the transformations on the right) generate the
+ zeros in the upper triangle.
+ (An upper bidiagonal matrix is one with non-zeroes only on the diagonal
+ and first subdiagonal above the diagonal).
  Then the algorithm produces a series of upper bidiagonal matrices, 
 \begin_inset Formula $A^{(0)}$
 \end_inset
@@ -5271,6 +5277,11 @@ A^{(j+1)} & = & R_{m-2}^{\top}R_{m-3}^{\top}\cdots R_{0}^{\top}A^{(j)}T_{0}T_{1}
 
 \end_inset
 
+
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
 Note that the multiplication on the right is required to produce zeroes
  in the 
 \begin_inset Formula $k$
@@ -5281,6 +5292,11 @@ th column and the
 \end_inset
 
 th row.
+ [NOT SURE WHAT I MEANT BY THIS]
+\end_layout
+
+\end_inset
+
  This eventually gives 
 \begin_inset Formula $A^{(...)}=D$
 \end_inset
