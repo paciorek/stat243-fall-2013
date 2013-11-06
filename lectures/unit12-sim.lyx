@@ -656,7 +656,7 @@ with integer
 
 \begin_layout Chunk
 
-<<rng4, fig.width=5>>=
+<<rng4, fig.width=5, fig.height=5>>=
 \end_layout
 
 \begin_layout Chunk
@@ -1347,7 +1347,7 @@ set.seed(mySeed)
  in R on every process.
 \end_layout
 
-\begin_layout Paragraph
+\begin_layout Subsubsection
 The naive approach
 \end_layout
 
@@ -1384,7 +1384,7 @@ set.seed(id)
  process.
 \end_layout
 
-\begin_layout Paragraph
+\begin_layout Subsubsection
 The clunky but effective approach
 \end_layout
 
@@ -1394,7 +1394,7 @@ One approach to avoid the problem is to do all your RNG on one process and
  infeasible with many random numbers.
 \end_layout
 
-\begin_layout Paragraph
+\begin_layout Subsubsection
 The sophisticated approach
 \end_layout
 
@@ -1519,13 +1519,12 @@ clusterSetRNGStream(cl = cl, iseed = iseed)
 
 \begin_layout Chunk
 
-RNGkind() 
+RNGkind() # clusterSetRNGStream sets RNGkind as L'Ecuyer-CMRG
 \end_layout
 
 \begin_layout Chunk
 
-# hmmm...
- clusterSetRNGStream() should set as "L'Ecuyer-CMRG"
+# but it doesn't show up here on the master
 \end_layout
 
 \begin_layout Chunk
@@ -1630,11 +1629,12 @@ mc.set.seed
 \emph on
 mc.set.seed
 \emph default
- is TRUE by default, but one needs to invoke 
-\emph on
-RNGkind()
-\emph default
-.
+ is TRUE by default, so you should get different seeds for the different
+ processes by default), but one needs to invoke 
+\family typewriter
+RNGkind("L'Ecuyer-CMRG")
+\family default
+ to get independent streams via the L'Ecuyer algorithm.
 \end_layout
 
 \begin_layout Chunk
@@ -1692,8 +1692,24 @@ identical(res,res2)
 @
 \end_layout
 
+\begin_layout Standard
+The documentation for 
+\emph on
+mcparallel()
+\emph default
+ gives more information about reproducibility based on 
+\emph on
+mc.set.seed
+\emph default
+.
+\end_layout
+
 \begin_layout Paragraph
-foreach
+With foreach
+\end_layout
+
+\begin_layout Subparagraph
+Getting independent streams
 \end_layout
 
 \begin_layout Standard
@@ -1702,22 +1718,205 @@ One question is whether
 foreach
 \emph default
  deals with RNG correctly.
- I don't see any documentation on this, but the developers (Revolution Analytics
-) are well aware of RNG issues, so it seems plausible that 
+ This is not documented, but the developers (Revolution Analytics) are well
+ aware of RNG issues.
+ Digging into the underlying code reveals that the 
+\emph on
+doMC
+\emph default
+ and 
+\emph on
+doParallel
+\emph default
+ backends both invoke 
+\emph on
+mclapply()
+\emph default
+ and set 
+\emph on
+mc.set.seed
+\emph default
+ to TRUE by default.
+ This suggests that the discussion above r.e.
+ 
+\emph on
+mclapply()
+\emph default
+ holds for 
 \emph on
 foreach
 \emph default
- handles things for you.
- 
-\series bold
-Challenge
-\series default
-: can we think of a way to test whether foreach is dealing with RNG correctly?
- What are the difficulties in doing so?
+ as well, so you should do 
+\family typewriter
+RNGkind("L'Ecuyer-CMRG")
+\family default
+ before your foreach call.
+ For 
+\emph on
+doMPI
+\emph default
+, as of version 0.2, you can do something like this, which uses L'Ecuyer
+ behind the scenes:
+\begin_inset Newline newline
+\end_inset
+
+
+\family typewriter
+cl <- makeCluster(nSlots)
+\begin_inset Newline newline
+\end_inset
+
+setRngDoMPI(cl, seed=0)
+\end_layout
+
+\begin_layout Subparagraph
+Ensuring reproducibility
 \end_layout
 
 \begin_layout Standard
-There is also a package called 
+While using 
+\emph on
+foreach
+\emph default
+ as just described should ensure that the streams on each worker are are
+ distinct, it does not ensure reproducibility because task chunks may be
+ assigned to workers differently in different runs and the substreams are
+ specific to workers, not to tasks.
+ 
+\end_layout
+
+\begin_layout Standard
+For 
+\emph on
+doMPI
+\emph default
+, you can specify a different RNG substream for each task chunk in a way
+ that ensures reproducibility.
+ Basically you provide a list called 
+\emph on
+.options.mpi
+\emph default
+ as an argument to 
+\emph on
+foreach
+\emph default
+, with 
+\emph on
+seed
+\emph default
+ as an element of the list:
+\end_layout
+
+\begin_layout Chunk
+
+<<RNG-doMPI, eval=TRUE>>=
+\end_layout
+
+\begin_layout Chunk
+
+nslaves <- 4
+\end_layout
+
+\begin_layout Chunk
+
+library(doMPI, quietly = TRUE)
+\end_layout
+
+\begin_layout Chunk
+
+cl <- startMPIcluster(nslaves)
+\end_layout
+
+\begin_layout Chunk
+
+registerDoMPI(cl) 
+\end_layout
+
+\begin_layout Chunk
+
+result <- foreach(i = 1:20, .options.mpi = list(seed = 0)) %dopar% { 
+\end_layout
+
+\begin_layout Chunk
+
+	out <- mean(rnorm(1000)) 
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+result2 <- foreach(i = 1:20, .options.mpi = list(seed = 0)) %dopar% { 
+\end_layout
+
+\begin_layout Chunk
+
+	out <- mean(rnorm(1000)) 
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+identical(result, result2)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+That single seed then initializes the RNG for the first task, and subsequent
+ tasks get separate substreams, using the L'Ecuyer algorithm, based on 
+\emph on
+nextRNGStream()
+\emph default
+.
+ Note that the 
+\emph on
+doMPI
+\emph default
+ developers also suggest using the 
+\emph on
+chunkSize
+\emph default
+ option (also specified as an element of 
+\emph on
+.options.mpi
+\emph default
+) when using 
+\emph on
+seed
+\emph default
+.
+ See 
+\family typewriter
+?
+\begin_inset Quotes erd
+\end_inset
+
+doMPI-package
+\begin_inset Quotes erd
+\end_inset
+
+
+\family default
+ for more details.
+\end_layout
+
+\begin_layout Standard
+For other backends, such as 
+\emph on
+doParallel
+\emph default
+, there is a package called 
 \emph on
 doRNG
 \emph default
@@ -1725,16 +1924,157 @@ doRNG
 \emph on
 foreach
 \emph default
- loops are reproducible, but in my basic test, it appears that 
-\emph on
-foreach
-\emph default
- loops are reproducible without 
-\emph on
-doRNG
-\emph default
-, so I'm not sure what the deal is here.
- 
+ loops are reproducible.
+ Here's how you do it:
+\end_layout
+
+\begin_layout Chunk
+
+<<RNG-doRNG>>=
+\end_layout
+
+\begin_layout Chunk
+
+rm(result, result2)
+\end_layout
+
+\begin_layout Chunk
+
+nCores <- 4
+\end_layout
+
+\begin_layout Chunk
+
+library(doRNG, quietly = TRUE)
+\end_layout
+
+\begin_layout Chunk
+
+library(doParallel)
+\end_layout
+
+\begin_layout Chunk
+
+registerDoParallel(nCores) 
+\end_layout
+
+\begin_layout Chunk
+
+result <- foreach(i = 1:20, .options.RNG = 0) %dorng% { 
+\end_layout
+
+\begin_layout Chunk
+
+	out <- mean(rnorm(1000)) 
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+result2 <- foreach(i = 1:20, .options.RNG = 0) %dorng% { 
+\end_layout
+
+\begin_layout Chunk
+
+	out <- mean(rnorm(1000)) 
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+identical(result, result2)
+\end_layout
+
+\begin_layout Chunk
+
+@
+\end_layout
+
+\begin_layout Standard
+Alternatively, you can do:
+\end_layout
+
+\begin_layout Chunk
+
+<<RNG-doRNG2>>=
+\end_layout
+
+\begin_layout Chunk
+
+rm(result, result2)
+\end_layout
+
+\begin_layout Chunk
+
+library(doRNG, quietly = TRUE)
+\end_layout
+
+\begin_layout Chunk
+
+library(doParallel)
+\end_layout
+
+\begin_layout Chunk
+
+registerDoParallel(nCores)
+\end_layout
+
+\begin_layout Chunk
+
+registerDoRNG(seed = 0) 
+\end_layout
+
+\begin_layout Chunk
+
+result <- foreach(i = 1:20) %dopar% { 
+\end_layout
+
+\begin_layout Chunk
+
+	out <- mean(rnorm(1000)) 
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+registerDoRNG(seed = 0) 
+\end_layout
+
+\begin_layout Chunk
+
+result2 <- foreach(i = 1:20) %dopar% { 
+\end_layout
+
+\begin_layout Chunk
+
+	out <- mean(rnorm(1000)) 
+\end_layout
+
+\begin_layout Chunk
+
+}
+\end_layout
+
+\begin_layout Chunk
+
+identical(result,result2)
+\end_layout
+
+\begin_layout Chunk
+
+@
 \end_layout
 
 \begin_layout Standard
@@ -2890,6 +3230,7 @@ for
 \end_layout
 
 \begin_layout Chunk
+
 <<loading, include=FALSE>>=
 \end_layout
 

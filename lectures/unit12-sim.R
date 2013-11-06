@@ -227,6 +227,7 @@ abline(0,1)
 # 5: Implementation of simulation studies
 ##############################################
 
+require(fields)
 thetaLevels <- c("low", "med", "hi")
 n <- c(10, 100, 1000)
 tVsNorm <- c("t", "norm")
