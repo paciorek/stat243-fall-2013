@@ -201,7 +201,7 @@ lines(yvals, dnorm(yvals)/(1-pnorm(tauStd)), col = 'red')
 ### 3.5 Importance sampling
 
 
-# suppose we want to estimate P(X^2 < -3) for a Cauchy
+# suppose we want to estimate P(X < -3) for a Cauchy (this is of interest in the case where we don't have the CDF in closed form)
 # instead of drawing from a standard Cauchy, let's draw from a Cauchy shifted to be centered at -5
 
 # write out the code below for a single estimate
@@ -218,7 +218,7 @@ g <- dt(x + 5, df = 1)  # density of x under g (density of x under a Cauchy cent
 w <- f/g  # weights
 
 stdEst <- mean(y < (-3))
-isEst <- mean((x < (-3))*w)
+isEst <- mean((x < (-3))*w) # i.e. (1/m)*sum((x < (-3))*w)
 
 # now let's do a small simulation study of the estimator
 

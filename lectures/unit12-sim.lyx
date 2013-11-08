@@ -655,82 +655,66 @@ with integer
 \end_layout
 
 \begin_layout Chunk
-
 <<rng4, fig.width=5, fig.height=5>>=
 \end_layout
 
 \begin_layout Chunk
-
 n <- 100
 \end_layout
 
 \begin_layout Chunk
-
 a <- 171
 \end_layout
 
 \begin_layout Chunk
-
 m <- 30269
 \end_layout
 
 \begin_layout Chunk
-
 u <- rep(NA, n) 
 \end_layout
 
 \begin_layout Chunk
-
 u[1] <- 7306 
 \end_layout
 
 \begin_layout Chunk
-
 for(i in 2:n)
 \end_layout
 
 \begin_layout Chunk
-
 	u[i] <- (a * u[i-1]) %% m 
 \end_layout
 
 \begin_layout Chunk
-
 u <- u/m
 \end_layout
 
 \begin_layout Chunk
-
 uFromR <- runif(n) 
 \end_layout
 
 \begin_layout Chunk
-
 par(mfrow = c(2,2)) 
 \end_layout
 
 \begin_layout Chunk
-
 plot(1:n, u, type = 'l') 
 \end_layout
 
 \begin_layout Chunk
-
 plot(1:n, uFromR, type = 'l') 
 \end_layout
 
 \begin_layout Chunk
-
 hist(u, nclass = 25) 
 \end_layout
 
 \begin_layout Chunk
-
 hist(uFromR, nclass = 25)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -804,87 +788,70 @@ Combining generators can yield better generators.
 \end_layout
 
 \begin_layout Chunk
-
 <<rng5>>=
 \end_layout
 
 \begin_layout Chunk
-
 RNGkind("Wichmann-Hill")
 \end_layout
 
 \begin_layout Chunk
-
 set.seed(0)
 \end_layout
 
 \begin_layout Chunk
-
 saveSeed <- .Random.seed
 \end_layout
 
 \begin_layout Chunk
-
 uFromR <- runif(10)
 \end_layout
 
 \begin_layout Chunk
-
 a <- c(171, 172, 170)
 \end_layout
 
 \begin_layout Chunk
-
 m <- c(30269, 30307, 30323)
 \end_layout
 
 \begin_layout Chunk
-
 xyz <- matrix(NA, nr = 10, nc = 3)
 \end_layout
 
 \begin_layout Chunk
-
 xyz[1, ] <- (a * saveSeed[2:4]) %% m
 \end_layout
 
 \begin_layout Chunk
-
 for( i in 2:10)
 \end_layout
 
 \begin_layout Chunk
-
 	xyz[i, ] <- (a * xyz[i-1, ]) %% m
 \end_layout
 
 \begin_layout Chunk
-
 for(i in 1:10)
 \end_layout
 
 \begin_layout Chunk
-
 	print(c(uFromR[i],sum(xyz[i, ]/m)%%1))
 \end_layout
 
 \begin_layout Chunk
-
 # we should be able to recover the current value of the seed
 \end_layout
 
 \begin_layout Chunk
-
 xyz[10, ]
 \end_layout
 
 \begin_layout Chunk
-
 .Random.seed[2:4]
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1098,32 +1065,26 @@ So we get replicability by setting the seed to a specific value at the beginning
 \end_layout
 
 \begin_layout Chunk
-
 <<rng1>>=
 \end_layout
 
 \begin_layout Chunk
-
 set.seed(0)
 \end_layout
 
 \begin_layout Chunk
-
 rnorm(10)
 \end_layout
 
 \begin_layout Chunk
-
 set.seed(0)
 \end_layout
 
 \begin_layout Chunk
-
 rnorm(10)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1138,42 +1099,34 @@ savedSeed
 \end_layout
 
 \begin_layout Chunk
-
 <<rng2>>=
 \end_layout
 
 \begin_layout Chunk
-
 set.seed(0)
 \end_layout
 
 \begin_layout Chunk
-
 rnorm(5)
 \end_layout
 
 \begin_layout Chunk
-
 savedSeed <- .Random.seed
 \end_layout
 
 \begin_layout Chunk
-
 tmp <- sample(1:50, 2000, replace = TRUE)
 \end_layout
 
 \begin_layout Chunk
-
 .Random.seed <- savedSeed
 \end_layout
 
 \begin_layout Chunk
-
 rnorm(5)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1183,37 +1136,30 @@ In some cases you might want to reset the seed upon exit from a function
 \end_layout
 
 \begin_layout Chunk
-
 <<rng3, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 f = function(args) {
 \end_layout
 
 \begin_layout Chunk
-
 oldseed <- .Random.seed
 \end_layout
 
 \begin_layout Chunk
-
 # other code 
 \end_layout
 
 \begin_layout Chunk
-
 .Random.seed <<- oldseed
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1251,32 +1197,25 @@ The RNGs in R generally return 32-bit (4-byte) integers converted to doubles,
 
 \begin_layout Standard
 One way to proceed if you're using both R and C is to have C use the R RNG,
- using the 
-\emph on
-unif_rand
-\emph default
- (corresponding to 
-\emph on
-runif()
-\emph default
-) and 
-\emph on
-norm_rand
-\emph default
- (corresponding to 
-\emph on
-rnorm()
-\emph default
-) functions in the 
+ calling the C functions that R uses under the hood, which are located in
+ the 
 \emph on
 Rmath
 \emph default
  library.
  This way you have a consistent source of random numbers and don't need
  to worry about issues with RNG in C.
- If you call C from R, this should approach should also work; you could
- also generate all the random numbers you need in R and pass them to the
- C function.
+ If you call C from R, this should approach should also work (see details
+ in 
+\begin_inset CommandInset href
+LatexCommand href
+name "http://statistics.berkeley.edu/computing/cpp"
+target "http://statistics.berkeley.edu/computing/cpp"
+
+\end_inset
+
+); you could also generate all the random numbers you need in R and pass
+ them to the C function.
 \end_layout
 
 \begin_layout Standard
@@ -1449,42 +1388,34 @@ parSapply()
 \end_layout
 
 \begin_layout Chunk
-
 <<RNG-apply, eval=TRUE>>=
 \end_layout
 
 \begin_layout Chunk
-
 require(parallel)
 \end_layout
 
 \begin_layout Chunk
-
 require(rlecuyer)
 \end_layout
 
 \begin_layout Chunk
-
 nSims <- 250
 \end_layout
 
 \begin_layout Chunk
-
 testFun <- function(i){
 \end_layout
 
 \begin_layout Chunk
-
 	val <- runif(1)
 \end_layout
 
 \begin_layout Chunk
-
 	return(val)
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
@@ -1493,67 +1424,54 @@ testFun <- function(i){
 \end_layout
 
 \begin_layout Chunk
-
 nCores <- 4
 \end_layout
 
 \begin_layout Chunk
-
 RNGkind()
 \end_layout
 
 \begin_layout Chunk
-
 cl <- makeCluster(nCores)
 \end_layout
 
 \begin_layout Chunk
-
 iseed <- 0
 \end_layout
 
 \begin_layout Chunk
-
 clusterSetRNGStream(cl = cl, iseed = iseed)
 \end_layout
 
 \begin_layout Chunk
-
 RNGkind() # clusterSetRNGStream sets RNGkind as L'Ecuyer-CMRG
 \end_layout
 
 \begin_layout Chunk
-
 # but it doesn't show up here on the master
 \end_layout
 
 \begin_layout Chunk
-
 res <- parSapply(cl, 1:nSims, testFun)
 \end_layout
 
 \begin_layout Chunk
-
 clusterSetRNGStream(cl = cl, iseed = iseed)
 \end_layout
 
 \begin_layout Chunk
-
 res2 <- parSapply(cl, 1:nSims, testFun)
 \end_layout
 
 \begin_layout Chunk
-
 identical(res,res2)
 \end_layout
 
 \begin_layout Chunk
-
 stopCluster(cl)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1567,52 +1485,42 @@ nextRNGStream()
 \end_layout
 
 \begin_layout Chunk
-
 <<RNGstream, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 RNGkind("L'Ecuyer-CMRG") 
 \end_layout
 
 \begin_layout Chunk
-
 seed <- 0
 \end_layout
 
 \begin_layout Chunk
-
 set.seed(seed) ## now start M workers 
 \end_layout
 
 \begin_layout Chunk
-
 s <- .Random.seed 
 \end_layout
 
 \begin_layout Chunk
-
 for (i in 1:M) { 
 \end_layout
 
 \begin_layout Chunk
-
 	s <- nextRNGStream(s) 
 \end_layout
 
 \begin_layout Chunk
-
 	# now send s to worker i as .Random.seed 
 \end_layout
 
 \begin_layout Chunk
-
 } 
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1638,57 +1546,46 @@ RNGkind("L'Ecuyer-CMRG")
 \end_layout
 
 \begin_layout Chunk
-
 <<RNG-mclapply, eval=FALSE, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 require(parallel)
 \end_layout
 
 \begin_layout Chunk
-
 require(rlecuyer)
 \end_layout
 
 \begin_layout Chunk
-
 RNGkind("L'Ecuyer-CMRG")
 \end_layout
 
 \begin_layout Chunk
-
 res <- mclapply(seq_len(nSims), testFun, 
 \end_layout
 
 \begin_layout Chunk
-
 	mc.cores = nSlots, mc.set.seed = TRUE) 
 \end_layout
 
 \begin_layout Chunk
-
 # this also seems to auotmatically reset the seed when it is run
 \end_layout
 
 \begin_layout Chunk
-
 res2 <- mclapply(seq_len(nSims), testFun, 
 \end_layout
 
 \begin_layout Chunk
-
 	mc.cores = nSlots, mc.set.seed = TRUE) 
 \end_layout
 
 \begin_layout Chunk
-
 identical(res,res2)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1808,67 +1705,54 @@ seed
 \end_layout
 
 \begin_layout Chunk
-
 <<RNG-doMPI, eval=TRUE>>=
 \end_layout
 
 \begin_layout Chunk
-
 nslaves <- 4
 \end_layout
 
 \begin_layout Chunk
-
 library(doMPI, quietly = TRUE)
 \end_layout
 
 \begin_layout Chunk
-
 cl <- startMPIcluster(nslaves)
 \end_layout
 
 \begin_layout Chunk
-
 registerDoMPI(cl) 
 \end_layout
 
 \begin_layout Chunk
-
 result <- foreach(i = 1:20, .options.mpi = list(seed = 0)) %dopar% { 
 \end_layout
 
 \begin_layout Chunk
-
 	out <- mean(rnorm(1000)) 
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 result2 <- foreach(i = 1:20, .options.mpi = list(seed = 0)) %dopar% { 
 \end_layout
 
 \begin_layout Chunk
-
 	out <- mean(rnorm(1000)) 
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 identical(result, result2)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -1929,72 +1813,58 @@ foreach
 \end_layout
 
 \begin_layout Chunk
-
 <<RNG-doRNG>>=
 \end_layout
 
 \begin_layout Chunk
-
 rm(result, result2)
 \end_layout
 
 \begin_layout Chunk
-
 nCores <- 4
 \end_layout
 
 \begin_layout Chunk
-
 library(doRNG, quietly = TRUE)
 \end_layout
 
 \begin_layout Chunk
-
 library(doParallel)
 \end_layout
 
 \begin_layout Chunk
-
 registerDoParallel(nCores) 
 \end_layout
 
 \begin_layout Chunk
-
 result <- foreach(i = 1:20, .options.RNG = 0) %dorng% { 
 \end_layout
 
 \begin_layout Chunk
-
 	out <- mean(rnorm(1000)) 
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 result2 <- foreach(i = 1:20, .options.RNG = 0) %dorng% { 
 \end_layout
 
 \begin_layout Chunk
-
 	out <- mean(rnorm(1000)) 
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 identical(result, result2)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2003,77 +1873,62 @@ Alternatively, you can do:
 \end_layout
 
 \begin_layout Chunk
-
 <<RNG-doRNG2>>=
 \end_layout
 
 \begin_layout Chunk
-
 rm(result, result2)
 \end_layout
 
 \begin_layout Chunk
-
 library(doRNG, quietly = TRUE)
 \end_layout
 
 \begin_layout Chunk
-
 library(doParallel)
 \end_layout
 
 \begin_layout Chunk
-
 registerDoParallel(nCores)
 \end_layout
 
 \begin_layout Chunk
-
 registerDoRNG(seed = 0) 
 \end_layout
 
 \begin_layout Chunk
-
 result <- foreach(i = 1:20) %dopar% { 
 \end_layout
 
 \begin_layout Chunk
-
 	out <- mean(rnorm(1000)) 
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 registerDoRNG(seed = 0) 
 \end_layout
 
 \begin_layout Chunk
-
 result2 <- foreach(i = 1:20) %dopar% { 
 \end_layout
 
 \begin_layout Chunk
-
 	out <- mean(rnorm(1000)) 
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 identical(result,result2)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2208,22 +2063,18 @@ To generate a multivariate normal, we've seen the standard method based
 \end_layout
 
 \begin_layout Chunk
-
 <<eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 U <- chol(covMat)
 \end_layout
 
 \begin_layout Chunk
-
 crossprod(U, nrow(covMat))
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -2347,7 +2198,7 @@ The basic idea of rejection sampling (RS) relies on the introduction of
 
 .
  Thus 
-\begin_inset Formula $X$
+\begin_inset Formula $f$
 \end_inset
 
  is the marginal density of 
@@ -3052,32 +2903,26 @@ same
 \end_layout
 
 \begin_layout Chunk
-
 <<tvsnormal, fig.width=3.5, fig.height=3>>=
 \end_layout
 
 \begin_layout Chunk
-
 devs <- rnorm(100)
 \end_layout
 
 \begin_layout Chunk
-
 tdevs <- qt(pnorm(devs), df = 1)
 \end_layout
 
 \begin_layout Chunk
-
 plot(devs, tdevs)
 \end_layout
 
 \begin_layout Chunk
-
 abline(0,1)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
@@ -3230,112 +3075,90 @@ for
 \end_layout
 
 \begin_layout Chunk
-
 <<loading, include=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
-
 require(fields)
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 
 \begin_layout Chunk
-
 <<>>=
 \end_layout
 
 \begin_layout Chunk
-
 require(fields)
 \end_layout
 
 \begin_layout Chunk
-
 thetaLevels <- c("low", "med", "hi")
 \end_layout
 
 \begin_layout Chunk
-
 n <- c(10, 100, 1000)
 \end_layout
 
 \begin_layout Chunk
-
 tVsNorm <- c("t", "norm")
 \end_layout
 
 \begin_layout Chunk
-
 levels <- expand.grid(thetaLevels, tVsNorm, n)
 \end_layout
 
 \begin_layout Chunk
-
 # example of replicate() -- generate m sets correlated normals
 \end_layout
 
 \begin_layout Chunk
-
 set.seed(0)
 \end_layout
 
 \begin_layout Chunk
-
 genFun <- function(n, theta = 1){
 \end_layout
 
 \begin_layout Chunk
-
 	u <- rnorm(n)
 \end_layout
 
 \begin_layout Chunk
-
 	x <- runif(n)
 \end_layout
 
 \begin_layout Chunk
-
 	Cov <- exp(-rdist(x)/theta)
 \end_layout
 
 \begin_layout Chunk
-
 	U <- chol(Cov)
 \end_layout
 
 \begin_layout Chunk
-
 	return(cbind(x,crossprod(U, u)))
 \end_layout
 
 \begin_layout Chunk
-
 }
 \end_layout
 
 \begin_layout Chunk
-
 m <- 20
 \end_layout
 
 \begin_layout Chunk
-
 simData <- replicate(m, genFun(100, 1))
 \end_layout
 
 \begin_layout Chunk
-
 dim(simData) # 100 observations by {x, y} values by 20 replicates
 \end_layout
 
 \begin_layout Chunk
-
 @
 \end_layout
 

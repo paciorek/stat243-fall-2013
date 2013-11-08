@@ -5346,7 +5346,7 @@ The SVD can also be generated from a QR decomposition.
 \end_inset
 
  matrix to get 
-\begin_inset Formula $R=QUDV^{T}=U^{*}DV$
+\begin_inset Formula $X=QUDV^{\top}=U^{*}DV^{\top}$
 \end_inset
 
 .

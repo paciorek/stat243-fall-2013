@@ -203,6 +203,10 @@ Q[ ,4] = orth(Q[ ,4], Q[ ,2])
 
 Q[ ,4] = nlz(orth(Q[, 4], Q[ ,3]))
 
+# compare with R's QR
+
+print(Q)
+qr.Q(qr(X))
    
 # original Gram-Schmidt
 Q = matrix(NA, 5, 4)
@@ -238,7 +242,8 @@ for(i in 1:20){
   print(z1)
 }
 
-val1 = (A %*% z1 / z1)[1, 1]
+val1 = (A %*% z1 / z1)
+val1 = val1[1,1]
 
 # following Gentle-NLA, p. 125, we can get the next largest eigenvalue, which is the largest eigenvalue of the matrix B
 B = A - val1 * outer(c(z1), c(z1))
