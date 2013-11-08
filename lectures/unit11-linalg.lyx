@@ -859,18 +859,22 @@ In R, recall the syntax is
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk0, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 A + B
 \end_layout
 
 \begin_layout Chunk
+
 A %*% B
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -1636,46 +1640,57 @@ If we look at the eigendecomposition of such matrices, we see that in the
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk1, tidy=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 precMat <- matrix(c(1,-1,0,0,0,-1,2,-1,0,0,0,-1,2,-1,
 \end_layout
 
 \begin_layout Chunk
+
     0,0,0,-1,2,-1,0,0,0,-1,1), 5)
 \end_layout
 
 \begin_layout Chunk
+
 e <- eigen(precMat)
 \end_layout
 
 \begin_layout Chunk
+
 e$values
 \end_layout
 
 \begin_layout Chunk
+
 e$vectors[ , 5]
 \end_layout
 
 \begin_layout Chunk
+
 # generate a realization
 \end_layout
 
 \begin_layout Chunk
+
 e$values[1:4] <- 1 / e$values[1:4]
 \end_layout
 
 \begin_layout Chunk
+
 y <- e$vec %*% (e$values * rnorm(5))
 \end_layout
 
 \begin_layout Chunk
+
 sum(y)
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2104,54 +2119,67 @@ The solution of
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk1a>>=
 \end_layout
 
 \begin_layout Chunk
+
 norm2 <- function(x) sqrt(sum(x^2))
 \end_layout
 
 \begin_layout Chunk
+
 A <- matrix(c(10,7,8,7,7,5,6,5,8,6,10,9,7,5,9,10),4)
 \end_layout
 
 \begin_layout Chunk
+
 e <- eigen(A)
 \end_layout
 
 \begin_layout Chunk
+
 b <- c(32, 23, 33, 31)
 \end_layout
 
 \begin_layout Chunk
+
 bPerturb <- c(32.1, 22.9, 33.1, 30.9)
 \end_layout
 
 \begin_layout Chunk
+
 x <- solve(A, b)
 \end_layout
 
 \begin_layout Chunk
+
 xPerturb <- solve(A, bPerturb)
 \end_layout
 
 \begin_layout Chunk
+
 norm2(x - xPerturb)
 \end_layout
 
 \begin_layout Chunk
+
 norm2(b - bPerturb)
 \end_layout
 
 \begin_layout Chunk
+
 norm2(x - xPerturb)/norm2(x)
 \end_layout
 
 \begin_layout Chunk
+
 (e$val[1]/e$val[4])*norm2(b - bPerturb)/norm2(b)
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2323,58 +2351,72 @@ A general comment on improving conditioning is that we want to avoid large
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk2>>=
 \end_layout
 
 \begin_layout Chunk
+
 x1 <- 1990:2010
 \end_layout
 
 \begin_layout Chunk
+
 x2 <- x1 - 2000 # centered
 \end_layout
 
 \begin_layout Chunk
+
 x3 <- x2/10 # centered and scaled
 \end_layout
 
 \begin_layout Chunk
+
 X1 <- cbind(rep(1, 21), x1, x1^2)
 \end_layout
 
 \begin_layout Chunk
+
 X2 <- cbind(rep(1, 21), x2, x2^2)
 \end_layout
 
 \begin_layout Chunk
+
 X3 <- cbind(rep(1, 21), x3, x3^2)
 \end_layout
 
 \begin_layout Chunk
+
 e1 <- eigen(crossprod(X1))
 \end_layout
 
 \begin_layout Chunk
+
 e1$values
 \end_layout
 
 \begin_layout Chunk
+
 e2 <- eigen(crossprod(X2))
 \end_layout
 
 \begin_layout Chunk
+
 e2$values
 \end_layout
 
 \begin_layout Chunk
+
 e3 <- eigen(crossprod(X3))
 \end_layout
 
 \begin_layout Chunk
+
 e3$values
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2537,46 +2579,57 @@ forwardsolve()
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk3>>=
 \end_layout
 
 \begin_layout Chunk
+
 n <- 20
 \end_layout
 
 \begin_layout Chunk
+
 X <- crossprod(matrix(rnorm(n^2), n))
 \end_layout
 
 \begin_layout Chunk
+
 b <- rnorm(n)
 \end_layout
 
 \begin_layout Chunk
+
 U <- chol(crossprod(X)) # U is upper-triangular
 \end_layout
 
 \begin_layout Chunk
+
 L <- t(U) # L is lower-triangular
 \end_layout
 
 \begin_layout Chunk
+
 out1 <- backsolve(U, b) 
 \end_layout
 
 \begin_layout Chunk
+
 out2 <- forwardsolve(L, b) 
 \end_layout
 
 \begin_layout Chunk
+
 all.equal(out1, c(solve(U) %*% b)) 
 \end_layout
 
 \begin_layout Chunk
+
 all.equal(out2, c(solve(L) %*% b)) 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2593,18 +2646,22 @@ We can also solve
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk4, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 backsolve(U, b, transpose = TRUE) 
 \end_layout
 
 \begin_layout Chunk
+
 forwardsolve(L, b, transpose = TRUE)
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2979,18 +3036,22 @@ We can then solve a system of equations as:
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk5, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 backsolve(U, backsolve(U, b, transpose = TRUE))
 \end_layout
 
 \begin_layout Chunk
+
 backsolve(U, forwardsolve(t(U), b)) # equivalent but less efficient
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3047,18 +3108,22 @@ The standard algorithm for generating
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk6, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 U <- chol(A)
 \end_layout
 
 \begin_layout Chunk
+
 y <- crossprod(U, rnorm(n)) # i.e., t(U)%*%rnorm(n), but much faster
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3132,14 +3197,17 @@ tion are very stable.
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk8a, include=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 require(fields)
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3148,50 +3216,62 @@ require(fields)
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk8>>=
 \end_layout
 
 \begin_layout Chunk
+
 # require(fields)
 \end_layout
 
 \begin_layout Chunk
+
 locs <- runif(100)
 \end_layout
 
 \begin_layout Chunk
+
 rho <- .1
 \end_layout
 
 \begin_layout Chunk
+
 C <- exp(-rdist(locs)^2/rho^2)
 \end_layout
 
 \begin_layout Chunk
+
 e <- eigen(C)
 \end_layout
 
 \begin_layout Chunk
+
 e$values[96:100]
 \end_layout
 
 \begin_layout Chunk
+
 U <- chol(C)
 \end_layout
 
 \begin_layout Chunk
+
 vals <- abs(e$values)
 \end_layout
 
 \begin_layout Chunk
+
 max(vals)/min(vals)
 \end_layout
 
 \begin_layout Chunk
+
 U <- chol(C, pivot = TRUE)
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3814,22 +3894,27 @@ qr.qty()
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk11>>=
 \end_layout
 
 \begin_layout Chunk
+
 X.qr = qr(X)
 \end_layout
 
 \begin_layout Chunk
+
 Q = qr.Q(X.qr)
 \end_layout
 
 \begin_layout Chunk
+
 R = qr.R(X.qr) 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -4635,18 +4720,22 @@ $qr
 \end_layout
 
 \begin_layout Chunk
+
 <<chunk12, eval=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 myqr = qr(A)
 \end_layout
 
 \begin_layout Chunk
+
 magn = sum(log(abs(diag(myqr$qr)))) 
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -5456,13 +5545,18 @@ In general, matrix operations in R go to compiled C or Fortran code without
  As we've discussed in the parallelization unit, one way to speed up code
  that relies heavily on linear algebra is to make sure you have a BLAS library
  tuned to your machine.
- These include GotoBLAS (free), Intel's MKL, and AMD's ACML.
+ These include OpenBLAS (free; formerly called GotoBLAS), Intel's MKL, AMD's
+ ACML, and Apple's vecLib.
  These can be installed and R can be linked to the shared object library
  file (
 \emph on
 .so
 \emph default
- file) for the fast BLAS.
+ file or 
+\emph on
+.dylib
+\emph default
+ on a Mac) for the fast BLAS.
  These BLAS libraries are also available in threaded versions that farm
  out the calculations across multiple cores or processors that share memory.
  
@@ -5527,7 +5621,48 @@ rowptr
 colindices
 \emph default
  that tells the column identity of each element.
- 
+ Here's an example in the spam package in R:
+\end_layout
+
+\begin_layout Chunk
+
+<<spam-format>>=
+\end_layout
+
+\begin_layout Chunk
+
+require(spam)
+\end_layout
+
+\begin_layout Chunk
+
+mat = matrix(c(0,0,1,0,10,0,0,0,100,0,rep(0,5),1000,rep(0,4)), nrow = 4,
+ byrow = TRUE)
+\end_layout
+
+\begin_layout Chunk
+
+mat = as.spam(mat)
+\end_layout
+
+\begin_layout Chunk
+
+mat@entries 
+\end_layout
+
+\begin_layout Chunk
+
+mat@rowpointers 
+\end_layout
+
+\begin_layout Chunk
+
+mat@colindices 
+\end_layout
+
+\begin_layout Chunk
+
+@
 \end_layout
 
 \begin_layout Standard

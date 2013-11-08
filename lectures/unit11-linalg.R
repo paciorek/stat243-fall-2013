@@ -226,6 +226,9 @@ Q2[ ,4] = nlz(orth(Q2[, 4], Q2[ ,3]))
 myqr = qr(A)
 magn = sum(log(abs(diag(myqr$qr)))) # magnitude on log scale
 
+##################################
+# 4: Eigendecomposition and SVD
+##################################
 
 ### 4.1 Eigendecomposition
 
@@ -256,3 +259,16 @@ for(i in 1:200){
 }
 
 val2 = B%*%z2/z2 + val1
+
+##################################
+# 5: Computation
+##################################
+
+### 5.2 Sparse matrices
+
+require(spam)
+mat = matrix(c(0,0,1,0,10,0,0,0,100,0,rep(0,5),1000,rep(0,4)), nrow = 4, byrow = TRUE)
+mat = as.spam(mat)
+mat@entries
+mat@rowpointers
+mat@colindices
