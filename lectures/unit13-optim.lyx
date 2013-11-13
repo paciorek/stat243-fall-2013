@@ -4124,6 +4124,12 @@ Convexity
 \end_layout
 
 \begin_layout Standard
+
+\series bold
+[NOTE: I may make some changes to this section - Chris Nov 12, 2013]
+\end_layout
+
+\begin_layout Standard
 Many optimization problems involve (or can be transformed into) convex functions.
  Convex optimization (also called convex programming) is a big topic and
  one that we'll only brush the surface of in Sections 8 and 9.
