@@ -117,7 +117,7 @@ lines(Days, fitted(wtloss.lm), col = "grey")
 # we need some starting values
 # guess that beta2 approx 100 since the midpoint of Days is near 100
 
-beta2.init = 100
+beta2.init = 1000
 plot(2^(-Days/beta2.init), Weight)
 tmpMod = lm(Weight ~ I(2^(-Days/beta2.init)))
 beta0.init = tmpMod$coef[1]
@@ -403,7 +403,7 @@ x= seq(0,10,len=100)
 f=function(x)  sin(x)
 
 plot(x, f(x), type='l', ylim = c(-1, 3))
-tau = 10
+tau = 1
 # plot the modified function
 lines(x, exp(-f(x)/tau))   # try tau = 3, 1, .3, etc.
 
@@ -415,7 +415,7 @@ lines(x, exp(-f(x)/tau))   # try tau = 3, 1, .3, etc.
 
 # using optim()
 
-yHundredths = scan('precipData.txt')  # precip in hundredths of inches
+yHundredths = scan('../data/precipData.txt')  # precip in hundredths of inches
 yHundredths = yHundredths[!is.na(yHundredths)]
 y = yHundredths/100  # precip now in inches
 
