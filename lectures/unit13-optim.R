@@ -344,6 +344,8 @@ plotseg(1, 2)
 
 xbar = (xs[1,]+xs[2,])/2
 
+text(xs[3,1], xs[3,2], expression(x[p+1]))
+
 points(xbar[1],xbar[2], col = 'red')
 
 ### reflection
