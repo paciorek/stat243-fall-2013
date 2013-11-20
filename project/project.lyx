@@ -163,9 +163,9 @@ Your task is to implement an adaptive-rejection sampler, described in class
 \begin_layout Enumerate
 Your solution should allow the user to provide reasonable inputs, including
  the number of points to sample, and should check the inputs for validity.
- The primary input should be an R function that calculates the (possibly
- unnormalized) density of the distribution of interest in a vectorized fashion
- (e.g., many of the 
+ The primary input should be an R function or R expression that calculates
+ the (possibly unnormalized) density of the distribution of interest in
+ a vectorized fashion (e.g., many of the 
 \begin_inset Quotes eld
 \end_inset
 
