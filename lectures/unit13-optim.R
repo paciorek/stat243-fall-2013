@@ -404,10 +404,17 @@ plotseg(2, 3, 'purple')
 x= seq(0,10,len=100)
 f=function(x)  sin(x)
 
-plot(x, f(x), type='l', ylim = c(-1, 3))
+plot(x, f(x), type='l', ylim = c(-1, 3), col = 'grey')
 tau = 10
 # plot the modified function
-lines(x, exp(-f(x)/tau))   # try tau = 3, 1, .3, etc.
+lines(x, exp(-f(x)/tau), col = 'red')   # try tau = 3, 1, .3, etc.
+# effect of cooling...
+tau =3
+# plot the modified function
+lines(x, exp(-f(x)/tau), col='yellow')   # try tau = 3, 1, .3, etc.
+tau =1
+# plot the modified function
+lines(x, exp(-f(x)/tau), col = 'blue')   # try tau = 3, 1, .3, etc.
 
 ##############################
 # 6: Optimization in R

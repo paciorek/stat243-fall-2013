@@ -5998,6 +5998,8 @@ One caution about optimizing under constraints is that you just get a point
  One strategy is to ignore the inactive inequality constraints and reparameteriz
 e (based on the active equality constraints) to get an unconstrained problem
  in a lower-dimensional space.
+ Then you can make use of the Hessian in the usual fashion to estimate the
+ information matrix.
 \end_layout
 
 \begin_layout Standard
