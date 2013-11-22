@@ -405,7 +405,7 @@ x= seq(0,10,len=100)
 f=function(x)  sin(x)
 
 plot(x, f(x), type='l', ylim = c(-1, 3))
-tau = 1
+tau = 10
 # plot the modified function
 lines(x, exp(-f(x)/tau))   # try tau = 3, 1, .3, etc.
 

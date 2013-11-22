@@ -3913,8 +3913,8 @@ Always consider your answer and make sure it makes sense, in particular
 Venables and Ripley suggest that it is often worth supplying analytic first
  derivatives rather than having a routine calculate numerical derivatives
  but not worth supplying analytic second derivatives.
- As we've seen R can do symbolic (i.e., analytic) differentiation to find
- first and second derivatives using 
+ As we'll see in Unit 14, R can do symbolic (i.e., analytic) differentiation
+ to find first and second derivatives using 
 \emph on
 deriv()
 \emph default
