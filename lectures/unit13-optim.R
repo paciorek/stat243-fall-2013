@@ -524,3 +524,80 @@ for( i in 1:length(shapeVals)){
 
 # apart from that, it appears that optim() has probably found the minimum
 
+##############################
+# 9: Convex optimization
+##############################
+
+### 9.6 Interior point methods
+
+# based on the example in ?constrOptim
+
+fr <- function(x) {   ## Rosenbrock Banana function
+  x1 <- x[1]
+  x2 <- x[2]
+  100 * (x2 - x1 * x1)^2 + (1 - x1)^2
+}
+grr <- function(x) { ## Gradient of 'fr'
+  x1 <- x[1]
+  x2 <- x[2]
+  c(-400 * x1 * (x2 - x1 * x1) - 2 * (1 - x1),
+    200 *      (x2 - x1 * x1))
+}
+
+m <- 100
+x1s <- x2s <- seq(-5, 5, len = m)
+xs <- expand.grid(x1s, x2s)
+
+f <- apply(xs, 1, fr)
+
+image.plot(x1s, x2s, matrix(log(f), m))
+
+ui = rbind(c(-1,0), c(1,-1))
+ci = c(-0.9,0.1)
+# x1 <= 0.9
+# x2 <= x1 + 0.1
+
+abline(v = 0.9)
+abline(.1, 1)
+
+out <- constrOptim(c(.5,0), fr, grr, ui = ui, ci = ci)
+out$par
+points(out$par[1], out$par[2])
+
+# what about constraining to a different region?
+
+ui = rbind(c(-1,0), c(-1, 1))
+ci = c(-0.9,0.1)
+# x1 <= 0.9
+# x2 >= x1 + 0.1
+
+out <- constrOptim(c(.5,0), fr, grr, ui = ui, ci = ci)
+# whoops, not feasible!
+out <- constrOptim(c(-3, 2), fr, grr, ui = ui, ci = ci)
+points(out$par[1], out$par[2])
+
+
+# how about optimizing along a line (equality constraint)?
+# x1 - x2 <= 0.1
+# x2 - x1 <= 0.1
+ui = rbind(c(-1,1), c(1, -1))
+ci = c(0.1, -0.1)
+
+out <- constrOptim(c(3, 3.1), fr, grr, ui = ui, ci = ci)
+# hmmm, numerical issues?
+
+
+# ok, how about making a long narrow region around the line?
+ui = rbind(c(-1,1), c(1, -1))
+ci = c(0.099, -0.101)
+
+out <- constrOptim(c(3, 3.1), fr, grr, ui = ui, ci = ci)
+points(out$par[1], out$par[2])
+
+ui = rbind(c(-1,1), c(1, -1))
+ci = c(0.0999, -0.1001)
+
+out <- constrOptim(c(3, 3.1), fr, grr, ui = ui, ci = ci)
+points(out$par[1], out$par[2])
+
+
