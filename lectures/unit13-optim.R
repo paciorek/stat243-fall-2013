@@ -538,7 +538,6 @@ for( i in 1:length(shapeVals)){
 ### 9.6 Interior point methods
 
 # based on the example in ?constrOptim
-
 fr <- function(x) {   ## Rosenbrock Banana function
   x1 <- x[1]
   x2 <- x[2]
@@ -560,7 +559,7 @@ f <- apply(xs, 1, fr)
 image.plot(x1s, x2s, matrix(log(f), m))
 
 ui = rbind(c(-1,0), c(1,-1))
-ci = c(-0.9,0.1)
+ci = c(-0.9, -0.1)
 # x1 <= 0.9
 # x2 <= x1 + 0.1
 
@@ -581,30 +580,31 @@ ci = c(-0.9,0.1)
 out <- constrOptim(c(.5,0), fr, grr, ui = ui, ci = ci)
 # whoops, not feasible!
 out <- constrOptim(c(-3, 2), fr, grr, ui = ui, ci = ci)
-points(out$par[1], out$par[2])
+points(out$par[1], out$par[2], pch = 2)
 
 
 # how about optimizing along a line (equality constraint)?
+# x1 - x2 = 0.1 is the same as
 # x1 - x2 <= 0.1
-# x2 - x1 <= 0.1
-ui = rbind(c(-1,1), c(1, -1))
-ci = c(0.1, -0.1)
+# x1 - x2 >= 0.1
+ui = rbind(c(-1, 1), c(1, -1))
+ci = c(-0.1, 0.1)
 
-out <- constrOptim(c(3, 3.1), fr, grr, ui = ui, ci = ci)
+out <- constrOptim(c(3.1, 3.0), fr, grr, ui = ui, ci = ci)
 # hmmm, numerical issues?
 
-
 # ok, how about making a long narrow region around the line?
-ui = rbind(c(-1,1), c(1, -1))
-ci = c(0.099, -0.101)
+# this takes a while...
+ui = rbind(c(1,-1), c(-1,1))
+ci = c(.099,-.101)
+# hmmm
+out1 <- constrOptim(c(3.1, 3.0), fr, grr, ui = ui, ci = ci)
+out2 <- constrOptim(c(3.1, 3.0), fr, NULL, ui = ui, ci = ci)
 
-out <- constrOptim(c(3, 3.1), fr, grr, ui = ui, ci = ci)
-points(out$par[1], out$par[2])
+image.plot(x1s, x2s, matrix(log(f), m))
+abline(-0.1, 1)
+points(out1$par[1], out1$par[2], pch = "1")
+points(out2$par[1], out2$par[2], pch = "2")
 
-ui = rbind(c(-1,1), c(1, -1))
-ci = c(0.0999, -0.1001)
-
-out <- constrOptim(c(3, 3.1), fr, grr, ui = ui, ci = ci)
-points(out$par[1], out$par[2])
 
 

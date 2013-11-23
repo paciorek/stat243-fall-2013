@@ -195,14 +195,17 @@ example from PP POT analysis (potOptimExample.RData)
 \end_layout
 
 \begin_layout Chunk
+
 <<setup, include=FALSE>>=
 \end_layout
 
 \begin_layout Chunk
+
 require(fields)
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -1080,206 +1083,257 @@ status open
 \end_layout
 
 \begin_layout Chunk
+
 <<fig.width=7, fig.height=4>>=
 \end_layout
 
 \begin_layout Chunk
+
 options(width=55)
 \end_layout
 
 \begin_layout Chunk
+
 par(mfrow = c(1,2))
 \end_layout
 
 \begin_layout Chunk
+
 fp <- function(x, theta = 1){
 \end_layout
 
 \begin_layout Chunk
+
 	exp(x*theta)/(1+exp(x*theta)) - .5
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 fpp <- function(x, theta = 1){
 \end_layout
 
 \begin_layout Chunk
+
 	exp(x*theta)/((1+exp(x*theta))^2)
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 xs <- seq(-15, 15, len = 300)
 \end_layout
 
 \begin_layout Chunk
+
 plot(xs, fp(xs), type = 'l')
 \end_layout
 
 \begin_layout Chunk
+
 lines(xs, fpp(xs), lty = 2)
 \end_layout
 
 \begin_layout Chunk
+
 # good starting point
 \end_layout
 
 \begin_layout Chunk
+
 x0 <- 2
 \end_layout
 
 \begin_layout Chunk
+
 xvals <- c(x0,rep(NA,9))
 \end_layout
 
 \begin_layout Chunk
+
 for(t in 2:10){
 \end_layout
 
 \begin_layout Chunk
+
 	xvals[t]=xvals[t-1] - fp(xvals[t-1]) / fpp(xvals[t-1])
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 print(xvals)
 \end_layout
 
 \begin_layout Chunk
+
 points(xvals, fp(xvals), pch = as.character(1:length(xvals)))
 \end_layout
 
 \begin_layout Chunk
+
 # bad starting point
 \end_layout
 
 \begin_layout Chunk
+
 x0 <- 2.5
 \end_layout
 
 \begin_layout Chunk
+
 xvals <- c(x0,rep(NA,9))
 \end_layout
 
 \begin_layout Chunk
+
 for(t in 2:10){
 \end_layout
 
 \begin_layout Chunk
+
 	xvals[t]=xvals[t-1] - fp(xvals[t-1]) / fpp(xvals[t-1])
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 print(xvals)
 \end_layout
 
 \begin_layout Chunk
+
 points(xvals, fp(xvals), pch = as.character(1:length(xvals)), col = 'red')
 \end_layout
 
 \begin_layout Chunk
+
 # whoops
 \end_layout
 
 \begin_layout Chunk
+
 #############################################
 \end_layout
 
 \begin_layout Chunk
+
 # mistakenly climbing uphill
 \end_layout
 
 \begin_layout Chunk
+
 f <- function(x) cos(x)
 \end_layout
 
 \begin_layout Chunk
+
 fp <- function(x) -sin(x)
 \end_layout
 
 \begin_layout Chunk
+
 fpp <- function(x) -cos(x)
 \end_layout
 
 \begin_layout Chunk
+
 xs <- seq(0, 2*pi, len = 300)
 \end_layout
 
 \begin_layout Chunk
+
 plot(xs, f(xs), type = 'l', lwd = 2)
 \end_layout
 
 \begin_layout Chunk
+
 lines(xs, fp(xs))
 \end_layout
 
 \begin_layout Chunk
+
 lines(xs, fpp(xs), lty = 2)
 \end_layout
 
 \begin_layout Chunk
+
 x0 <- 0.2 # starting point
 \end_layout
 
 \begin_layout Chunk
+
 fp(x0) # negative
 \end_layout
 
 \begin_layout Chunk
+
 fpp(x0) # negative
 \end_layout
 
 \begin_layout Chunk
+
 x1 <- x0 - fp(x0)/fpp(x0) # whoops, we've gone uphill 
 \end_layout
 
 \begin_layout Chunk
+
 # because of the negative second derivative
 \end_layout
 
 \begin_layout Chunk
+
 xvals <- c(x0,rep(NA,9))
 \end_layout
 
 \begin_layout Chunk
+
 for(t in 2:10){
 \end_layout
 
 \begin_layout Chunk
+
 	xvals[t]=xvals[t-1]-fp(xvals[t-1])/fpp(xvals[t-1])
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 xvals
 \end_layout
 
 \begin_layout Chunk
+
 points(xvals, fp(xvals), pch = as.character(1:length(xvals)), col = 'red')
 \end_layout
 
 \begin_layout Chunk
+
 # and we've found a maximum rather than a minimum...
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -1667,119 +1721,148 @@ Here's an example of convergence comparing bisection and N-R:
 \end_layout
 
 \begin_layout Chunk
+
 <<>>=
 \end_layout
 
 \begin_layout Chunk
+
 options(digits = 10)
 \end_layout
 
 \begin_layout Chunk
+
 f <- function(x) cos(x)
 \end_layout
 
 \begin_layout Chunk
+
 fp <- function(x) -sin(x)
 \end_layout
 
 \begin_layout Chunk
+
 fpp <- function(x) -cos(x)
 \end_layout
 
 \begin_layout Chunk
+
 xstar <- pi # known minimum
 \end_layout
 
 \begin_layout Chunk
+
 # N-R
 \end_layout
 
 \begin_layout Chunk
+
 x0 <- 2
 \end_layout
 
 \begin_layout Chunk
+
 xvals <- c(x0,rep(NA,9))
 \end_layout
 
 \begin_layout Chunk
+
 for(t in 2:10){
 \end_layout
 
 \begin_layout Chunk
+
 	xvals[t] <- xvals[t-1] - fp(xvals[t-1]) / fpp(xvals[t-1])
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 print(xvals)
 \end_layout
 
 \begin_layout Chunk
+
 # bisection
 \end_layout
 
 \begin_layout Chunk
+
 bisecStep <- function(interval, fp){
 \end_layout
 
 \begin_layout Chunk
+
 	xt <- mean(interval)
 \end_layout
 
 \begin_layout Chunk
+
 	if(fp(interval[1]) * fp(xt) <= 0) interval[2] <- xt else interval[1] <-
  xt
 \end_layout
 
 \begin_layout Chunk
+
 	return(interval)
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 nIt <- 30
 \end_layout
 
 \begin_layout Chunk
+
 a0 <- 2; b0 <- (3*pi/2) - (xstar - a0) 
 \end_layout
 
 \begin_layout Chunk
+
 # have b0 be as far from min as a0 for fair comparison with N-R
 \end_layout
 
 \begin_layout Chunk
+
 interval <- matrix(NA, nr = nIt, nc = 2)
 \end_layout
 
 \begin_layout Chunk
+
 interval[1, ] <- c(a0, b0)
 \end_layout
 
 \begin_layout Chunk
+
 for(t in 2:nIt){
 \end_layout
 
 \begin_layout Chunk
+
 	interval[t, ] <- bisecStep(interval[t-1, ], fp)
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 rowMeans(interval)
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2462,122 +2545,152 @@ status open
 \end_layout
 
 \begin_layout Chunk
+
 <<fig.width=5, fig.height=4>>=
 \end_layout
 
 \begin_layout Chunk
+
 par(mai = c(.5,.4,.1,.4))
 \end_layout
 
 \begin_layout Chunk
+
 f <- function(x){
 \end_layout
 
 \begin_layout Chunk
+
 	x[1]^2/1000 + 4*x[1]*x[2]/1000 + 5*x[2]^2/1000
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 fp <- function(x){
 \end_layout
 
 \begin_layout Chunk
+
 	c(2 * x[1]/1000 + 4 * x[2]/1000,
 \end_layout
 
 \begin_layout Chunk
+
 	4 * x[1]/1000 + 10 * x[2]/1000)
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 lineSearch <- function(alpha, xCurrent, direction, FUN){
 \end_layout
 
 \begin_layout Chunk
+
 	newx <- xCurrent + alpha * direction
 \end_layout
 
 \begin_layout Chunk
+
 	FUN(newx)
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 nIt <- 50
 \end_layout
 
 \begin_layout Chunk
+
 xvals <- matrix(NA, nr = nIt, nc = 2)
 \end_layout
 
 \begin_layout Chunk
+
 xvals[1, ] <- c(7, -4)
 \end_layout
 
 \begin_layout Chunk
+
 for(t in 2:50){
 \end_layout
 
 \begin_layout Chunk
+
 	newalpha <- optimize(lineSearch, interval = c(-5000, 5000),
 \end_layout
 
 \begin_layout Chunk
+
 		xCurrent = xvals[t-1, ], direction = fp(xvals[t-1, ]),
 \end_layout
 
 \begin_layout Chunk
+
 		FUN = f)$minimum 
 \end_layout
 
 \begin_layout Chunk
+
 	xvals[t, ] <- xvals[t-1, ] + newalpha * fp(xvals[t-1, ])
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 x1s <- seq(-5, 8, len = 100); x2s = seq(-5, 2, len = 100)
 \end_layout
 
 \begin_layout Chunk
+
 fx <- apply(expand.grid(x1s, x2s), 1, f)
 \end_layout
 
 \begin_layout Chunk
+
 # plot f(x) surface on log scale
 \end_layout
 
 \begin_layout Chunk
+
 image.plot(x1s, x2s, matrix(log(fx), 100, 100), 
 \end_layout
 
 \begin_layout Chunk
+
 	xlim = c(-5, 8), ylim = c(-5,2)) 
 \end_layout
 
 \begin_layout Chunk
+
 lines(xvals) # overlay optimization path
 \end_layout
 
 \begin_layout Chunk
+
 # kind of slow
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -2906,106 +3019,132 @@ However, Gauss-Seidel can zigzag, since you only take steps in one dimension
 \end_layout
 
 \begin_layout Chunk
+
 <<fig.width=5, fig.height=4>>=
 \end_layout
 
 \begin_layout Chunk
+
 par(mai = c(.5,.4,.1,.4))
 \end_layout
 
 \begin_layout Chunk
+
 f <- function(x){
 \end_layout
 
 \begin_layout Chunk
+
 	return(x[1]^2/1000 + 4*x[1]*x[2]/1000 + 5*x[2]^2/1000)
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 f1 <- function(x1, x2){ # f(x) as a function of x1
 \end_layout
 
 \begin_layout Chunk
+
 	return(x1^2/1000 + 4*x1*x2/1000 + 5*x2^2/1000)
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 f2 <- function(x2, x1){ # f(x) as a function of x2
 \end_layout
 
 \begin_layout Chunk
+
 	return(x1^2/1000 + 4*x1*x2/1000 + 5*x2^2/1000)
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 x1s <- seq(-5, 8, len = 100); x2s = seq(-5, 2, len = 100)
 \end_layout
 
 \begin_layout Chunk
+
 fx <- apply(expand.grid(x1s, x2s), 1, f)
 \end_layout
 
 \begin_layout Chunk
+
 image.plot(x1s, x2s, matrix(log(fx), 100, 100))
 \end_layout
 
 \begin_layout Chunk
+
 nIt <- 49
 \end_layout
 
 \begin_layout Chunk
+
 xvals <- matrix(NA, nr = nIt, nc = 2)
 \end_layout
 
 \begin_layout Chunk
+
 xvals[1, ] <- c(7, -4)
 \end_layout
 
 \begin_layout Chunk
+
 # 5, -10
 \end_layout
 
 \begin_layout Chunk
+
 for(t in seq(2, nIt, by = 2)){
 \end_layout
 
 \begin_layout Chunk
+
 	newx1 <- optimize(f1, x2 = xvals[t-1, 2], interval = c(-40, 40))$minimum
 \end_layout
 
 \begin_layout Chunk
+
 	xvals[t, ] <- c(newx1, xvals[t-1, 2])
 \end_layout
 
 \begin_layout Chunk
+
 	newx2 <- optimize(f2, x1 = newx1, interval = c(-40, 40))$minimum
 \end_layout
 
 \begin_layout Chunk
+
 	xvals[t+1, ] <- c(newx1, newx2)
 \end_layout
 
 \begin_layout Chunk
+
 }
 \end_layout
 
 \begin_layout Chunk
+
 lines(xvals)
 \end_layout
 
 \begin_layout Chunk
+
 @
 \end_layout
 
@@ -3198,6 +3337,7 @@ The algorithm relies on four tuning factors: a reflection factor,
 \end_inset
 
  points that serve as the vertices of a convex hull.
+ 
 \end_layout
 
 \begin_layout Enumerate
@@ -4778,12 +4918,6 @@ Optimization under constraints
 \end_layout
 
 \begin_layout Standard
-
-\series bold
-[NOTE: I may make some changes to this section - Chris Nov 20, 2013]
-\end_layout
-
-\begin_layout Standard
 Constrained optimization is harder than unconstrained, and inequality constraint
 s harder to deal with than equality constraints.
 \end_layout
@@ -5918,46 +6052,331 @@ Software for constrained and convex optimization
 \end_layout
 
 \begin_layout Standard
-
-\series bold
-[Under construction 11/21/13]
-\end_layout
-
-\begin_layout Standard
-R provides an optimization function, constrOptim(), for optimizing with
- linear inequality constraints.
+R provides an optimization function, 
+\emph on
+constrOptim()
+\emph default
+, for optimizing with linear inequality constraints.
  This is somewhat more limited than the general problem we've defined in
  that the constraints need to be linear rather than general functions, 
 \begin_inset Formula $h$
 \end_inset
 
 .
- However, constrOptim() doesn't require a convex function.
+ However, 
+\emph on
+constrOptim()
+\emph default
+ doesn't require a convex function.
  It uses a logarithmic barrier function as discussed above in combination
- with the methods used in optim(), e.g., Nelder-Mead, BFGS, etc.; in fact it
- uses optim() for the sequential optimizations, i.e., the individual optimizations
- involved as one changes the value of 
+ with the methods used in 
+\emph on
+optim()
+\emph default
+, e.g., Nelder-Mead, BFGS, etc.
+ In fact it uses 
+\emph on
+optim()
+\emph default
+ for the sequential optimizations, i.e., the individual optimizations involved
+ as one changes the value of 
 \begin_inset Formula $1/t$
 \end_inset
 
- (called mu in constrOptim()).
+ (called 
+\emph on
+mu
+\emph default
+ in 
+\emph on
+constrOptim()
+\emph default
+).
  
 \end_layout
 
 \begin_layout Standard
-Here is how one can use constrOptim() for linear inequality and linear equality
- constraints.
- 
+Here is how one can use 
+\emph on
+constrOptim()
+\emph default
+ for linear inequality and linear equality constraints.
+ The feasible region is defined to be 
+\begin_inset Formula $u_{i}^{\top}\theta-c_{i}\geq0,\, i=1,\ldots$
+\end_inset
+
+, so for 
+\begin_inset Quotes eld
+\end_inset
+
+less than or equal
+\begin_inset Quotes erd
+\end_inset
+
+ and for equality constraints we need to do some basic manipulations.
 \end_layout
 
-\begin_layout Standard
-[insert R code]
+\begin_layout Chunk
+
+<<constrOptim, fig.height=4, fig.width=4, cache=TRUE>>=
+\end_layout
+
+\begin_layout Chunk
+
+# based on the example in help(constrOptim)
+\end_layout
+
+\begin_layout Chunk
+fr <- function(x) { ## Rosenbrock Banana function
+\end_layout
+
+\begin_layout Chunk
+	x1 <- x[1]
+\end_layout
+
+\begin_layout Chunk
+	x2 <- x[2]
+\end_layout
+
+\begin_layout Chunk
+	100 * (x2 - x1 * x1)^2 + (1 - x1)^2
+\end_layout
+
+\begin_layout Chunk
+}
+\end_layout
+
+\begin_layout Chunk
+grr <- function(x) { ## Gradient of 'fr'
+\end_layout
+
+\begin_layout Chunk
+	x1 <- x[1]
+\end_layout
+
+\begin_layout Chunk
+	x2 <- x[2]
+\end_layout
+
+\begin_layout Chunk
+	c(-400 * x1 * (x2 - x1 * x1) - 2 * (1 - x1), 200 * (x2 - x1 * x1))
+\end_layout
+
+\begin_layout Chunk
+}
+\end_layout
+
+\begin_layout Chunk
+m <- 100
+\end_layout
+
+\begin_layout Chunk
+x1s <- x2s <- seq(-5, 5, len = m)
+\end_layout
+
+\begin_layout Chunk
+xs <- expand.grid(x1s, x2s)
+\end_layout
+
+\begin_layout Chunk
+f <- apply(xs, 1, fr)
+\end_layout
+
+\begin_layout Chunk
+image.plot(x1s, x2s, matrix(log(f), m))
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Chunk
+ui = rbind(c(-1,0), c(1,-1))
+\end_layout
+
+\begin_layout Chunk
+ci = c(-0.9, -0.1)
+\end_layout
+
+\begin_layout Chunk
+# x1 <= 0.9
+\end_layout
+
+\begin_layout Chunk
+# x2 <= x1 + 0.1
+\end_layout
+
+\begin_layout Chunk
+abline(v = 0.9)
+\end_layout
+
+\begin_layout Chunk
+abline(.1, 1)
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Chunk
+out <- constrOptim(c(.5,0), fr, grr, ui = ui, ci = ci)
+\end_layout
+
+\begin_layout Chunk
+out$par
+\end_layout
+
+\begin_layout Chunk
+points(out$par[1], out$par[2])
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Chunk
+# what about constraining to a different region?
+\end_layout
+
+\begin_layout Chunk
+ui = rbind(c(-1,0), c(-1, 1))
+\end_layout
+
+\begin_layout Chunk
+ci = c(-0.9,0.1)
+\end_layout
+
+\begin_layout Chunk
+# x1 <= 0.9
+\end_layout
+
+\begin_layout Chunk
+# x2 >= x1 + 0.1
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Chunk
+out <- constrOptim(c(.5,0), fr, grr, ui = ui, ci = ci)
+\end_layout
+
+\begin_layout Chunk
+# whoops, not feasible!
+\end_layout
+
+\begin_layout Chunk
+out <- constrOptim(c(-3, 2), fr, grr, ui = ui, ci = ci)
+\end_layout
+
+\begin_layout Chunk
+points(out$par[1], out$par[2], pch = 2)
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Chunk
+# how about optimizing along a line (equality constraint)?
+\end_layout
+
+\begin_layout Chunk
+# x1 - x2 = 0.1 is the same as
+\end_layout
+
+\begin_layout Chunk
+# x1 - x2 <= 0.1
+\end_layout
+
+\begin_layout Chunk
+# x1 - x2 >= 0.1
+\end_layout
+
+\begin_layout Chunk
+ui = rbind(c(-1, 1), c(1, -1))
+\end_layout
+
+\begin_layout Chunk
+ci = c(-0.1, 0.1)
+\end_layout
+
+\begin_layout Chunk
+out <- constrOptim(c(3.1, 3.0), fr, grr, ui = ui, ci = ci)
+\end_layout
+
+\begin_layout Chunk
+# hmmm, numerical issues?
+\end_layout
+
+\begin_layout Chunk
+
+\end_layout
+
+\begin_layout Chunk
+# ok, how about making a long narrow region around the line?
+\end_layout
+
+\begin_layout Chunk
+# this takes a while...
+\end_layout
+
+\begin_layout Chunk
+ui = rbind(c(1,-1), c(-1,1))
+\end_layout
+
+\begin_layout Chunk
+ci = c(.099,-.101)
+\end_layout
+
+\begin_layout Chunk
+# hmmm
+\end_layout
+
+\begin_layout Chunk
+out1 <- constrOptim(c(3.1, 3.0), fr, grr, ui = ui, ci = ci)
+\end_layout
+
+\begin_layout Chunk
+out2 <- constrOptim(c(3.1, 3.0), fr, NULL, ui = ui, ci = ci)
+\end_layout
+
+\begin_layout Chunk
+image.plot(x1s, x2s, matrix(log(f), m))
+\end_layout
+
+\begin_layout Chunk
+abline(-0.1, 1)
+\end_layout
+
+\begin_layout Chunk
+points(out1$par[1], out1$par[2], pch = "1")
+\end_layout
+
+\begin_layout Chunk
+points(out2$par[1], out2$par[2], pch = "2")
+\end_layout
+
+\begin_layout Chunk
+
+@
 \end_layout
 
 \begin_layout Standard
 This draft paper discusses R's capabilities for convex optimization in more
  detail.
- http://www.econ.uiuc.edu/~roger/research/conopt/coptr.pdf
+\begin_inset Newline newline
+\end_inset
+
+ 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://www.econ.uiuc.edu/~roger/research/conopt/coptr.pdf"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -5966,12 +6385,20 @@ Given that R is somewhat limited in its treatment of convex optimization,
 \end_layout
 
 \begin_layout Itemize
-Python, in particular the cvxopt package
+Python, in particular the 
+\emph on
+cvxopt
+\emph default
+ package, and
 \end_layout
 
 \begin_layout Itemize
-Matlab, in particular the fmincon function, as well as Matlab's linear and
- quadratic programming abilities
+Matlab, in particular the 
+\emph on
+fmincon()
+\emph default
+ function, the CVX system, and Matlab's linear and quadratic programming
+ abilities.
 \end_layout
 
 \begin_layout Section
