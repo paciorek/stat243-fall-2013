@@ -562,6 +562,7 @@ ui = rbind(c(-1,0), c(1,-1))
 ci = c(-0.9, -0.1)
 # x1 <= 0.9
 # x2 <= x1 + 0.1
+# this is Region "I" in the figure
 
 abline(v = 0.9)
 abline(.1, 1)
@@ -569,8 +570,9 @@ abline(.1, 1)
 out <- constrOptim(c(.5,0), fr, grr, ui = ui, ci = ci)
 out$par
 points(out$par[1], out$par[2])
+text(-1,-2, "I", cex = 2)
 
-# what about constraining to a different region?
+# what about constraining to a different region? ("Region II")
 
 ui = rbind(c(-1,0), c(-1, 1))
 ci = c(-0.9,0.1)
@@ -581,7 +583,7 @@ out <- constrOptim(c(.5,0), fr, grr, ui = ui, ci = ci)
 # whoops, not feasible!
 out <- constrOptim(c(-3, 2), fr, grr, ui = ui, ci = ci)
 points(out$par[1], out$par[2], pch = 2)
-
+text(-3,0, "II", cex = 2)
 
 # how about optimizing along a line (equality constraint)?
 # x1 - x2 = 0.1 is the same as
