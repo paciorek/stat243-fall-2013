@@ -4808,7 +4808,7 @@ Convex programming minimizes
 
  s.t.
  
-\begin_inset Formula $h_{i}(x)\leq0,\, i=1,\ldots,m$
+\begin_inset Formula $h_{j}(x)\leq0,\, j=1,\ldots,m$
 \end_inset
 
  and 
@@ -4835,20 +4835,20 @@ Convex programming minimizes
 
 .
  It also includes 
-\begin_inset Formula $h_{i}(x)\geq b_{i}$
+\begin_inset Formula $h_{j}(x)\geq b_{j}$
 \end_inset
 
  by taking 
-\begin_inset Formula $-h_{i}(x)$
+\begin_inset Formula $-h_{j}(x)$
 \end_inset
 
 .
  Also note that we can always have 
-\begin_inset Formula $h_{i}(x)\leq b_{i}$
+\begin_inset Formula $h_{j}(x)\leq b_{j}$
 \end_inset
 
  and convert to the above form by subtracting 
-\begin_inset Formula $b_{i}$
+\begin_inset Formula $b_{j}$
 \end_inset
 
  from each side (note that this preserves convexity).
@@ -5792,7 +5792,7 @@ Recall our previous notation, in which convex programming minimizes
  function:
 \begin_inset Formula 
 \[
-f(x)+\sum_{i=1}^{m}I_{-}(h_{i}(x))
+f(x)+\sum_{ij=1}^{m}I_{-}(h_{j}(x))
 \]
 
 \end_inset
@@ -5824,7 +5824,7 @@ This is fine, but the new objective function is not differentiable so we
  giving the new objective function
 \begin_inset Formula 
 \[
-\tilde{f}(x)=f(x)+\sum_{i=1}^{m}-(1/t)\log(-h_{i}(x)),
+\tilde{f}(x)=f(x)+\sum_{j=1}^{m}-(1/t)\log(-h_{j}(x)),
 \]
 
 \end_inset
@@ -5838,7 +5838,7 @@ which is convex and differentiable.
  approaches the boundary, nearing points for which the inequality constraints
  are not met.
  The 
-\begin_inset Formula $-\sum(1/t)\log(-h_{i}(x))$
+\begin_inset Formula $-\sum(1/t)\log(-h_{j}(x))$
 \end_inset
 
  term is called the log barrier, since it keeps the solution in the feasible
