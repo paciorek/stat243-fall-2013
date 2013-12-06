@@ -271,6 +271,8 @@ map('county', add = TRUE) # add county boundaries
 
 ## @knitr layersExample
 
+library(ggplot2)
+
 cpds <- read.csv('../data/cpds.csv')
 usa <- cpds[cpds$country == "USA", ]
 ggplot(data = usa, aes(x = year, y = vturn)) +
