@@ -112,6 +112,18 @@ The code of your solution, including (a) a primary function that carries
  function and testing function.
  All code should be submitted to bSpace as a single text file with comments
  clearly delineating different pieces of the code.
+ Please call the file 
+\begin_inset Quotes eld
+\end_inset
+
+ars.R
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Please call your main function "ars" and your test function "test".
+ Of course in your development you could use many files, but please combine
+ for the final one.
 \end_layout
 
 \begin_layout Enumerate
@@ -122,6 +134,20 @@ A paper document describing your solution, prepared in LaTeX or R Markdown.
  It must include a paragraph describing the specific contributions of each
  team member and which person/people were responsible for each component
  of the work.
+ Please submit the paper document to me - either directly to me, under my
+ door, or in my mailbox.
+ The deadline is firm because I need to grade them Friday afternoon and
+ during the day Saturday.
+ On your paper solution, please indicate the last name of the group member
+ who submitted the R code so that I know where to look on bSpace.
+ Make sure to include the requested paragraph describing which project member
+ did what.
+\end_layout
+
+\begin_layout Enumerate
+For the help information on your main function, this can either be part
+ of your R code as indicated below or if a PDF, can be stapled to your paper
+ solution.
 \end_layout
 
 \begin_layout Standard
